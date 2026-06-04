@@ -1,3 +1,1 @@
-# JOGO MUITO IRADO
-
-Este jogo é foda memo
+# Jogo da ConwayJam 2026
