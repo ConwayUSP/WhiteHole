@@ -4,8 +4,8 @@ LIBS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
 all: game
 
-game: jogo_vida.c
-	$(CC) $(CFLAGS) -o game.out jogo_vida.c $(LIBS)
+game: main.c
+	$(CC) $(CFLAGS) -o game.out main.c $(LIBS)
 
 clean:
 	rm -f game
