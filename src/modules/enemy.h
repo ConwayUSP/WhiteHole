@@ -38,6 +38,7 @@ typedef enum {
 // Tipo que representará nossos inimigos
 typedef struct enemy {
   EnemyType type;       // Tipo específico de inimigo
+  int id;               // Seu índice na lista de inimigos do universo
   usint hp;             // Vida restante ao inimigo
   EnemyState state;     // Estado atual (animação que está rodando)
   Vector2 pos;          // Posição no mundo
@@ -48,9 +49,9 @@ typedef struct enemy {
 } Enemy;
 
 // Funções relacionadas aos inimigos
-Enemy new_enemy(EnemyType); // Cria um inimigo
-void set_enemy_animation(Enemy enemy, EnemyState state,
+Enemy new_enemy(EnemyType type, int id); // Cria um inimigo
+void set_enemy_animation(Enemy *enemy, EnemyState state,
                          Animation anim); // Define uma animação
-void update_enemy(Enemy enemy);           // Função de update do inimigo
+void update_enemy(Enemy *enemy);          // Função de update do inimigo
 
 #endif

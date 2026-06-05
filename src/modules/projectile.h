@@ -33,6 +33,7 @@ typedef enum {
 // Tipo que representará nossos projéteis
 typedef struct projectile {
   ProjectileType type;   // Tipo específico de projétil
+  int id;                // Seu ID na lista de projéteis do universo
   ProjectileState state; // Estado atual (animação que está rodando)
   Vector2 pos;           // Posição no mundo
   Vector2 direction;     // Direção de movimento
@@ -45,9 +46,9 @@ typedef struct projectile {
 } Projectile;
 
 // Funções relacionadas aos inimigos
-Projectile new_projectile(ProjectileType type); // Cria um projétil
-void set_projectile_animation(Projectile projectile, ProjectileState state,
-                              Animation anim); // Define uma animação
-void update_projectile(Projectile projectile); // Função de update do projétil
+Projectile new_projectile(ProjectileType type, int id); // Cria um projétil
+void set_projectile_animation(Projectile *projectile, ProjectileState state,
+                              Animation anim);  // Define uma animação
+void update_projectile(Projectile *projectile); // Função de update do projétil
 
 #endif
