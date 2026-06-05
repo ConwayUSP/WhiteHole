@@ -36,21 +36,20 @@ typedef enum {
 
 // Tipo que representará nossos inimigos
 typedef struct enemy {
-  EnemyType type;       // Tipo específico de inimigo
-  usint hp;             // Vida restante ao inimigo
-  EnemyState state;     // Estado atual (animação que está rodando)
-  Vector2 pos;          // Posição no mundo
-  double ult_charge;    // Carga atual da ult
-  double ult_threshold; // Quanta carga precisa acumular para ultar
-  double atk_cooldown;  // Quanto tempo desde o último tiro
-  Texture2D spritesheets[NUM_STATES]; // Spritesheets para cada estado
-  Animation animations[NUM_STATES];   // Animações para cada estado
+  EnemyType type;                   // Tipo específico de inimigo
+  usint hp;                         // Vida restante ao inimigo
+  EnemyState state;                 // Estado atual (animação que está rodando)
+  Vector2 pos;                      // Posição no mundo
+  double ult_charge;                // Carga atual da ult
+  double ult_threshold;             // Quanta carga precisa acumular para ultar
+  double atk_cooldown;              // Quanto tempo desde o último tiro
+  Animation animations[NUM_STATES]; // Animações para cada estado
 } Enemy;
 
 // Funções relacionadas aos inimigos
 Enemy new_enemy(EnemyType); // Cria um inimigo
-void set_enemy_spritesheet(Enemy enemy, EnemyState state,
-                           Texture2D spritesheet); // Define uma spritesheet
-void update_enemy(Enemy enemy); // Função de update do inimigo
+void set_enemy_animation(Enemy enemy, EnemyState state,
+                         Animation anim); // Define uma animação
+void update_enemy(Enemy enemy);           // Função de update do inimigo
 
 #endif

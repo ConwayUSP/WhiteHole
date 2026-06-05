@@ -29,14 +29,13 @@ typedef struct player {
   usint crazyness;   // Nível de loucura, quanto maior, mais forte ele fica
   usint black_hole_charge; // Número de recargas para o buraco negro (ult)
   double atk_cooldown;     // Quanto tempo desde o último tiro
-  Texture2D spritesheets[NUM_STATES]; // Spritesheets para cada estado
-  Animation animations[NUM_STATES];   // Animações para cada estado
+  Animation animations[NUM_STATES]; // Animações para cada estado
 } Player;
 
 // Funções relacionadas ao Player
 Player init_player(); // Cria um jogador
-void set_player_spritesheet(Player player, PlayerState state,
-                            Texture2D spritesheet); // Define uma spritesheet
-void update_player(Player player); // Função de update do Player
+void set_player_animation(Player player, PlayerState state,
+                          Animation anim); // Define uma animação
+void update_player(Player player);         // Função de update do Player
 
 #endif

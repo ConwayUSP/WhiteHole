@@ -18,15 +18,15 @@ typedef enum {
   ICE_ATK,
   ASTRONAUT_ATK,
   BILLIONAIRE_ATK,
-  BLACK_HOLE
+  BLACK_HOLE,
+  NUM_STATES // Variante de contagem
 } ProjectileType;
 
 // Estados nos quais o projétil pode estar
 typedef enum {
-  FORMING,   // Sendo criado
-  IDLE,      // Se movendo
-  BREAKING,  // Quebrando no fim de sua vida
-  NUM_STATES // Variante de contagem
+  FORMING,  // Sendo criado
+  IDLE,     // Se movendo
+  BREAKING, // Quebrando no fim de sua vida
 } ProjectileState;
 
 // Tipo que representará nossos projéteis
@@ -40,15 +40,13 @@ typedef struct projectile {
   double duration;       // Carga atual da ult
   usint damange;         // Dano causado em impacto
   float weight;          // Peso, influencia como é afetado pelos buracos negros
-  Texture2D spritesheets[NUM_STATES]; // Spritesheets para cada estado
-  Animation animations[NUM_STATES];   // Animações para cada estado
+  Animation animations[NUM_STATES]; // Animações para cada estado
 } Projectile;
 
 // Funções relacionadas aos inimigos
 Projectile new_projectile(ProjectileType type); // Cria um projétil
-void set_projectile_spritesheet(
-    Projectile projectile, ProjectileState state,
-    Texture2D spritesheet);                    // Define uma spritesheet
+void set_projectile_animation(Projectile projectile, ProjectileState state,
+                              Animation anim); // Define uma animação
 void update_projectile(Projectile projectile); // Função de update do projétil
 
 #endif
