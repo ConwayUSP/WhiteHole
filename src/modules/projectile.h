@@ -37,7 +37,8 @@ typedef struct projectile {
   ProjectileState state; // Estado atual (animação que está rodando)
   Vector2 pos;           // Posição no mundo
   Vector2 direction;     // Direção de movimento
-  float vel;             // Velocidade de movimento
+  float speed;           // Velocidade de movimento
+  Vector2 vel;           // Vetor de velocidade
   double timer;          // Tempo desde que foi atirado
   double duration;       // Carga atual da ult
   usint damange;         // Dano causado em impacto

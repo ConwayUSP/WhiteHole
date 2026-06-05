@@ -26,6 +26,7 @@ typedef struct player {
   usint hp;          // Vida restante ao player
   PlayerState state; // Estado atual (animação que está rodando)
   Vector2 pos;       // Posição no mundo
+  Vector2 vel;       // Vetor de velocidade
   usint crazyness;   // Nível de loucura, quanto maior, mais forte ele fica
   usint black_hole_charge; // Número de recargas para o buraco negro (ult)
   double atk_cooldown;     // Quanto tempo desde o último tiro
