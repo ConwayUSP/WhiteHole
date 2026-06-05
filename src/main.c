@@ -12,12 +12,15 @@ int main(void) {
   InitWindow(screenWidth, screenHeight, "WhiteHole"); // Inicializando janela
   SetTargetFPS(60); // Queremos que rode a 60 fps
 
+  float dt; // Tempo entre frames
+
   // Loop de jogo
   while (!WindowShouldClose()) // Fecha no ESC
   {
     //----------------------------------------------------------------------------------
     // Update
     //----------------------------------------------------------------------------------
+    dt = GetFrameTime();
 
     //----------------------------------------------------------------------------------
     // Renderização do jogo
