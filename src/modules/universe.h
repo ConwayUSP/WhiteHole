@@ -18,6 +18,7 @@ typedef struct universe {
   Scene context;          // Contexto atual do jogo
   AssetStore asset_store; // O asset store global
   Player player;
+  int points; // Com quantos pontos o jogador está atualmente
   Projectile projectiles[MAX_PROJECTILES]; // Lista de todos os projéteis
   Stack projectile_slots;     // Stack de posições livres na lista projectiles
   Enemy enemies[MAX_ENEMIES]; // Lista de todos os inimigos
