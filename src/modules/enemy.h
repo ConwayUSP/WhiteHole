@@ -21,29 +21,30 @@ typedef enum {
   ICE,
   ASTRONAUT,
   BILLIONAIRE,
+  ENEMY_NUM_TYPES // Variante de contagem
 } EnemyType;
 
 // Estados nos quais o inimigo pode estar
 typedef enum {
-  IDLE, // Parado
-  MOVING_UP,
-  MOVING_DOWN,
-  MOVING_LEFT,
-  MOVING_RIGHT,
-  ULTING,
-  NUM_STATES // Variante de contagem
+  ENEMY_IDLE, // Parado
+  ENEMY_MOVING_UP,
+  ENEMY_MOVING_DOWN,
+  ENEMY_MOVING_LEFT,
+  ENEMY_MOVING_RIGHT,
+  ENEMY_ULTING,
+  ENEMY_NUM_STATES // Variante de contagem
 } EnemyState;
 
 // Tipo que representará nossos inimigos
 typedef struct enemy {
-  EnemyType type;                   // Tipo específico de inimigo
-  usint hp;                         // Vida restante ao inimigo
-  EnemyState state;                 // Estado atual (animação que está rodando)
-  Vector2 pos;                      // Posição no mundo
-  double ult_charge;                // Carga atual da ult
-  double ult_threshold;             // Quanta carga precisa acumular para ultar
-  double atk_cooldown;              // Quanto tempo desde o último tiro
-  Animation animations[NUM_STATES]; // Animações para cada estado
+  EnemyType type;       // Tipo específico de inimigo
+  usint hp;             // Vida restante ao inimigo
+  EnemyState state;     // Estado atual (animação que está rodando)
+  Vector2 pos;          // Posição no mundo
+  double ult_charge;    // Carga atual da ult
+  double ult_threshold; // Quanta carga precisa acumular para ultar
+  double atk_cooldown;  // Quanto tempo desde o último tiro
+  Animation animations[ENEMY_NUM_STATES]; // Animações para cada estado
 } Enemy;
 
 // Funções relacionadas aos inimigos

@@ -2,22 +2,18 @@
 #define ASSETSTORE_H
 
 #include "../../include/raylib.h"
-
-// Infelizmente precisaremos manter essa contagem manual por enquanto
-#define NUM_PLAYER_STATES 6
-#define NUM_ENEMY_STATES 6
-#define NUM_ENEMY_TYPES 3
-#define NUM_PROJECTILE_STATES 3
-#define NUM_PROJECTILE_TYPES 5
+#include "enemy.h"
+#include "player.h"
+#include "projectile.h"
 
 // Entenda "usint" como "unsigned short int" a partir de agora
 typedef unsigned short int usint;
 
 // Um gerenciador de sprites, é bom para reduzir cache misses e pa
 typedef struct assetstore {
-  Texture2D player_sheets[NUM_PLAYER_STATES];
-  Texture2D enemy_sheets[NUM_ENEMY_TYPES][NUM_ENEMY_STATES];
-  Texture2D projectile_sheets[NUM_PROJECTILE_TYPES][NUM_PROJECTILE_STATES];
+  Texture2D player_sheets[PLAYER_NUM_STATES];
+  Texture2D enemy_sheets[ENEMY_NUM_TYPES][ENEMY_NUM_STATES];
+  Texture2D projectile_sheets[PROJECTILE_NUM_TYPES][PROJECTILE_NUM_STATES];
 } AssetStore;
 
 // Construtor

@@ -12,13 +12,13 @@ typedef unsigned short int usint;
 
 // Estados nos quais o Player pode estar
 typedef enum {
-  IDLE, // Parado
-  MOVING_UP,
-  MOVING_DOWN,
-  MOVING_LEFT,
-  MOVING_RIGHT,
-  BLACK_HOLING, // Ult
-  NUM_STATES    // Variante de contagem
+  PLAYER_IDLE, // Parado
+  PLAYER_MOVING_UP,
+  PLAYER_MOVING_DOWN,
+  PLAYER_MOVING_LEFT,
+  PLAYER_MOVING_RIGHT,
+  PLAYER_BLACK_HOLING, // Ult
+  PLAYER_NUM_STATES    // Variante de contagem
 } PlayerState;
 
 // Tipo que representará nosso jogador
@@ -29,7 +29,7 @@ typedef struct player {
   usint crazyness;   // Nível de loucura, quanto maior, mais forte ele fica
   usint black_hole_charge; // Número de recargas para o buraco negro (ult)
   double atk_cooldown;     // Quanto tempo desde o último tiro
-  Animation animations[NUM_STATES]; // Animações para cada estado
+  Animation animations[PLAYER_NUM_STATES]; // Animações para cada estado
 } Player;
 
 // Funções relacionadas ao Player
