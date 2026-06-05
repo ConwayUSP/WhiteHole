@@ -9,7 +9,7 @@
 #include "stack.h"
 
 #define MAX_PROJECTILES 1024
-#define MAX_ENEMIES 256
+#define MAX_ENEMIES 128
 
 typedef enum { MENU, RUNNING, GAME_OVER, VICTORY } Scene;
 
@@ -27,7 +27,13 @@ typedef struct universe {
 
 // Construtor
 Universe init_universe();
-int get_valid_projectile_id(Universe *universe);
-int get_valid_enemy_id(Universe *universe);
+int get_valid_projectile_id(
+    Universe *universe); // Reserva um espaço na lista de projéteis
+int get_valid_enemy_id(
+    Universe *universe); // Reserva um espaço na lista de inimigos
+void free_projectile_slot(Universe *universe,
+                          int id); // Libera um espaço na lista de projéteis
+void free_enemy_slot(Universe *universe,
+                     int id); // Libera um espaço na lista de inimigos
 
 #endif

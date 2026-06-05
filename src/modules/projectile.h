@@ -41,7 +41,7 @@ typedef struct projectile {
   Vector2 vel;           // Vetor de velocidade
   double timer;          // Tempo desde que foi atirado
   double duration;       // Carga atual da ult
-  usint damange;         // Dano causado em impacto
+  usint damage;          // Dano causado em impacto
   float weight;          // Peso, influencia como é afetado pelos buracos negros
   Animation animations[PROJECTILE_NUM_STATES]; // Animações para cada estado
 } Projectile;
