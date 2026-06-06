@@ -26,7 +26,7 @@ int pop(Stack *stack) {
   return res;
 }
 
-void fillZeroToMax(Stack *stack) {
+void fill_zero_to_max(Stack *stack) {
   for (int i = 0; i < stack->max; i++)
     stack->stack[i] = i;
 }
