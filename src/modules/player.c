@@ -30,6 +30,6 @@ Player init_player() {
 void set_player_animation(Player *player, PlayerState state, Animation anim) {
   player->animations[state] = anim;
 }
-void update_player(Player *player) {
+void update_player(Player *player, float dt) {
   // !TODO: implementar
 }
