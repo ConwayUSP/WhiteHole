@@ -5,10 +5,6 @@
 #include "../../include/raylib.h"
 #include "animation.h"
 
-#define MAX_ICE_HP 30
-#define MAX_ASTRONAUT_HP 50
-#define MAX_BILLIONAIRE_HP 80
-
 // Entenda "usint" como "unsigned short int" a partir de agora
 typedef unsigned short int usint;
 
@@ -39,8 +35,8 @@ typedef struct projectile {
   Vector2 direction;     // Direção de movimento
   float speed;           // Velocidade de movimento
   Vector2 vel;           // Vetor de velocidade
-  double timer;          // Tempo desde que foi atirado
-  double duration;       // Carga atual da ult
+  float timer;           // Tempo desde que foi atirado
+  float duration;        // Carga atual da ult
   usint damage;          // Dano causado em impacto
   float weight;          // Peso, influencia como é afetado pelos buracos negros
   Animation animations[PROJECTILE_NUM_STATES]; // Animações para cada estado
@@ -49,7 +45,8 @@ typedef struct projectile {
 // Funções relacionadas aos inimigos
 Projectile new_projectile(ProjectileType type, int id); // Cria um projétil
 void set_projectile_animation(Projectile *projectile, ProjectileState state,
-                              Animation anim);  // Define uma animação
-void update_projectile(Projectile *projectile); // Função de update do projétil
+                              Animation anim); // Define uma animação
+void update_projectile(Projectile *projectile,
+                       float dt); // Função de update do projétil
 
 #endif
