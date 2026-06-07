@@ -1,4 +1,5 @@
 #include "../include/raylib.h"
+#include "modules/player.h"
 
 #define MAX_BUILDINGS 100
 
@@ -12,6 +13,13 @@ int main(void) {
   InitWindow(screenWidth, screenHeight, "WhiteHole"); // Inicializando janela
   SetTargetFPS(60); // Queremos que rode a 60 fps
 
+<<<<<<< Updated upstream
+=======
+  float dt; // Tempo entre frames
+
+  Player player = init_player();
+
+>>>>>>> Stashed changes
   // Loop de jogo
   while (!WindowShouldClose()) // Fecha no ESC
   {
@@ -19,12 +27,16 @@ int main(void) {
     // Update
     //----------------------------------------------------------------------------------
 
+    update_player(&player, dt);
     //----------------------------------------------------------------------------------
     // Renderização do jogo
     //----------------------------------------------------------------------------------
     BeginDrawing();
 
     ClearBackground(RAYWHITE);
+
+    DrawCircle(player.pos.x, player.pos.y, 50.0f, RED);
+    DrawLineEx((Vector2){0,0}, (Vector2){1200,1200}, 5.0f, BLACK);
 
     BeginMode2D(cam);
 

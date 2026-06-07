@@ -52,4 +52,6 @@ void set_projectile_animation(Projectile *projectile, ProjectileState state,
                               Animation anim);  // Define uma animação
 void update_projectile(Projectile *projectile); // Função de update do projétil
 
+void sai_projectile(Projectile *projectile, float dt);
+
 #endif
