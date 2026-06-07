@@ -18,13 +18,12 @@ typedef struct assetstore {
 
 // Construtor
 AssetStore init_asset_store();
-// Setters para as spritesheets
-void set_player_sheet(int state, Texture2D sheet);
-void set_enemy_sheet(int enemy_type, int state, Texture2D sheet);
-void set_projectile_sheet(int projectile_type, int state, Texture2D sheet);
 // Getters para as spritesheets
-Texture2D get_player_sheet(int state);
-Texture2D get_enemy_sheet(int enemy_type, int state);
-Texture2D get_projectile_sheet(int projectile_type, int state);
+Texture2D get_player_sheet(AssetStore *store, PlayerState state);
+Texture2D get_enemy_sheet(AssetStore *store, EnemyType enemy_type,
+                          EnemyState state);
+Texture2D get_projectile_sheet(AssetStore *store,
+                               ProjectileType projectile_type,
+                               ProjectileState state);
 
 #endif
