@@ -13,6 +13,6 @@ Stack new_stack(int stack_size);  // Cria um novo stack com tamanho qualquer
 void free_stack(Stack *stack);    // Libera o stack do nosso stack (!)
 void push(Stack *stack, int val); // Adiciona um elemento ao topo do stack
 int pop(Stack *stack); // Retorna e remove o elemento no topo do stack
-void fillZeroToMax(Stack *stack); // Preenche o stack com valores [0..max]
+void fill_zero_to_max(Stack *stack); // Preenche o stack com valores [0..max]
 
 #endif

@@ -36,8 +36,8 @@ typedef struct player {
 // Funções relacionadas ao Player
 Player init_player(); // Cria um jogador
 void set_player_animation(Player *player, PlayerState state,
-                          Animation anim); // Define uma animação
-void update_player(Player *player);        // Função de update do Player
+                          Animation anim);    // Define uma animação
+void update_player(Player *player, float dt); // Função de update do Player
 
 void move_player(Player *player, float dt);
 

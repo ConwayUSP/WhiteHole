@@ -8,24 +8,24 @@ Camera2D cam = {0};
 int main(void) {
   // Dimensões da tela
   const int screenWidth = 1200;
-  const int screenHeight = 800;
+  const int screenHeight = 1200;
 
   InitWindow(screenWidth, screenHeight, "WhiteHole"); // Inicializando janela
   SetTargetFPS(60); // Queremos que rode a 60 fps
 
-<<<<<<< Updated upstream
-=======
   float dt; // Tempo entre frames
 
   Player player = init_player();
 
->>>>>>> Stashed changes
+  float dt; // Tempo entre frames
+
   // Loop de jogo
   while (!WindowShouldClose()) // Fecha no ESC
   {
     //----------------------------------------------------------------------------------
     // Update
     //----------------------------------------------------------------------------------
+    dt = GetFrameTime();
 
     update_player(&player, dt);
     //----------------------------------------------------------------------------------

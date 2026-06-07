@@ -1,6 +1,8 @@
 #include "stack.h"
 #include <stdlib.h>
 
+#define EMPTY -999 // Tecnicamente não é o certo a se fazer, mas tá dboas
+
 Stack new_stack(int stack_size) {
   int *s = malloc(stack_size * sizeof(int));
   Stack stack = {.stack = s, .top = 0, .max = stack_size};
@@ -18,13 +20,13 @@ void push(Stack *stack, int val) {
 
 int pop(Stack *stack) {
   if (stack->top <= 0)
-    return -999; // Tecnicamente não é o certo a se fazer, mas tá dboas
+    return EMPTY;
   int res = stack->stack[stack->top];
   stack->top -= 1;
   return res;
 }
 
-void fillZeroToMax(Stack *stack) {
+void fill_zero_to_max(Stack *stack) {
   for (int i = 0; i < stack->max; i++)
     stack->stack[i] = i;
 }

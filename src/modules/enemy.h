@@ -43,6 +43,7 @@ typedef struct enemy {
   EnemyState state;     // Estado atual (animação que está rodando)
   Vector2 pos;          // Posição no mundo
   Vector2 vel;          // Vetor de velocidade
+  float speed;          // Velocidade base de movimento
   double ult_charge;    // Carga atual da ult
   double ult_threshold; // Quanta carga precisa acumular para ultar
   double atk_cooldown;  // Quanto tempo desde o último tiro
