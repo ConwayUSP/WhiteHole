@@ -19,13 +19,13 @@ Vector2 normalize_vec(Vector2 V) {
 
 // Encontra o vetor de direção entre um de origem e um de destino
 Vector2 direction_vec(Vector2 origin, Vector2 dest){
-	return normalize(sub_vec(dest, origin));
+	return normalize_vec(sub_vec(dest, origin));
 }
 
 // Encontra o ponto em que target vai estar se andar em target_vel por um segundo
 // E gera um vetor de direção saindo de origin até esse ponto
 Vector2 predict_vec(Vector2 origin, Vector2 target, Vector2 target_vel){
-	return vec_direction(sum_vec(target, target_vel), origin);
+	return direction_vec(sum_vec(target, target_vel), origin);
 }
 
 #endif
