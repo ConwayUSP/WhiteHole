@@ -31,13 +31,8 @@ Player init_player() {
 void set_player_animation(Player *player, PlayerState state, Animation anim) {
   player->animations[state] = anim;
 }
-<<<<<<< Updated upstream
-void update_player(Player *player) {
-  // !TODO: implementar
-=======
 void update_player(Player *player, float dt) {
   move_player(player, dt);
->>>>>>> Stashed changes
 }
 void move_player(Player *player, float dt){
     Vector2 move = {.x = 0, .y = 0};
