@@ -5,16 +5,17 @@
 #include <math.h>
 
 Vector2 sub_vec(Vector2 A, Vector2 B){
-	return {.x = A.x - B.x, .y = A.y - B.y};
+	return (Vector2){.x = A.x - B.x, .y = A.y - B.y};
 }
 
 Vector2 sum_vec(Vector2 A, Vector2 B){
-	return {.x = A.x + B.x, .y = A.y + B.y};
+	return (Vector2){.x = A.x + B.x, .y = A.y + B.y};
 }
 
 Vector2 normalize_vec(Vector2 V) {
+	if (V.x == 0 && V.y == 0) {return V;}
 	float mod = sqrt(pow(V.x, 2) + pow(V.y, 2));
-	return {.x = V.x / mod, .y = V.y / mod};
+	return (Vector2){.x = V.x / mod, .y = V.y / mod};
 }
 
 // Encontra o vetor de direção entre um de origem e um de destino

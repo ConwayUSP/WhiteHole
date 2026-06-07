@@ -46,3 +46,8 @@ void set_projectile_animation(Projectile *projectile, ProjectileState state,
 void update_projectile(Projectile *projectile, float dt) {
   // !TODO: Implementar
 }
+void sai_projectile(Projectile *projectile, float dt) {
+  Vector2 sai = {.x = 0, .y = 0};
+  if (IsKeyDown(KEY_SPACE)) {sai.y -= 1;}
+
+}
