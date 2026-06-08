@@ -41,4 +41,7 @@ void update_player(Player *player, float dt); // Função de update do Player
 
 void move_player(Player *player, float dt);
 
+void shoot_blackhole(Player *player);
+
+void read_mouse_inputs(Player *player, float dt);
 #endif

@@ -1,6 +1,6 @@
 #ifndef STACK_H
 #define STACK_H
-
+#define NULL_SLOT -999 // Tecnicamente não é o certo a se fazer, mas tá dboas
 // Um stack (LIFO)
 typedef struct {
   int *free_stack; // índices livres da lista sendo controladas

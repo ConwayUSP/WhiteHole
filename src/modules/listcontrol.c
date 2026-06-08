@@ -1,8 +1,8 @@
 #include "listcontrol.h"
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdio.h> 
 
-#define NULL_SLOT -999 // Tecnicamente não é o certo a se fazer, mas tá dboas
 
 ListControl new_list_control(int list_size) {
   int *s = malloc(list_size * sizeof(int));
@@ -25,15 +25,16 @@ void set_slot_as_empty(ListControl *list_control, int idx) {
 }
 
 int get_empty_slot(ListControl *list_control) {
-  if (list_control->top <= 0)
+  if (list_control->top <=0)
     return NULL_SLOT;
+    printf("babuino");
   int res = list_control->free_stack[list_control->top];
   list_control->top -= 1;
   list_control->used_slots[res] = true;
   return res;
 }
 
-void set_all_free(ListControl *list_control) {
+void set_all_empty(ListControl *list_control) {
   for (int i = list_control->max - 1; i >= 0; i++)
     set_slot_as_empty(list_control, i);
 }

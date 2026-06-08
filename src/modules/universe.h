@@ -29,13 +29,10 @@ extern Universe universe;
 
 // Construtor
 Universe init_universe();
-int get_valid_projectile_id(
-    Universe *universe); // Reserva um espaço na lista de projéteis
-int get_valid_enemy_id(
-    Universe *universe); // Reserva um espaço na lista de inimigos
-void free_projectile_slot(Universe *universe,
-                          int id); // Libera um espaço na lista de projéteis
-void free_enemy_slot(Universe *universe,
-                     int id); // Libera um espaço na lista de inimigos
-
+int get_valid_projectile_id(); // Reserva um espaço na lista de projéteis
+int get_valid_enemy_id(); // Reserva um espaço na lista de inimigos
+void free_projectile_slot(int id); // Libera um espaço na lista de projéteis
+void free_enemy_slot(int id); // Libera um espaço na lista de inimigos
+bool is_slot_empty(ListControl *control, int id); // Verifica se um slot está vazio
+void insert_projectile(Projectile projectile); // Insere um projétil na lista de projéteis do universo  
 #endif
