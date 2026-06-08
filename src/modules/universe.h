@@ -25,6 +25,8 @@ typedef struct universe {
   Stack enemy_slots;          // Stack de posições livres na lista enemies
 } Universe;
 
+extern Universe universe;
+
 // Construtor
 Universe init_universe();
 int get_valid_projectile_id(
