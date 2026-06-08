@@ -47,7 +47,12 @@ void set_projectile_animation(Projectile *projectile, ProjectileState state,
                               Animation anim); // Define uma animação
 void update_projectile(Projectile *projectile,
                        float dt); // Função de update do projétil
-
+       
+void move_projectile(Projectile *projectile, float dt); // Move o projétil de acordo com sua direção e velocidade 
 void sai_projectile(Projectile *projectile, float dt);
-
+void draw_projectiles();
+void draw_projectile(Projectile projectile);
+void set_projectile_direction(Projectile *projectile, Vector2 direction);
+void new_black_hole(Vector2 pos, Vector2 direction);
+void update_projectiles( float dt);
 #endif

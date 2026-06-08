@@ -1,6 +1,7 @@
 #include "player.h"
 #include "animation.h"
 #include "vector.h"
+#include "projectile.h"
 
 Player init_player() {
   Player p = {0};
@@ -32,6 +33,7 @@ void set_player_animation(Player *player, PlayerState state, Animation anim) {
   player->animations[state] = anim;
 }
 void update_player(Player *player, float dt) {
+        read_mouse_inputs(player, dt);
   move_player(player, dt);
 }
 void move_player(Player *player, float dt){
@@ -45,4 +47,16 @@ void move_player(Player *player, float dt){
     move.y *= 500 *dt;
     player->pos = sum_vec(player->pos, move);
     player->vel = move;
+}
+void shoot_blackhole(Player *player){
+    int mouse_x = GetMouseX();
+    int mouse_y = GetMouseY();
+    Vector2 mouse_pos = {.x = mouse_x, .y = mouse_y};
+    Vector2 direction = direction_vec(player->pos, mouse_pos);
+    new_black_hole(player->pos, direction);
+}
+void read_mouse_inputs(Player *player, float dt){
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+        shoot_blackhole(player);
+    }
 }

@@ -29,6 +29,7 @@ int main(void) {
     dt = GetFrameTime();
 
     update_player(&player, dt);
+    update_projectiles(dt);
     //----------------------------------------------------------------------------------
     // Renderização do jogo
     //----------------------------------------------------------------------------------
@@ -38,7 +39,7 @@ int main(void) {
 
     DrawCircle(player.pos.x, player.pos.y, 50.0f, RED);
     DrawLineEx((Vector2){0,0}, (Vector2){1200,1200}, 5.0f, BLACK);
-
+    draw_projectiles();
     BeginMode2D(cam);
 
     EndMode2D();
