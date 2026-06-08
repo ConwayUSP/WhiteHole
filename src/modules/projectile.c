@@ -1,5 +1,6 @@
 #include "projectile.h"
 #include "stdlib.h"
+#include "vector.h"
 
 Projectile new_projectile(ProjectileType type, int id) {
   Projectile p = {0};
@@ -43,11 +44,17 @@ void set_projectile_animation(Projectile *projectile, ProjectileState state,
                               Animation anim) {
   projectile->animations[state] = anim;
 }
-void update_projectile(Projectile *projectile, float dt) {
-  // !TODO: Implementar
+void update_projectile(Projectile *projectile, Vector2 inicial_position, Vector2 final_position, float dt) {
+  sai_projectile(projectile, inicial_position, final_position, dt);
 }
-void sai_projectile(Projectile *projectile, float dt) {
-  Vector2 sai = {.x = 0, .y = 0};
-  if (IsKeyDown(KEY_SPACE)) {sai.y -= 1;}
-
+void sai_projectile(Projectile *projectile, Vector2 inicial_position, Vector2 final_position, float dt) {
+  Vector2 sai = inicial_position;
+  Vector2 dir = direction_vec(final_position, inicial_position);
+  projectile->pos = sai;
+  projectile->direction = dir;
+  projectile->vel = (Vector2){100.0f, 100.0f};
+  dir.x *= projectile->vel.x * dt;
+  dir.y *= projectile->vel.y * dt;
+  projectile->pos = sum_vec(sai, dir);
+  
 }

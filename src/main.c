@@ -1,5 +1,6 @@
 #include "../include/raylib.h"
 #include "modules/player.h"
+#include "modules/projectile.h"
 
 #define MAX_BUILDINGS 100
 
@@ -13,11 +14,11 @@ int main(void) {
   InitWindow(screenWidth, screenHeight, "WhiteHole"); // Inicializando janela
   SetTargetFPS(60); // Queremos que rode a 60 fps
 
-  float dt; // Tempo entre frames
-
-  Player player = init_player();
+  Vector2 mira_position = { 0.0f, 0.0f };
 
   float dt; // Tempo entre frames
+
+  Player player = init_player(); // Inicializa o player
 
   // Loop de jogo
   while (!WindowShouldClose()) // Fecha no ESC
@@ -26,17 +27,22 @@ int main(void) {
     // Update
     //----------------------------------------------------------------------------------
     dt = GetFrameTime();
+    mira_position = GetMousePosition();
 
-    update_player(&player, dt);
+    update_player(&player, dt); // Atualiza o moviento do player
+
+
     //----------------------------------------------------------------------------------
     // Renderização do jogo
     //----------------------------------------------------------------------------------
     BeginDrawing();
 
     ClearBackground(RAYWHITE);
-
+    
+    DrawCircleV(mira_position, 40, DARKBLUE);
     DrawCircle(player.pos.x, player.pos.y, 50.0f, RED);
     DrawLineEx((Vector2){0,0}, (Vector2){1200,1200}, 5.0f, BLACK);
+    //DrawCircle(mouse_position);
 
     BeginMode2D(cam);
 
