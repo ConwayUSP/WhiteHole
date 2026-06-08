@@ -6,7 +6,7 @@
 #include "enemy.h"
 #include "player.h"
 #include "projectile.h"
-#include "stack.h"
+#include "listcontrol.h"
 
 #define MAX_PROJECTILES 1024
 #define MAX_ENEMIES 128
@@ -20,9 +20,9 @@ typedef struct universe {
   Player player;
   int points; // Com quantos pontos o jogador está atualmente
   Projectile projectiles[MAX_PROJECTILES]; // Lista de todos os projéteis
-  Stack projectile_slots;     // Stack de posições livres na lista projectiles
+  ListControl projectile_slots;     // Gerencia a lista de projectiles
   Enemy enemies[MAX_ENEMIES]; // Lista de todos os inimigos
-  Stack enemy_slots;          // Stack de posições livres na lista enemies
+  ListControl enemy_slots;          // Gerencia a lista de inimigos
 } Universe;
 
 extern Universe universe;
