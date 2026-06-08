@@ -23,8 +23,8 @@ Vector2 direction_vec(Vector2 origin, Vector2 dest){
 	return normalize_vec(sub_vec(dest, origin));
 }
 
-// Encontra o ponto em que target vai estar se andar em target_vel por um segundo
+// Encontra o ponto em que target vai estar se andar target_move
 // E gera um vetor de direção saindo de origin até esse ponto
-Vector2 predict_vec(Vector2 origin, Vector2 target, Vector2 target_vel){
-	return direction_vec(sum_vec(target, target_vel), origin);
+Vector2 predict_vec(Vector2 origin, Vector2 target, Vector2 target_move){
+	return direction_vec(origin, sum_vec(target, target_move));
 }

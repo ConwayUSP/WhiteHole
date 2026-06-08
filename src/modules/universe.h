@@ -20,7 +20,7 @@ typedef struct universe {
   Player player;
   int points; // Com quantos pontos o jogador está atualmente
   Projectile projectiles[MAX_PROJECTILES]; // Lista de todos os projéteis
-  ListControl projectile_slots;     // Gerencia a lista de projectiles
+  ListControl projectile_slots;     // Gerencia a lista de projéteis
   Enemy enemies[MAX_ENEMIES]; // Lista de todos os inimigos
   ListControl enemy_slots;          // Gerencia a lista de inimigos
 } Universe;
@@ -35,4 +35,5 @@ void free_projectile_slot(int id); // Libera um espaço na lista de projéteis
 void free_enemy_slot(int id); // Libera um espaço na lista de inimigos
 bool is_slot_empty(ListControl *control, int id); // Verifica se um slot está vazio
 void insert_projectile(Projectile projectile); // Insere um projétil na lista de projéteis do universo  
+void insert_enemy(Enemy enemy); // Insere um projétil na lista de projéteis do universo  
 #endif

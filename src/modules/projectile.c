@@ -3,10 +3,12 @@
 #include "universe.h"
 #include "listcontrol.h"
 #include "stdio.h"
-Projectile new_projectile(ProjectileType type, int id) {
+
+void new_projectile(ProjectileType type, Vector2 pos, Vector2 direction) {
   Projectile p = {0};
   p.type = type;
-  p.id = id;
+  p.pos = pos;
+  p.id = get_valid_projectile_id();
   p.state = PROJECTILE_FORMING;
   
   switch (type) {
@@ -41,12 +43,11 @@ Projectile new_projectile(ProjectileType type, int id) {
     p.weight = 1000000.0f;
     break;
 
-
   default:
     exit(1); // Tipo de projétil não reconhecido
   }
-  printf("babuino");
-  return p;
+
+  insert_projectile(p);
 }
 
 void set_projectile_animation(Projectile *projectile, ProjectileState state,
@@ -78,11 +79,7 @@ void new_black_hole(Vector2 pos, Vector2 direction){
   if (id == NULL_SLOT){
     return; // Não tem slot vazio para criar um novo projétil
   }
-  Projectile p = new_projectile(BLACK_HOLE, id);
-  p.pos = pos;
-  set_projectile_direction(&p, direction);
-
-  insert_projectile(p);
+  new_projectile(BLACK_HOLE, pos, direction);
 }
 
 void set_projectile_direction(Projectile *projectile, Vector2 direction)
@@ -104,5 +101,5 @@ void draw_projectiles(){
   }
 }
 void draw_projectile(Projectile projectile){
-  DrawCircle(projectile.pos.x, projectile.pos.y, 10.0f, BLACK);
+  DrawCircle(projectile.pos.x, projectile.pos.y, 100.0f, BLACK);
 }

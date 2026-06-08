@@ -42,7 +42,7 @@ typedef struct projectile {
 } Projectile;
 
 // Funções relacionadas aos inimigos
-Projectile new_projectile(ProjectileType type, int id); // Cria um projétil
+void new_projectile(ProjectileType type, Vector2 pos, Vector2 direction); // Cria um projétil
 void set_projectile_animation(Projectile *projectile, ProjectileState state,
                               Animation anim); // Define uma animação
 void update_projectile(Projectile *projectile,
