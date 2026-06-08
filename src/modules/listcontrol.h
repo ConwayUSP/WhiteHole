@@ -1,5 +1,8 @@
 #ifndef STACK_H
 #define STACK_H
+
+#include <stdbool.h>
+
 #define NULL_SLOT -999 // Tecnicamente não é o certo a se fazer, mas tá dboas
 // Um stack (LIFO)
 typedef struct {

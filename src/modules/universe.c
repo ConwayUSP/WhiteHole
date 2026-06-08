@@ -2,7 +2,7 @@
 #include "assetstore.h"
 #include "listcontrol.h"
 #include "player.h"
-#include "stdio.h"
+#include <stdio.h>
 
 Universe init_universe() {
   Universe u = {0};
@@ -37,6 +37,11 @@ void free_enemy_slot(int id) {
 void insert_projectile(Projectile projectile){
   universe.projectiles[projectile.id]=projectile;
 }
+
+void insert_enemy(Enemy enemy){
+  universe.enemies[enemy.id]=enemy;
+}
+
 bool is_slot_empty(ListControl *control, int id){
   return !control->used_slots[id];
 }

@@ -1,6 +1,10 @@
 #include "../include/raylib.h"
+#include "modules/enemy.h"
 #include "modules/player.h"
 #include "modules/universe.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #define MAX_BUILDINGS 100
 
@@ -15,10 +19,15 @@ int main(void) {
   InitWindow(screenWidth, screenHeight, "WhiteHole"); // Inicializando janela
   SetTargetFPS(60); // Queremos que rode a 60 fps
 
-  universe = init_universe();
-  float dt; // Tempo entre frames
+  // Aleatoriedade
+  srand(time(NULL));
 
-  Player player = init_player();
+  universe = init_universe();
+
+  new_enemy(BILLIONAIRE, (Vector2){0,0});
+  new_enemy(BILLIONAIRE, (Vector2){0,600});
+
+  float dt; // Tempo entre frames
 
   // Loop de jogo
   while (!WindowShouldClose()) // Fecha no ESC
@@ -28,8 +37,10 @@ int main(void) {
     //----------------------------------------------------------------------------------
     dt = GetFrameTime();
 
-    update_player(&player, dt);
+    update_player(&universe.player, dt);
     update_projectiles(dt);
+    update_enemies(dt);
+
     //----------------------------------------------------------------------------------
     // Renderização do jogo
     //----------------------------------------------------------------------------------
@@ -37,9 +48,11 @@ int main(void) {
 
     ClearBackground(RAYWHITE);
 
-    DrawCircle(player.pos.x, player.pos.y, 50.0f, RED);
-    DrawLineEx((Vector2){0,0}, (Vector2){1200,1200}, 5.0f, BLACK);
+    DrawCircle(universe.player.pos.x, universe.player.pos.y, 50.0f, RED);
     draw_projectiles();
+    draw_enemies();
+
+
     BeginMode2D(cam);
 
     EndMode2D();
