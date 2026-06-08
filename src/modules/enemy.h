@@ -54,6 +54,6 @@ typedef struct enemy {
 Enemy new_enemy(EnemyType type, int id); // Cria um inimigo
 void set_enemy_animation(Enemy *enemy, EnemyState state,
                          Animation anim); // Define uma animação
-void update_enemy(Enemy *enemy);          // Função de update do inimigo
+void update_enemy(Enemy *enemy, float dt);          // Função de update do inimigo
 
 #endif

@@ -1,9 +1,11 @@
 #include "../include/raylib.h"
 #include "modules/player.h"
+#include "modules/universe.h"
 
 #define MAX_BUILDINGS 100
 
 Camera2D cam = {0};
+Universe universe;
 
 int main(void) {
   // Dimensões da tela
@@ -13,11 +15,10 @@ int main(void) {
   InitWindow(screenWidth, screenHeight, "WhiteHole"); // Inicializando janela
   SetTargetFPS(60); // Queremos que rode a 60 fps
 
+  universe = init_universe();
   float dt; // Tempo entre frames
 
   Player player = init_player();
-
-  float dt; // Tempo entre frames
 
   // Loop de jogo
   while (!WindowShouldClose()) // Fecha no ESC
