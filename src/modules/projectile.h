@@ -48,8 +48,6 @@ typedef struct projectile {
 void new_projectile(ProjectileType type, Vector2 pos, Vector2 direction); // Cria um projétil
 void set_projectile_animation(Projectile *projectile, ProjectileState state,
                               Animation anim); // Define uma animação
-void update_projectile(Projectile *projectile, Vector2 inicial_position, Vector2 final_position,
-                       float dt); // Função de update do projétil
 void sai_projectile(Projectile *projectile, Vector2 inicial_position, Vector2 mira_position, float dt);
 void move_projectile(Projectile *projectile, float dt); // Move o projétil de acordo com sua direção e velocidade 
 void draw_projectiles();

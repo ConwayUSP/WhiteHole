@@ -9,15 +9,14 @@
 
 #define MAX_BUILDINGS 100
 
-Camera2D cam = {0};
+
 Universe universe;
 
 int main(void) {
   // Dimensões da tela
   const int screenWidth = 1200;
   const int screenHeight = 1200;
-  cam.zoom = 3.2f;
-  cam.target = (Vector2){.x = 600, .y = 600};
+
 
   InitWindow(screenWidth, screenHeight, "WhiteHole"); // Inicializando janela
   SetTargetFPS(60); // Queremos que rode a 60 fps
@@ -26,6 +25,8 @@ int main(void) {
   srand(time(NULL));
 
   universe = init_universe();
+  universe.cam.zoom = 3.2f;
+  universe.cam.target = (Vector2){.x = 600, .y = 600};
 
   float dt; // Tempo entre frames
   float timer = 0; // Contador de um segundo para spawn
@@ -51,7 +52,7 @@ int main(void) {
     // Renderização do jogo
     //----------------------------------------------------------------------------------
     BeginDrawing();
-    BeginMode2D(cam);
+    BeginMode2D(universe.cam);
 
     ClearBackground(WHITE);
     draw_universe();

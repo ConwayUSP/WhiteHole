@@ -9,6 +9,7 @@ void new_projectile(ProjectileType type, Vector2 pos, Vector2 direction) {
   p.type = type;
   p.pos = pos;
   p.id = get_valid_projectile_id();
+  if (p.id == NULL_SLOT) {return;}
   p.state = PROJECTILE_FORMING;
 
   switch (type) {
@@ -54,18 +55,10 @@ void set_projectile_animation(Projectile *projectile, ProjectileState state,
                               Animation anim) {
   projectile->animations[state] = anim;
 }
-void update_projectile(Projectile *projectile, Vector2 inicial_position, Vector2 final_position, float dt) {
-  sai_projectile(projectile, inicial_position, final_position, dt);
+
+void new_player_projectile(Vector2 inicial_position, Vector2 proj_direction) {
+  new_projectile(PLAYER_ATK, inicial_position, proj_direction);
 }
-void sai_projectile(Projectile *projectile, Vector2 inicial_position, Vector2 mira_position, float dt) {
-  Vector2 sai = inicial_position;
-  Vector2 dir = direction_vec(mira_position, inicial_position);
-  projectile->pos = sai;
-  projectile->direction = dir;
-  projectile->vel = (Vector2){100.0f, 100.0f};
-  dir.x *= projectile->vel.x * dt;
-  dir.y *= projectile->vel.y * dt;
-  projectile->pos = sum_vec(sai, dir);
   
 void update_projectiles(float dt) {
   for (int i = 0; i < MAX_PROJECTILES; i++) {
@@ -78,12 +71,6 @@ void update_projectiles(float dt) {
 void update_projectile(Projectile *projectile, float dt) {
   move_projectile(projectile, dt);
   projectile->timer += dt;
-}
-void sai_projectile(Projectile *projectile, float dt) {
-  Vector2 sai = {.x = 0, .y = 0};
-  if (IsKeyDown(KEY_SPACE)) {
-    sai.y -= 1;
-  }
 }
 
 void new_black_hole(Vector2 pos, Vector2 direction) {
@@ -111,5 +98,9 @@ void draw_projectiles() {
   }
 }
 void draw_projectile(Projectile projectile) {
-  DrawCircle(projectile.pos.x, projectile.pos.y, 100.0f, BLACK);
+  switch (projectile.type) {
+    case BLACK_HOLE: DrawCircle(projectile.pos.x, projectile.pos.y, 15.0f, BLACK);
+    case PLAYER_ATK: DrawCircle(projectile.pos.x, projectile.pos.y, 5.0f, YELLOW);
+  }
+  
 }

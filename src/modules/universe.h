@@ -23,6 +23,7 @@ typedef struct universe {
   ListControl projectile_slots;            // Gerencia a lista de projectiles
   Enemy enemies[MAX_ENEMIES];              // Lista de todos os inimigos
   ListControl enemy_slots;                 // Gerencia a lista de inimigos
+  Camera2D cam;
 } Universe;
 
 extern Universe universe;
