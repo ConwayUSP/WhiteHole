@@ -1,11 +1,12 @@
 #include "listcontrol.h"
-#include <stdlib.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 ListControl new_list_control(int list_size) {
   int *s = malloc(list_size * sizeof(int));
   bool *l = malloc(list_size * sizeof(bool));
-  ListControl list_control = {.free_stack = s, .top = 0, .max = list_size, .used_slots = l};
+  ListControl list_control = {
+      .free_stack = s, .top = 0, .max = list_size, .used_slots = l};
   return list_control;
 }
 
@@ -23,7 +24,7 @@ void set_slot_as_empty(ListControl *list_control, int idx) {
 }
 
 int get_empty_slot(ListControl *list_control) {
-  if (list_control->top <=0)
+  if (list_control->top <= 0)
     return NULL_SLOT;
   int res = list_control->free_stack[list_control->top];
   list_control->top -= 1;
