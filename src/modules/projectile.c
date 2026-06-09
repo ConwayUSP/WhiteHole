@@ -47,9 +47,9 @@ void set_projectile_animation(Projectile *projectile, ProjectileState state,
 void update_projectile(Projectile *projectile, Vector2 inicial_position, Vector2 final_position, float dt) {
   sai_projectile(projectile, inicial_position, final_position, dt);
 }
-void sai_projectile(Projectile *projectile, Vector2 inicial_position, Vector2 final_position, float dt) {
+void sai_projectile(Projectile *projectile, Vector2 inicial_position, Vector2 mira_position, float dt) {
   Vector2 sai = inicial_position;
-  Vector2 dir = direction_vec(final_position, inicial_position);
+  Vector2 dir = direction_vec(mira_position, inicial_position);
   projectile->pos = sai;
   projectile->direction = dir;
   projectile->vel = (Vector2){100.0f, 100.0f};

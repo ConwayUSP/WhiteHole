@@ -17,8 +17,12 @@ int main(void) {
   Vector2 mira_position = { 0.0f, 0.0f };
 
   float dt; // Tempo entre frames
+  int id;
+  Vector2 inicial_position; // Posição inicial do projectile
+  Vector2 mira_position; // Posição da mira do projectile
 
   Player player = init_player(); // Inicializa o player
+  Projectile projectile = new_projectile(PLAYER_ATK, id);
 
   // Loop de jogo
   while (!WindowShouldClose()) // Fecha no ESC
@@ -27,10 +31,11 @@ int main(void) {
     // Update
     //----------------------------------------------------------------------------------
     dt = GetFrameTime();
+    inicial_position = player.pos;
     mira_position = GetMousePosition();
 
     update_player(&player, dt); // Atualiza o moviento do player
-
+    
 
     //----------------------------------------------------------------------------------
     // Renderização do jogo
@@ -42,7 +47,7 @@ int main(void) {
     DrawCircleV(mira_position, 40, DARKBLUE);
     DrawCircle(player.pos.x, player.pos.y, 50.0f, RED);
     DrawLineEx((Vector2){0,0}, (Vector2){1200,1200}, 5.0f, BLACK);
-    //DrawCircle(mouse_position);
+
 
     BeginMode2D(cam);
 
@@ -51,7 +56,7 @@ int main(void) {
     //----------------------------------------------------------------------------------
     // Renderização da UI
     //----------------------------------------------------------------------------------
-    DrawText("WHITEHOLE", 500, 10, 40, BLACK);
+    DrawText("WHITEHOLE", 600, 10, 40, BLACK);
 
     EndDrawing();
     //----------------------------------------------------------------------------------

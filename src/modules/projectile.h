@@ -51,6 +51,6 @@ void set_projectile_animation(Projectile *projectile, ProjectileState state,
 void update_projectile(Projectile *projectile, Vector2 inicial_position, Vector2 final_position,
                        float dt); // Função de update do projétil
 
-void sai_projectile(Projectile *projectile, Vector2 inicial_position, Vector2 final_position, float dt);
+void sai_projectile(Projectile *projectile, Vector2 inicial_position, Vector2 mira_position, float dt);
 
 #endif
