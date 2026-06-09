@@ -9,6 +9,8 @@
 
 #define MAX_BUILDINGS 100
 
+void draw_fps_monitor();
+
 Universe universe;
 
 int main(void) {
@@ -17,7 +19,7 @@ int main(void) {
   const int screenHeight = 1200;
 
   InitWindow(screenWidth, screenHeight, "WhiteHole"); // Inicializando janela
-  SetTargetFPS(60); // Queremos que rode a 60 fps
+  SetTargetFPS(240); // Queremos que rode a 60 fps
 
   // Aleatoriedade
   srand(time(NULL));
@@ -58,6 +60,7 @@ int main(void) {
 
     // Renderização da UI
     DrawText("WHITEHOLE", 500, 10, 40, WHITE);
+    draw_fps_monitor();
 
     EndDrawing();
   }
@@ -65,4 +68,17 @@ int main(void) {
   // Encerrando o programa
   CloseWindow();
   return 0;
+}
+
+void draw_fps_monitor() {
+  int FPS = GetFPS();
+  Color fps_color = (Color){.r = 100, .g = 255, .b = 150, .a = 255};
+  if (FPS < 50) {
+    fps_color = (Color){.r = 255, .g = 255, .b = 150, .a = 255};
+  } else if (FPS < 30) {
+    fps_color = (Color){.r = 255, .g = 100, .b = 100, .a = 255};
+  }
+  char fps_text[8];
+  sprintf(fps_text, "%d fps", FPS);
+  DrawText(fps_text, 1100, 10, 20, fps_color);
 }
