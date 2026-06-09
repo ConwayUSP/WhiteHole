@@ -6,7 +6,7 @@
     - [X] ICE: gosta de andar em grupinhos
     - [ ] Astronautas: seguem o player mas evitando buracos negros
     - [X] Jeff Bezos: dá uma corrida em linha reta na direção onde o player estava
-- [ ] Fazer o player atirar
+- [X] Fazer o player atirar
 - [ ] Fazer os inimigos atirarem
     - ICE ataca com uma bazooka que explode e dá dano em área
 - [ ] Fazer o player ultar (jogar buraco negro)

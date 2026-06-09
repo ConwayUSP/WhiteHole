@@ -6,6 +6,7 @@
 
 #define MAX_PLAYER_HP 3
 #define BLACK_HOLE_COST 20
+#define ATK_COOLDOWN 0.085
 
 // Entenda "usint" como "unsigned short int" a partir de agora
 typedef unsigned short int usint;
@@ -41,7 +42,6 @@ void set_player_animation(Player *player, PlayerState state,
 void update_player(Player *player, float dt); // Função de update do Player
 void move_player(Player *player, float dt);
 void update_player_state(Player *player);
-void shoot_blackhole(Player *player);
 void read_mouse_inputs(Player *player, float dt);
 void draw_player(Player *player);
 #endif

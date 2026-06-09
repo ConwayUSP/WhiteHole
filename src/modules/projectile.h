@@ -1,8 +1,6 @@
 #ifndef PROJECTILE_H
 #define PROJECTILE_H
 
-
-
 #include "../../include/raylib.h"
 #include "animation.h"
 #include "player.h"
@@ -45,14 +43,16 @@ typedef struct projectile {
 } Projectile;
 
 // Funções relacionadas aos inimigos
-void new_projectile(ProjectileType type, Vector2 pos, Vector2 direction); // Cria um projétil
+void new_projectile(ProjectileType type, Vector2 pos,
+                    Vector2 direction); // Cria um projétil
 void set_projectile_animation(Projectile *projectile, ProjectileState state,
                               Animation anim); // Define uma animação
-void sai_projectile(Projectile *projectile, Vector2 inicial_position, Vector2 mira_position, float dt);
-void move_projectile(Projectile *projectile, float dt); // Move o projétil de acordo com sua direção e velocidade 
+void move_projectile(
+    Projectile *projectile,
+    float dt); // Move o projétil de acordo com sua direção e velocidade
 void draw_projectiles();
 void draw_projectile(Projectile projectile);
 void set_projectile_direction(Projectile *projectile, Vector2 direction);
-void new_black_hole(Vector2 pos, Vector2 direction);
-void update_projectiles( float dt);
+void update_projectiles(float dt);
+void update_projectile(Projectile *projectile, float dt);
 #endif

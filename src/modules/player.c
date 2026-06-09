@@ -37,6 +37,7 @@ void set_player_animation(Player *player, PlayerState state, Animation anim) {
   player->animations[state] = anim;
 }
 void update_player(Player *player, float dt) {
+  player->atk_cooldown -= dt;
   read_mouse_inputs(player, dt);
   move_player(player, dt);
   update_player_state(player);
@@ -83,26 +84,27 @@ void move_player(Player *player, float dt) {
   player->pos = sum_vec(player->pos, move);
   player->vel = move;
 }
-void shoot_blackhole(Player *player) {
+
+void read_mouse_inputs(Player *player, float dt) {
+  if (player->atk_cooldown > 0) {
+    return;
+  }
+
+  // Calcular a direção do tiro
   int mouse_x = GetMouseX();
   int mouse_y = GetMouseY();
   Vector2 mouse_pos = {.x = mouse_x, .y = mouse_y};
   Vector2 mouse_2d = GetScreenToWorld2D(mouse_pos, universe.cam);
   Vector2 direction = direction_vec(player->pos, mouse_2d);
-  new_black_hole(player->pos, direction);
-}
-void read_mouse_inputs(Player *player, float dt) {
+
+  // Atirar de fato
   if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
-    shoot_blackhole(player);
+    new_projectile(BLACK_HOLE, player->pos, direction);
+  } else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+    new_projectile(PLAYER_ATK, player->pos, direction);
   }
-  else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-    int mouse_x = GetMouseX();
-    int mouse_y = GetMouseY();
-    Vector2 mouse = {mouse_x, mouse_y};
-    Vector2 mouse_2d = GetScreenToWorld2D(mouse, universe.cam);
-    Vector2 direction = direction_vec(player->pos, mouse_2d);
-    new_player_projectile(player->pos, direction);
-  }
+
+  player->atk_cooldown = ATK_COOLDOWN;
 }
 
 void draw_player(Player *player) {

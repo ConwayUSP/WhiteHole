@@ -1,21 +1,25 @@
 #include "projectile.h"
 #include "listcontrol.h"
 #include "stdlib.h"
-#include "vector.h"
 #include "universe.h"
+#include "vector.h"
+#include <stdio.h>
 
 void new_projectile(ProjectileType type, Vector2 pos, Vector2 direction) {
   Projectile p = {0};
   p.type = type;
   p.pos = pos;
+  p.direction = direction;
   p.id = get_valid_projectile_id();
-  if (p.id == NULL_SLOT) {return;}
+  if (p.id == NULL_SLOT) {
+    return;
+  }
   p.state = PROJECTILE_FORMING;
 
   switch (type) {
   case PLAYER_ATK:
     p.damage = 5;
-    p.speed = 100.0f;
+    p.speed = 400.0f;
     p.duration = 2.0f;
     p.weight = 1.0f;
     break;
@@ -56,10 +60,6 @@ void set_projectile_animation(Projectile *projectile, ProjectileState state,
   projectile->animations[state] = anim;
 }
 
-void new_player_projectile(Vector2 inicial_position, Vector2 proj_direction) {
-  new_projectile(PLAYER_ATK, inicial_position, proj_direction);
-}
-  
 void update_projectiles(float dt) {
   for (int i = 0; i < MAX_PROJECTILES; i++) {
     if (!is_slot_empty(&universe.projectile_slots, i)) {
@@ -73,23 +73,16 @@ void update_projectile(Projectile *projectile, float dt) {
   projectile->timer += dt;
 }
 
-void new_black_hole(Vector2 pos, Vector2 direction) {
-  int id = get_valid_projectile_id();
-  if (id == NULL_SLOT) {
-    return; // Não tem slot vazio para criar um novo projétil
-  }
-  new_projectile(BLACK_HOLE, pos, direction);
-}
-
 void set_projectile_direction(Projectile *projectile, Vector2 direction) {
   projectile->direction = direction;
 }
+
 void move_projectile(Projectile *projectile, float dt) {
   Vector2 movement = {.x = projectile->direction.x * projectile->speed * dt,
                       .y = projectile->direction.y * projectile->speed * dt};
-  projectile->pos.x += movement.x;
-  projectile->pos.y += movement.y;
+  projectile->pos = sum_vec(projectile->pos, movement);
 }
+
 void draw_projectiles() {
   for (int i = 0; i < MAX_PROJECTILES; i++) {
     if (!is_slot_empty(&universe.projectile_slots, i)) {
@@ -97,10 +90,16 @@ void draw_projectiles() {
     }
   }
 }
+
 void draw_projectile(Projectile projectile) {
   switch (projectile.type) {
-    case BLACK_HOLE: DrawCircle(projectile.pos.x, projectile.pos.y, 15.0f, BLACK);
-    case PLAYER_ATK: DrawCircle(projectile.pos.x, projectile.pos.y, 5.0f, YELLOW);
+  case BLACK_HOLE:
+    DrawCircle(projectile.pos.x, projectile.pos.y, 5.0f, BLACK);
+    break;
+  case PLAYER_ATK:
+    DrawCircle(projectile.pos.x, projectile.pos.y, 2.0f, YELLOW);
+    break;
+  default:
+    return;
   }
-  
 }
