@@ -1,6 +1,7 @@
 #include "../include/raylib.h"
 #include "modules/enemy.h"
 #include "modules/player.h"
+#include "modules/projectile.h"
 #include "modules/universe.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,8 +25,8 @@ int main(void) {
 
   universe = init_universe();
 
-  new_enemy(BILLIONAIRE, (Vector2){0,0});
-  new_enemy(BILLIONAIRE, (Vector2){0,600});
+  new_enemy(BILLIONAIRE, (Vector2){0, 0});
+  new_enemy(BILLIONAIRE, (Vector2){0, 600});
 
   float dt; // Tempo entre frames
 
@@ -36,10 +37,7 @@ int main(void) {
     // Update
     //----------------------------------------------------------------------------------
     dt = GetFrameTime();
-
-    update_player(&universe.player, dt);
-    update_projectiles(dt);
-    update_enemies(dt);
+    update_universe(dt);
 
     //----------------------------------------------------------------------------------
     // Renderização do jogo
@@ -48,10 +46,9 @@ int main(void) {
 
     ClearBackground(RAYWHITE);
 
-    DrawCircle(universe.player.pos.x, universe.player.pos.y, 50.0f, RED);
+    draw_player(&universe.player);
     draw_projectiles();
     draw_enemies();
-
 
     BeginMode2D(cam);
 
