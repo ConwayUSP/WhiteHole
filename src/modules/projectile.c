@@ -1,6 +1,7 @@
 #include "projectile.h"
 #include "listcontrol.h"
 #include "stdlib.h"
+#include "vector.h"
 #include "universe.h"
 
 void new_projectile(ProjectileType type, Vector2 pos, Vector2 direction) {
@@ -53,6 +54,19 @@ void set_projectile_animation(Projectile *projectile, ProjectileState state,
                               Animation anim) {
   projectile->animations[state] = anim;
 }
+void update_projectile(Projectile *projectile, Vector2 inicial_position, Vector2 final_position, float dt) {
+  sai_projectile(projectile, inicial_position, final_position, dt);
+}
+void sai_projectile(Projectile *projectile, Vector2 inicial_position, Vector2 mira_position, float dt) {
+  Vector2 sai = inicial_position;
+  Vector2 dir = direction_vec(mira_position, inicial_position);
+  projectile->pos = sai;
+  projectile->direction = dir;
+  projectile->vel = (Vector2){100.0f, 100.0f};
+  dir.x *= projectile->vel.x * dt;
+  dir.y *= projectile->vel.y * dt;
+  projectile->pos = sum_vec(sai, dir);
+  
 void update_projectiles(float dt) {
   for (int i = 0; i < MAX_PROJECTILES; i++) {
     if (!is_slot_empty(&universe.projectile_slots, i)) {
