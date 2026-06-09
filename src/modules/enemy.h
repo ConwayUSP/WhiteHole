@@ -49,6 +49,7 @@ typedef struct enemy {
   float ult_threshold;  // Quanta carga precisa acumular para ultar
   float atk_cooldown;   // Quanto tempo desde o último tiro
   float move_cooldown;  // Quanto tempo para o bilionário dar seu dash
+  float size;
   Animation animations[ENEMY_NUM_STATES]; // Animações para cada estado
 } Enemy;
 
@@ -62,5 +63,6 @@ void move_astronaut(Enemy *enemy, float dt);        // Função de movimentaçã
 void move_billionaire(Enemy *enemy, float dt);      // Função de movimentação inimigos tipo BILLIONAIRE
 void draw_enemies();
 void draw_enemy(Enemy enemy);
+void enemy_take_damage(Enemy*enemy, int damage);
 
 #endif

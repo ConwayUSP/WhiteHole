@@ -1,9 +1,11 @@
 #include "enemy.h"
 #include "player.h"
+#include "projectile.h"
 #include "universe.h"
 #include "vector.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "colision.h"
 
 void new_enemy(EnemyType type, Vector2 pos) {
   Enemy e = {0};
@@ -11,6 +13,7 @@ void new_enemy(EnemyType type, Vector2 pos) {
   e.id = get_valid_enemy_id();
   e.state = ENEMY_IDLE;
   e.pos = pos;
+  e.size = 10;
 
   // Atributos que variam de inimigo para inimigo
   switch (type) {
@@ -21,6 +24,7 @@ void new_enemy(EnemyType type, Vector2 pos) {
     break;
   case ASTRONAUT:
     e.hp = MAX_ASTRONAUT_HP;
+    e.speed = 100;
     e.ult_threshold = ASTRONAUT_ULT_CAP;
     break;
   case BILLIONAIRE:
@@ -53,13 +57,17 @@ void update_enemy(Enemy *enemy, float dt) {
     move_ice(enemy, dt);
     break;
   case ASTRONAUT:
-    // move_astronaut(enemy, dt);
+    move_astronaut(enemy, dt);
     break;
   case BILLIONAIRE:
     move_billionaire(enemy, dt);
     break;
   default:
     exit(1); // Tipo de inimigo não detectado
+  }
+  solve_enemy_colision(enemy);
+  if (enemy->hp <= 0){
+    free_enemy_slot(enemy->id);
   }
 }
 
@@ -90,11 +98,18 @@ void move_ice(Enemy *enemy, float dt) {
   enemy->pos = sum_vec(enemy->pos, enemy->vel);
 }
 
-/*
-void move_astronaut(Enemy *enemy, float dt){
+void move_astronaut(Enemy *e, float dt){
+  e->target = universe.player.pos;
 
+  for (int i = 0; i < MAX_PROJECTILES; i++){
+    Projectile p = universe.projectiles[i];
+    if (!is_slot_empty(&universe.projectile_slots, i) && distance_vec(sum_vec(e->pos, e->vel), p.pos) < p.size && p.type == BLACK_HOLE){
+      e->target = mult_vec(direction_vec(p.pos, sum_vec(e->pos, e->vel)), p.size);
+    }
+  }
+  e->vel = mult_vec(direction_vec(e->pos, e->target), e->speed * dt);
+  e->pos = sum_vec(e->pos, e->vel);  
 }
-*/
 
 void move_billionaire(Enemy *enemy, float dt) {
   const float DASH_SPEED = 400;
@@ -144,15 +159,24 @@ void draw_enemies() {
 void draw_enemy(Enemy enemy) {
   switch (enemy.type) {
   case ICE:
-    DrawCircle(enemy.pos.x, enemy.pos.y, 10.0f, WHITE);
+    DrawCircle(enemy.pos.x, enemy.pos.y, 10.0f, SKYBLUE);
     break;
   case ASTRONAUT:
-    DrawCircle(enemy.pos.x, enemy.pos.y, 10.0f, PINK);
+    DrawCircle(enemy.pos.x, enemy.pos.y, 10.0f, DARKBLUE);
     break;
   case BILLIONAIRE:
     DrawCircle(enemy.pos.x, enemy.pos.y, 10.0f, PURPLE);
     break;
   default:
     exit(1); // Tipo de inimigo não detectado
+  }
+}
+
+void enemy_take_damage(Enemy*enemy, int damage) {
+  if (damage > enemy->hp) {
+    enemy->hp = 0;
+  }
+  else {
+    enemy->hp -= damage;
   }
 }
