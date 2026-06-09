@@ -9,7 +9,6 @@
 
 #define MAX_BUILDINGS 100
 
-
 Universe universe;
 
 int main(void) {
@@ -25,7 +24,6 @@ int main(void) {
 
   universe = init_universe();
   universe.cam.zoom = 3.2f;
-  universe.cam.target = (Vector2){.x = 600, .y = 600};
 
   float dt;        // Tempo entre frames
   float timer = 0; // Contador de um segundo para spawn
