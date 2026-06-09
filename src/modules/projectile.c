@@ -45,6 +45,7 @@ void new_projectile(ProjectileType type, Vector2 pos, Vector2 direction) {
     p.damage = 1000;
     p.speed = 100.0f;
     p.duration = 60.0f;
+    p.size = 15.0f;
     p.weight = 1000000.0f;
     break;
 
