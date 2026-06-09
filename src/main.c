@@ -54,7 +54,7 @@ int main(void) {
     BeginDrawing();
     BeginMode2D(universe.cam);
 
-    ClearBackground(WHITE);
+    ClearBackground(BLUE);
     draw_universe();
 
     EndMode2D();
