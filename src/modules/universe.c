@@ -2,10 +2,13 @@
 #include "assetstore.h"
 #include "listcontrol.h"
 #include "player.h"
+#include "projectile.h"
+#include "vector.h"
+#include <stdio.h>
 
 Universe init_universe() {
   Universe u = {0};
-  
+
   u.context = MENU;
   u.player = init_player();
   u.asset_store = init_asset_store();
@@ -43,6 +46,29 @@ void insert_enemy(Enemy enemy) { universe.enemies[enemy.id] = enemy; }
 
 bool is_slot_empty(ListControl *control, int id) {
   return !control->used_slots[id];
+}
+
+float distort_time() {
+  const float EFFECT_RADIUS = 70;
+  float min_dist = 1000.0f;
+  for (int i = 0; i < MAX_PROJECTILES; i++) {
+    if (!is_slot_empty(&universe.projectile_slots, i)) {
+      Projectile p = universe.projectiles[i];
+      if (p.type == BLACK_HOLE &&
+          distance_vec(universe.player.pos, p.pos) < min_dist) {
+        printf("player pos: %f, %f\n", universe.player.pos.x,
+               universe.player.pos.y);
+        printf("blackhole pos: %f, %f\n", p.pos.x, p.pos.y);
+        min_dist = distance_vec(universe.player.pos, p.pos);
+      }
+    }
+  }
+  printf("min dist: %f\n", min_dist);
+  if (min_dist > EFFECT_RADIUS) {
+    return 1.0f;
+  }
+  float res = min_dist / EFFECT_RADIUS;
+  return res < 0.25 ? 0.25 : res;
 }
 
 void draw_universe() {

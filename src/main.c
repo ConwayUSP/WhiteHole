@@ -37,6 +37,7 @@ int main(void) {
     // Update
     //----------------------------------------------------------------------------------
     dt = GetFrameTime();
+    dt *= distort_time();
     timer += dt;
 
     // Spawna um novo inimigo a cada 2 segundos

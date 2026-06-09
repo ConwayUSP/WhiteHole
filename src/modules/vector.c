@@ -38,5 +38,5 @@ Vector2 predict_vec(Vector2 origin, Vector2 target, Vector2 target_move) {
 
 // Encontra a distância euclidiana entre dois vetores
 float distance_vec(Vector2 origin, Vector2 dest) {
-  return fabs(sqrt(pow(dest.x, 2) + pow(dest.y, 2)));
+  return mod_vec(sub_vec(origin, dest));
 }
