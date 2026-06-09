@@ -43,17 +43,24 @@ typedef struct enemy {
   EnemyState state;     // Estado atual (animação que está rodando)
   Vector2 pos;          // Posição no mundo
   Vector2 vel;          // Vetor de velocidade
+  Vector2 target;       // Ponto para o qual o inimigo quer se mover
   float speed;          // Velocidade base de movimento
-  double ult_charge;    // Carga atual da ult
-  double ult_threshold; // Quanta carga precisa acumular para ultar
-  double atk_cooldown;  // Quanto tempo desde o último tiro
+  float ult_charge;     // Carga atual da ult
+  float ult_threshold;  // Quanta carga precisa acumular para ultar
+  float atk_cooldown;   // Quanto tempo desde o último tiro
+  float move_cooldown;  // Quanto tempo para o bilionário dar seu dash
   Animation animations[ENEMY_NUM_STATES]; // Animações para cada estado
 } Enemy;
 
 // Funções relacionadas aos inimigos
-Enemy new_enemy(EnemyType type, int id); // Cria um inimigo
-void set_enemy_animation(Enemy *enemy, EnemyState state,
-                         Animation anim); // Define uma animação
-void update_enemy(Enemy *enemy);          // Função de update do inimigo
+void new_enemy(EnemyType type, Vector2 pos); // Cria um inimigo
+void set_enemy_animation(Enemy *enemy, EnemyState state, Animation anim); // Define uma animação
+void update_enemies(float dt);
+void update_enemy(Enemy *enemy, float dt);          // Função de update do inimigo
+void move_ice(Enemy *enemy, float dt);              // Função de movimentação inimigos tipo ICE 
+void move_astronaut(Enemy *enemy, float dt);        // Função de movimentação inimigos tipo ASTRONAUT
+void move_billionaire(Enemy *enemy, float dt);      // Função de movimentação inimigos tipo BILLIONAIRE
+void draw_enemies();
+void draw_enemy(Enemy enemy);
 
 #endif

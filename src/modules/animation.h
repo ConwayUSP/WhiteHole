@@ -13,8 +13,8 @@ typedef struct anim {
   usint num_frames;   // Quantos frames tem a animação
   usint loop_frame;   // Para qual frame a animação loopa ao chegar no final
   bool loop;          // Se a animação loopa ou não
-  double timer;       // Tempo decorrido desde a última troca de frames
-  double frame_dur;   // Duração de um frame da animação
+  float timer;        // Tempo decorrido desde a última troca de frames
+  float frame_dur;    // Duração de um frame da animação
   Vector2 frame_size; // Altura e largura de cada frame
 } Animation;
 
@@ -23,5 +23,6 @@ Animation new_animation(usint num_frames, bool loop, usint loop_frame,
                         double frame_dur, Vector2 frame_size);
 void reset_animation(Animation *anim);
 void update_animation(Animation *anim, float dt);
+void draw_frame(Animation anim, Texture2D spritesheet, Vector2 pos);
 
 #endif

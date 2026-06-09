@@ -4,9 +4,9 @@
 #include "../../include/raylib.h"
 #include "assetstore.h"
 #include "enemy.h"
+#include "listcontrol.h"
 #include "player.h"
 #include "projectile.h"
-#include "stack.h"
 
 #define MAX_PROJECTILES 1024
 #define MAX_ENEMIES 128
@@ -20,20 +20,27 @@ typedef struct universe {
   Player player;
   int points; // Com quantos pontos o jogador está atualmente
   Projectile projectiles[MAX_PROJECTILES]; // Lista de todos os projéteis
-  Stack projectile_slots;     // Stack de posições livres na lista projectiles
-  Enemy enemies[MAX_ENEMIES]; // Lista de todos os inimigos
-  Stack enemy_slots;          // Stack de posições livres na lista enemies
+  ListControl projectile_slots;            // Gerencia a lista de projectiles
+  Enemy enemies[MAX_ENEMIES];              // Lista de todos os inimigos
+  ListControl enemy_slots;                 // Gerencia a lista de inimigos
 } Universe;
+
+extern Universe universe;
 
 // Construtor
 Universe init_universe();
-int get_valid_projectile_id(
-    Universe *universe); // Reserva um espaço na lista de projéteis
-int get_valid_enemy_id(
-    Universe *universe); // Reserva um espaço na lista de inimigos
-void free_projectile_slot(Universe *universe,
-                          int id); // Libera um espaço na lista de projéteis
-void free_enemy_slot(Universe *universe,
-                     int id); // Libera um espaço na lista de inimigos
-
+int get_valid_projectile_id();     // Reserva um espaço na lista de projéteis
+int get_valid_enemy_id();          // Reserva um espaço na lista de inimigos
+void free_projectile_slot(int id); // Libera um espaço na lista de projéteis
+void free_enemy_slot(int id);      // Libera um espaço na lista de inimigos
+// Verifica se um slot está vazio
+bool is_slot_empty(ListControl *control, int id);
+// Insere um projétil na lista de projéteis do universo
+void insert_projectile(Projectile projectile);
+// Insere um projétil na lista de projéteis do universo
+void insert_enemy(Enemy enemy);
+// Faz o update de tudo que está contido no universo
+void update_universe(float dt);
+// Renderiza tudo que há no universo
+void draw_universe();
 #endif

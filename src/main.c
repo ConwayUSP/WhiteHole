@@ -1,28 +1,34 @@
 #include "../include/raylib.h"
+#include "modules/enemy.h"
 #include "modules/player.h"
 #include "modules/projectile.h"
+#include "modules/universe.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #define MAX_BUILDINGS 100
 
 Camera2D cam = {0};
+Universe universe;
 
 int main(void) {
   // Dimensões da tela
   const int screenWidth = 1200;
   const int screenHeight = 1200;
+  cam.zoom = 3.2f;
+  cam.target = (Vector2){.x = 600, .y = 600};
 
   InitWindow(screenWidth, screenHeight, "WhiteHole"); // Inicializando janela
   SetTargetFPS(60); // Queremos que rode a 60 fps
 
-  Vector2 mira_position = { 0.0f, 0.0f };
+  // Aleatoriedade
+  srand(time(NULL));
+
+  universe = init_universe();
 
   float dt; // Tempo entre frames
-  int id;
-  Vector2 inicial_position; // Posição inicial do projectile
-  Vector2 mira_position; // Posição da mira do projectile
-
-  Player player = init_player(); // Inicializa o player
-  Projectile projectile = new_projectile(PLAYER_ATK, id);
+  float timer = 0; // Contador de um segundo para spawn
 
   // Loop de jogo
   while (!WindowShouldClose()) // Fecha no ESC
@@ -31,35 +37,31 @@ int main(void) {
     // Update
     //----------------------------------------------------------------------------------
     dt = GetFrameTime();
-    inicial_position = player.pos;
-    mira_position = GetMousePosition();
+    timer += dt;
 
-    update_player(&player, dt); // Atualiza o moviento do player
-    
+    // Spawna um novo inimigo a cada 2 segundos
+    if(timer >= 2.0f){
+      timer -= 2.0f;
+      new_enemy(rand() % 3, (Vector2){rand() % 1200, 0});      
+    }
+
+    update_universe(dt);
 
     //----------------------------------------------------------------------------------
     // Renderização do jogo
     //----------------------------------------------------------------------------------
     BeginDrawing();
-
-    ClearBackground(RAYWHITE);
-    
-    DrawCircleV(mira_position, 40, DARKBLUE);
-    DrawCircle(player.pos.x, player.pos.y, 50.0f, RED);
-    DrawLineEx((Vector2){0,0}, (Vector2){1200,1200}, 5.0f, BLACK);
-
-
     BeginMode2D(cam);
+
+    ClearBackground(WHITE);
+    draw_universe();
 
     EndMode2D();
 
-    //----------------------------------------------------------------------------------
     // Renderização da UI
-    //----------------------------------------------------------------------------------
-    DrawText("WHITEHOLE", 600, 10, 40, BLACK);
+    DrawText("WHITEHOLE", 500, 10, 40, BLACK);
 
     EndDrawing();
-    //----------------------------------------------------------------------------------
   }
 
   // Encerrando o programa

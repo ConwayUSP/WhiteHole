@@ -45,12 +45,16 @@ typedef struct projectile {
 } Projectile;
 
 // Funções relacionadas aos inimigos
-Projectile new_projectile(ProjectileType type, int id); // Cria um projétil
+void new_projectile(ProjectileType type, Vector2 pos, Vector2 direction); // Cria um projétil
 void set_projectile_animation(Projectile *projectile, ProjectileState state,
                               Animation anim); // Define uma animação
 void update_projectile(Projectile *projectile, Vector2 inicial_position, Vector2 final_position,
                        float dt); // Função de update do projétil
-
 void sai_projectile(Projectile *projectile, Vector2 inicial_position, Vector2 mira_position, float dt);
-
+void move_projectile(Projectile *projectile, float dt); // Move o projétil de acordo com sua direção e velocidade 
+void draw_projectiles();
+void draw_projectile(Projectile projectile);
+void set_projectile_direction(Projectile *projectile, Vector2 direction);
+void new_black_hole(Vector2 pos, Vector2 direction);
+void update_projectiles( float dt);
 #endif
