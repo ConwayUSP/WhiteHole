@@ -7,6 +7,10 @@
 AssetStore init_asset_store() {
   AssetStore as = {0};
 
+  // Chão
+  as.floor_sprite = LoadTexture("assets/floor/galaxy.jpg");
+
+  // Player
   as.player_sheets[PLAYER_IDLE] = LoadTexture("assets/player/alien_idle.png");
   as.player_sheets[PLAYER_MOVING_DOWN] =
       LoadTexture("assets/player/alien_walk_down.png");
@@ -24,10 +28,12 @@ AssetStore init_asset_store() {
 Texture2D get_player_sheet(AssetStore *store, PlayerState state) {
   return store->player_sheets[state];
 }
+
 Texture2D get_enemy_sheet(AssetStore *store, EnemyType enemy_type,
                           EnemyState state) {
   return store->enemy_sheets[enemy_type][state];
 }
+
 Texture2D get_projectile_sheet(AssetStore *store,
                                ProjectileType projectile_type,
                                ProjectileState state) {

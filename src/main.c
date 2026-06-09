@@ -16,6 +16,8 @@ int main(void) {
   // Dimensões da tela
   const int screenWidth = 1200;
   const int screenHeight = 1200;
+  cam.zoom = 3.2f;
+  cam.target = (Vector2){.x = 600, .y = 600};
 
   InitWindow(screenWidth, screenHeight, "WhiteHole"); // Inicializando janela
   SetTargetFPS(60); // Queremos que rode a 60 fps
@@ -24,9 +26,6 @@ int main(void) {
   srand(time(NULL));
 
   universe = init_universe();
-
-  new_enemy(BILLIONAIRE, (Vector2){0, 0});
-  new_enemy(BILLIONAIRE, (Vector2){0, 600});
 
   float dt; // Tempo entre frames
 
@@ -43,24 +42,17 @@ int main(void) {
     // Renderização do jogo
     //----------------------------------------------------------------------------------
     BeginDrawing();
-
-    ClearBackground(RAYWHITE);
-
-    draw_player(&universe.player);
-    draw_projectiles();
-    draw_enemies();
-
     BeginMode2D(cam);
+
+    ClearBackground(WHITE);
+    draw_universe();
 
     EndMode2D();
 
-    //----------------------------------------------------------------------------------
     // Renderização da UI
-    //----------------------------------------------------------------------------------
     DrawText("WHITEHOLE", 500, 10, 40, BLACK);
 
     EndDrawing();
-    //----------------------------------------------------------------------------------
   }
 
   // Encerrando o programa
