@@ -1,11 +1,11 @@
 #include "enemy.h"
+#include "colision.h"
 #include "player.h"
 #include "projectile.h"
 #include "universe.h"
 #include "vector.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "colision.h"
 
 void new_enemy(EnemyType type, Vector2 pos) {
   Enemy e = {0};
@@ -36,6 +36,11 @@ void new_enemy(EnemyType type, Vector2 pos) {
     exit(1); // Tipo de inimigo não detectado
   }
 
+  // Animações
+  set_enemy_animation(
+      &e, ENEMY_IDLE,
+      new_animation(1, true, 0, 0.2f, (Vector2){.x = 32, .y = 32}));
+
   insert_enemy(e);
 }
 
@@ -46,7 +51,8 @@ void set_enemy_animation(Enemy *enemy, EnemyState state, Animation anim) {
 void update_enemies(float dt) {
   for (int i = 0; i < MAX_ENEMIES; i++) {
     if (!is_slot_empty(&(universe.enemy_slots), i)) {
-      update_enemy(&universe.enemies[i], dt);
+      Enemy *e = &universe.enemies[i];
+      update_enemy(e, dt);
     }
   }
 }
@@ -65,8 +71,10 @@ void update_enemy(Enemy *enemy, float dt) {
   default:
     exit(1); // Tipo de inimigo não detectado
   }
+
   solve_enemy_colision(enemy);
-  if (enemy->hp <= 0){
+  update_animation(&enemy->animations[enemy->state], dt);
+  if (enemy->hp <= 0) {
     free_enemy_slot(enemy->id);
   }
 }
@@ -98,17 +106,20 @@ void move_ice(Enemy *enemy, float dt) {
   enemy->pos = sum_vec(enemy->pos, enemy->vel);
 }
 
-void move_astronaut(Enemy *e, float dt){
+void move_astronaut(Enemy *e, float dt) {
   e->target = universe.player.pos;
 
-  for (int i = 0; i < MAX_PROJECTILES; i++){
+  for (int i = 0; i < MAX_PROJECTILES; i++) {
     Projectile p = universe.projectiles[i];
-    if (!is_slot_empty(&universe.projectile_slots, i) && distance_vec(sum_vec(e->pos, e->vel), p.pos) < p.size && p.type == BLACK_HOLE){
-      e->target = mult_vec(direction_vec(p.pos, sum_vec(e->pos, e->vel)), p.size);
+    if (!is_slot_empty(&universe.projectile_slots, i) &&
+        distance_vec(sum_vec(e->pos, e->vel), p.pos) < p.size &&
+        p.type == BLACK_HOLE) {
+      e->target =
+          mult_vec(direction_vec(p.pos, sum_vec(e->pos, e->vel)), p.size);
     }
   }
   e->vel = mult_vec(direction_vec(e->pos, e->target), e->speed * dt);
-  e->pos = sum_vec(e->pos, e->vel);  
+  e->pos = sum_vec(e->pos, e->vel);
 }
 
 void move_billionaire(Enemy *enemy, float dt) {
@@ -157,26 +168,16 @@ void draw_enemies() {
 }
 
 void draw_enemy(Enemy enemy) {
-  switch (enemy.type) {
-  case ICE:
-    DrawCircle(enemy.pos.x, enemy.pos.y, 10.0f, SKYBLUE);
-    break;
-  case ASTRONAUT:
-    DrawCircle(enemy.pos.x, enemy.pos.y, 10.0f, DARKBLUE);
-    break;
-  case BILLIONAIRE:
-    DrawCircle(enemy.pos.x, enemy.pos.y, 10.0f, PURPLE);
-    break;
-  default:
-    exit(1); // Tipo de inimigo não detectado
-  }
+  Animation animation = enemy.animations[enemy.state];
+  Texture2D spritesheet =
+      get_enemy_sheet(&universe.asset_store, enemy.type, enemy.state);
+  draw_frame(animation, spritesheet, enemy.pos);
 }
 
-void enemy_take_damage(Enemy*enemy, int damage) {
+void enemy_take_damage(Enemy *enemy, int damage) {
   if (damage > enemy->hp) {
     enemy->hp = 0;
-  }
-  else {
+  } else {
     enemy->hp -= damage;
   }
 }

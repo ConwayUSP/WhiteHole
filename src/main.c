@@ -46,7 +46,7 @@ int main(void) {
     // Spawna um novo inimigo a cada 2 segundos
     if (timer >= 2.0f) {
       timer -= 2.0f;
-      new_enemy(rand() % 3, (Vector2){rand() % 400, 0});
+      new_enemy(rand() % 3, (Vector2){rand() % 375, rand() % 375});
     }
 
     update_universe(dt);
