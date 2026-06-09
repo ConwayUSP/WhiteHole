@@ -45,10 +45,10 @@ typedef struct enemy {
   Vector2 vel;          // Vetor de velocidade
   Vector2 target;       // Ponto para o qual o inimigo quer se mover
   float speed;          // Velocidade base de movimento
-  float ult_charge;    // Carga atual da ult
-  float ult_threshold; // Quanta carga precisa acumular para ultar
-  float atk_cooldown;  // Quanto tempo desde o último tiro
-  float move_cooldown; // Quanto tempo para o bilionário dar seu dash
+  float ult_charge;     // Carga atual da ult
+  float ult_threshold;  // Quanta carga precisa acumular para ultar
+  float atk_cooldown;   // Quanto tempo desde o último tiro
+  float move_cooldown;  // Quanto tempo para o bilionário dar seu dash
   Animation animations[ENEMY_NUM_STATES]; // Animações para cada estado
 } Enemy;
 

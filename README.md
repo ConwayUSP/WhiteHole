@@ -1,11 +1,11 @@
 # Jogo da ConwayJam 2026
 
-- [ ] Implementar versão inicial dessas funções básicas cujos protótipos já estão nos headers (arquivos `.h`)
-- [ ] Fazer o jogador se mover pela tela
-- [ ] Fazer inimigos se moverem pela tela
-    - ICE: gosta de andar em grupinhos
-    - Jeff Bezos: dá uma corrida em linha reta na direção onde o player estava
-    - Astronautas: seguem o player mas evitando buracos negros
+- [X] Implementar versão inicial dessas funções básicas cujos protótipos já estão nos headers (arquivos `.h`)
+- [X] Fazer o jogador se mover pela tela
+- Fazer inimigos se moverem pela tela
+    - [X] ICE: gosta de andar em grupinhos
+    - [ ] Astronautas: seguem o player mas evitando buracos negros
+    - [X] Jeff Bezos: dá uma corrida em linha reta na direção onde o player estava
 - [ ] Fazer o player atirar
 - [ ] Fazer os inimigos atirarem
     - ICE ataca com uma bazooka que explode e dá dano em área

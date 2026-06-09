@@ -16,4 +16,7 @@ Vector2 direction_vec(Vector2 origin, Vector2 dest);
 // E gera um vetor de direção saindo de origin até esse ponto
 Vector2 predict_vec(Vector2 origin, Vector2 target, Vector2 target_vel);
 
+// Encontra a distância euclidiana entre dois vetores
+float distance_vec(Vector2 origin, Vector2 dest);
+
 #endif

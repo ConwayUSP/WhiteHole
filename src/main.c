@@ -24,10 +24,8 @@ int main(void) {
 
   universe = init_universe();
 
-  new_enemy(BILLIONAIRE, (Vector2){0,0});
-  new_enemy(BILLIONAIRE, (Vector2){0,600});
-
   float dt; // Tempo entre frames
+  float timer = 0; // Contador de um segundo para spawn
 
   // Loop de jogo
   while (!WindowShouldClose()) // Fecha no ESC
@@ -36,6 +34,13 @@ int main(void) {
     // Update
     //----------------------------------------------------------------------------------
     dt = GetFrameTime();
+    timer += dt;
+
+    // Spawna um novo inimigo a cada 2 segundos
+    if(timer >= 2.0f){
+      timer -= 2.0f;
+      new_enemy(rand() % 3, (Vector2){rand() % 1200, 0});      
+    }
 
     update_player(&universe.player, dt);
     update_projectiles(dt);
@@ -51,7 +56,6 @@ int main(void) {
     DrawCircle(universe.player.pos.x, universe.player.pos.y, 50.0f, RED);
     draw_projectiles();
     draw_enemies();
-
 
     BeginMode2D(cam);
 
