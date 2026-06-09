@@ -11,6 +11,7 @@ void new_projectile(ProjectileType type, Vector2 pos, Vector2 direction) {
   p.pos = pos;
   p.direction = direction;
   p.id = get_valid_projectile_id();
+  p.size = 2.0f;
   if (p.id == NULL_SLOT) {
     return;
   }
@@ -46,6 +47,7 @@ void new_projectile(ProjectileType type, Vector2 pos, Vector2 direction) {
     p.speed = 100.0f;
     p.duration = 10.0f;
     p.weight = 1000000.0f;
+    p.size = 5.0f;
     break;
 
   default:

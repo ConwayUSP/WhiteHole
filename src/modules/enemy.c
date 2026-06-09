@@ -4,6 +4,7 @@
 #include "vector.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "colision.h"
 
 void new_enemy(EnemyType type, Vector2 pos) {
   Enemy e = {0};
@@ -11,6 +12,7 @@ void new_enemy(EnemyType type, Vector2 pos) {
   e.id = get_valid_enemy_id();
   e.state = ENEMY_IDLE;
   e.pos = pos;
+  e.size = 10;
 
   // Atributos que variam de inimigo para inimigo
   switch (type) {
@@ -60,6 +62,10 @@ void update_enemy(Enemy *enemy, float dt) {
     break;
   default:
     exit(1); // Tipo de inimigo não detectado
+  }
+  solve_enemy_colision(enemy);
+  if (enemy->hp <= 0){
+    free_enemy_slot(enemy->id);
   }
 }
 
@@ -154,5 +160,14 @@ void draw_enemy(Enemy enemy) {
     break;
   default:
     exit(1); // Tipo de inimigo não detectado
+  }
+}
+
+void enemy_take_damage(Enemy*enemy, int damage) {
+  if (damage > enemy->hp) {
+    enemy->hp = 0;
+  }
+  else {
+    enemy->hp -= damage;
   }
 }
