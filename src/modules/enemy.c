@@ -21,16 +21,19 @@ void new_enemy(EnemyType type, Vector2 pos) {
     e.hp = MAX_ICE_HP;
     e.speed = 100;
     e.ult_threshold = ICE_ULT_CAP;
+    e.atk_cooldown = 4.0f;
     break;
   case ASTRONAUT:
     e.hp = MAX_ASTRONAUT_HP;
     e.speed = 100;
     e.ult_threshold = ASTRONAUT_ULT_CAP;
+    e.atk_cooldown = 0.3f;
     break;
   case BILLIONAIRE:
     e.hp = MAX_BILLIONAIRE_HP;
     e.ult_threshold = BILLIONAIRE_ULT_CAP;
     e.move_cooldown = 5.0f;
+    e.atk_cooldown = 2.5f;
     break;
   default:
     exit(1); // Tipo de inimigo não detectado
@@ -76,6 +79,11 @@ void update_enemy(Enemy *enemy, float dt) {
   update_animation(&enemy->animations[enemy->state], dt);
   if (enemy->hp <= 0) {
     free_enemy_slot(enemy->id);
+  }
+
+  enemy->atk_cooldown -= dt;
+  if (enemy->atk_cooldown <= 0) {
+    enemy_attack(enemy);
   }
 }
 
@@ -179,5 +187,39 @@ void enemy_take_damage(Enemy *enemy, int damage) {
     enemy->hp = 0;
   } else {
     enemy->hp -= damage;
+  }
+}
+
+void enemy_attack(Enemy *enemy) {
+  Vector2 main_direction = (Vector2){0, -1};
+  float angle = 0.3;
+
+  switch (enemy->type) {
+  case ICE:
+    main_direction = direction_vec(enemy->pos, universe.player.pos);
+    for (int i = -1; i <= 1; i++) {
+      new_projectile(ICE_ATK, enemy->pos,
+                     rotate_vec(main_direction, i * angle));
+    }
+    enemy->atk_cooldown = 4.0f;
+    break;
+
+  case ASTRONAUT:
+    new_projectile(ASTRONAUT_ATK, enemy->pos,
+                   direction_vec(enemy->pos, universe.player.pos));
+    enemy->atk_cooldown = 0.3f;
+    break;
+
+  case BILLIONAIRE:
+    angle = 0.785375;
+    for (int i = 0; i < 8; i++) {
+      new_projectile(BILLIONAIRE_ATK, enemy->pos,
+                     rotate_vec(main_direction, i * angle));
+    }
+    enemy->atk_cooldown = 7.0f;
+    break;
+
+  default:
+    return;
   }
 }
