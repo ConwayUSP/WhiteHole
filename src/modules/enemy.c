@@ -100,12 +100,14 @@ void move_ice(Enemy *enemy, float dt) {
 
 void move_astronaut(Enemy *e, float dt){
   e->target = universe.player.pos;
+  e->vel = mult_vec(direction_vec(e->pos, e->target), e->speed * dt);
 
   for (int i = 0; i < MAX_PROJECTILES; i++){
     Projectile p = universe.projectiles[i];
-    float orb = p.size + 15;
+    float orb = p.size + 30;
     if (!is_slot_empty(&universe.projectile_slots, i) && distance_vec(sum_vec(e->pos, e->vel), p.pos) < orb && p.type == BLACK_HOLE){
-      e->target = mult_vec(direction_vec(p.pos, sum_vec(e->pos, e->vel)), orb);
+      Vector2 new_direction = direction_vec(p.pos, sum_vec(e->pos, e->vel));
+      e->target = sum_vec(p.pos, mult_vec(new_direction, orb));
     }
   }
   e->vel = mult_vec(direction_vec(e->pos, e->target), e->speed * dt);
