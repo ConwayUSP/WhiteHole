@@ -78,6 +78,12 @@ void set_projectile_direction(Projectile *projectile, Vector2 direction) {
 }
 
 void move_projectile(Projectile *projectile, float dt) {
+  // DEBUG DA DISTORÇÃO TEMPORAL
+  if (projectile->type == BLACK_HOLE) {
+    return;
+  }
+  // ---------------------------
+
   Vector2 movement = {.x = projectile->direction.x * projectile->speed * dt,
                       .y = projectile->direction.y * projectile->speed * dt};
   projectile->pos = sum_vec(projectile->pos, movement);
