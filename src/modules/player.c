@@ -82,6 +82,10 @@ void move_player(Player *player, float dt) {
   move.x *= player->speed * dt;
   move.y *= player->speed * dt;
   player->pos = sum_vec(player->pos, move);
+  player->pos.x = player->pos.x < 0? 0: player->pos.x;
+  player->pos.x = player->pos.x > 375? 375: player->pos.x;
+  player->pos.y = player->pos.y < 0? 0: player->pos.y;
+  player->pos.y = player->pos.y > 375? 375: player->pos.y;
   player->vel = move;
 }
 

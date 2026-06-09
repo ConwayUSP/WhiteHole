@@ -7,13 +7,14 @@
     - [ ] Astronautas: seguem o player mas evitando buracos negros
     - [X] Jeff Bezos: dá uma corrida em linha reta na direção onde o player estava
 - [X] Fazer o player atirar
+- [ ] Fazer a colisão
 - [ ] Fazer os inimigos atirarem
     - ICE ataca com uma bazooka que explode e dá dano em área
 - [ ] Fazer o player ultar (jogar buraco negro)
     - Poder segurar o botão direito para controlar a força com a qual o jogador arremeça o buraco negro
 - [ ] Fazer área bebêficadora do buraco negro
-- [ ] Fazer a distorção temporal via proximidade a buracos negros
-- [ ] Fazer gravidade do buraco negro afetar entidades
+- [X] Fazer a distorção temporal via proximidade a buracos negros
+- [X] Fazer gravidade do buraco negro afetar entidades
 - [ ] Geração de inimigos (aleatório ou deteminístico)
 - [ ] Pontuação
 - [ ] Música de fundo

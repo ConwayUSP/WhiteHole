@@ -56,14 +56,10 @@ float distort_time() {
       Projectile p = universe.projectiles[i];
       if (p.type == BLACK_HOLE &&
           distance_vec(universe.player.pos, p.pos) < min_dist) {
-        printf("player pos: %f, %f\n", universe.player.pos.x,
-               universe.player.pos.y);
-        printf("blackhole pos: %f, %f\n", p.pos.x, p.pos.y);
         min_dist = distance_vec(universe.player.pos, p.pos);
       }
     }
   }
-  printf("min dist: %f\n", min_dist);
   if (min_dist > EFFECT_RADIUS) {
     return 1.0f;
   }
