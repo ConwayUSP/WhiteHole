@@ -47,7 +47,7 @@ bool is_slot_empty(ListControl *control, int id) {
 
 void draw_universe() {
   Rectangle source_rec = {150.0f, 0.0f, 900.0f, 900.0f};
-  Rectangle dest_rec = {600.0f, 600.0f, 400.0f, 400.0f};
+  Rectangle dest_rec = {0.0f, 0.0f, 400.0f, 400.0f};
   Vector2 origin = {0.0f, 0.0f};
   DrawTexturePro(universe.asset_store.floor_sprite, source_rec, dest_rec,
                  origin, 0.0f, WHITE);

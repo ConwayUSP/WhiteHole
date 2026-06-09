@@ -1,9 +1,9 @@
-#include <stdlib.h>
 #include "enemy.h"
 #include "player.h"
 #include "universe.h"
 #include "vector.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void new_enemy(EnemyType type, Vector2 pos) {
   Enemy e = {0};
@@ -16,7 +16,7 @@ void new_enemy(EnemyType type, Vector2 pos) {
   switch (type) {
   case ICE:
     e.hp = MAX_ICE_HP;
-    e.speed = 200;
+    e.speed = 100;
     e.ult_threshold = ICE_ULT_CAP;
     break;
   case ASTRONAUT:
@@ -40,20 +40,20 @@ void set_enemy_animation(Enemy *enemy, EnemyState state, Animation anim) {
 }
 
 void update_enemies(float dt) {
-  for(int i = 0; i < MAX_ENEMIES; i++) {
-    if(!is_slot_empty(&(universe.enemy_slots), i)) {
+  for (int i = 0; i < MAX_ENEMIES; i++) {
+    if (!is_slot_empty(&(universe.enemy_slots), i)) {
       update_enemy(&universe.enemies[i], dt);
     }
   }
 }
 
 void update_enemy(Enemy *enemy, float dt) {
-  switch(enemy->type) {
+  switch (enemy->type) {
   case ICE:
     move_ice(enemy, dt);
     break;
   case ASTRONAUT:
-    //move_astronaut(enemy, dt);
+    // move_astronaut(enemy, dt);
     break;
   case BILLIONAIRE:
     move_billionaire(enemy, dt);
@@ -63,80 +63,94 @@ void update_enemy(Enemy *enemy, float dt) {
   }
 }
 
-void move_ice(Enemy *enemy, float dt){
-  Vector2 itar;     // Posição do ICE mais próximo
-  bool flag = true; // Verifica se esse é o primeiro ICE da lista de inimigos
+void move_ice(Enemy *enemy, float dt) {
+  Vector2 itar = enemy->pos; // Posição do ICE mais próximo
+  bool found_other_ice =
+      true; // Verifica se esse é o primeiro ICE da lista de inimigos
 
-  for (int i = 0; i < MAX_ENEMIES; i++){
-    if (!is_slot_empty(&universe.enemy_slots, i) && enemy->id != universe.enemies[i].id && universe.enemies[i].type == ICE){
-      if(flag){
+  for (int i = 0; i < MAX_ENEMIES; i++) {
+    if (!is_slot_empty(&universe.enemy_slots, i) &&
+        enemy->id != universe.enemies[i].id &&
+        universe.enemies[i].type == ICE) {
+      if (found_other_ice) {
         itar = universe.enemies[i].pos;
-        flag = false;
+        found_other_ice = false;
       } else {
-        itar = distance_vec(enemy->pos, itar) > distance_vec(enemy->pos, universe.enemies[i].pos) ? universe.enemies[i].pos : itar;
+        itar = distance_vec(enemy->pos, itar) >
+                       distance_vec(enemy->pos, universe.enemies[i].pos)
+                   ? universe.enemies[i].pos
+                   : itar;
       }
     }
   }
 
   enemy->target = mult_vec(sum_vec(universe.player.pos, itar), 0.5);
-  enemy->vel = mult_vec(direction_vec(enemy->pos, enemy->target), enemy->speed * dt);
+  enemy->vel =
+      mult_vec(direction_vec(enemy->pos, enemy->target), enemy->speed * dt);
   enemy->pos = sum_vec(enemy->pos, enemy->vel);
 }
 
 /*
 void move_astronaut(Enemy *enemy, float dt){
-  
+
 }
 */
 
-void move_billionaire(Enemy *enemy, float dt){
+void move_billionaire(Enemy *enemy, float dt) {
+  const float DASH_SPEED = 400;
+  const float MIN_SPEED = 50;
+
   float old_cooldown = enemy->move_cooldown;
   enemy->move_cooldown -= dt;
   float cd = enemy->move_cooldown;
 
-  if(old_cooldown > 0 && cd < 0) {
-      enemy->target = sum_vec(universe.player.pos, mult_vec(universe.player.vel, 1000*dt));
-      enemy->speed = 600;
-  } else if(old_cooldown > -2 && cd < -2) {
-      enemy->target = (Vector2){.x = rand() % 1200, .y = rand() % 1200};
-      enemy->speed = 100;
-      enemy->move_cooldown = 5;
+  if (old_cooldown > 0 && cd < 0) {
+    enemy->target =
+        sum_vec(universe.player.pos, mult_vec(universe.player.vel, 1000 * dt));
+    enemy->speed = DASH_SPEED;
+  } else if (old_cooldown > -2 && cd < -2) {
+    enemy->target = (Vector2){.x = rand() % 400, .y = rand() % 400};
+    enemy->speed = MIN_SPEED;
+    enemy->move_cooldown = 5;
   }
 
-  if(cd < 0.2 && cd > 0) {
-      float charge = (0.2f - cd) * 5;
-      enemy->target = sum_vec(universe.player.pos, mult_vec(universe.player.vel, 300*dt));
-      enemy->speed = (charge * charge) * 500 + 100;
-  } else if(cd > 4.8 && cd < 5) {
-      float charge = (cd - 4.8) * 5;
-      enemy->speed = (charge * charge) * 500 + 100;
-      enemy->target = sum_vec(universe.player.pos, mult_vec(universe.player.vel, 300*dt));
-  } else if(cd < 0 && cd >= -2) {
-      enemy->target = sum_vec(enemy->pos, enemy->vel);
+  if (cd < 0.2 && cd > 0) {
+    float charge = (0.2f - cd) * 5;
+    enemy->target =
+        sum_vec(universe.player.pos, mult_vec(universe.player.vel, 300 * dt));
+    enemy->speed = (charge * charge) * (DASH_SPEED - MIN_SPEED) + MIN_SPEED;
+  } else if (cd > 4.8 && cd < 5) {
+    float charge = (cd - 4.8) * 5;
+    enemy->speed = (charge * charge) * (DASH_SPEED - MIN_SPEED) + MIN_SPEED;
+    enemy->target =
+        sum_vec(universe.player.pos, mult_vec(universe.player.vel, 300 * dt));
+  } else if (cd < 0 && cd >= -2) {
+    enemy->target = sum_vec(enemy->pos, enemy->vel);
   }
 
-  enemy->vel = mult_vec(direction_vec(enemy->pos, enemy->target), enemy->speed * dt);
+  enemy->vel =
+      mult_vec(direction_vec(enemy->pos, enemy->target), enemy->speed * dt);
   enemy->pos = sum_vec(enemy->pos, enemy->vel);
 }
 
-void draw_enemies(){
-  for (int i = 0; i < MAX_ENEMIES; i++){
-    if (!is_slot_empty(&universe.enemy_slots, i)){
+void draw_enemies() {
+  for (int i = 0; i < MAX_ENEMIES; i++) {
+    if (!is_slot_empty(&universe.enemy_slots, i)) {
       draw_enemy(universe.enemies[i]);
     }
   }
 }
 
-void draw_enemy(Enemy enemy){
-  switch(enemy.type) {
+void draw_enemy(Enemy enemy) {
+  switch (enemy.type) {
   case ICE:
-    DrawCircle(enemy.pos.x, enemy.pos.y, 30.0f, WHITE);
+    DrawCircle(enemy.pos.x, enemy.pos.y, 10.0f, WHITE);
     break;
   case ASTRONAUT:
-    DrawCircle(enemy.pos.x, enemy.pos.y, 35.0f, PINK);
+    DrawCircle(enemy.pos.x, enemy.pos.y, 10.0f, PINK);
     break;
   case BILLIONAIRE:
-    DrawCircle(enemy.pos.x, enemy.pos.y, 40.0f, PURPLE);
+    DrawCircle(enemy.pos.x, enemy.pos.y, 10.0f, PURPLE);
     break;
   default:
     exit(1); // Tipo de inimigo não detectado

@@ -1,4 +1,5 @@
 #include "animation.h"
+#include "vector.h"
 #include <math.h>
 
 Animation new_animation(usint num_frames, bool loop, usint loop_frame,
@@ -41,5 +42,7 @@ void draw_frame(Animation anim, Texture2D spritesheet, Vector2 pos) {
   int frameY =
       floor((float)anim.frame / spritesheet_columns) * anim.frame_size.y;
   Rectangle frame_rect = {frameX, frameY, anim.frame_size.x, anim.frame_size.y};
-  DrawTextureRec(spritesheet, frame_rect, pos, WHITE);
+  Vector2 good_pos = sub_vec(
+      pos, (Vector2){.x = anim.frame_size.x / 2, .y = anim.frame_size.y / 2});
+  DrawTextureRec(spritesheet, frame_rect, good_pos, WHITE);
 }
