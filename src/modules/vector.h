@@ -8,6 +8,7 @@ Vector2 sub_vec(Vector2 A, Vector2 B);
 Vector2 sum_vec(Vector2 A, Vector2 B);
 Vector2 mult_vec(Vector2 V, float a);
 Vector2 normalize_vec(Vector2 V);
+float mod_vec(Vector2 V);
 bool is_null_vec(Vector2 V);
 
 // Encontra o vetor de direção entre um de origem e um de destino

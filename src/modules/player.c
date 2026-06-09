@@ -10,7 +10,7 @@ Player init_player() {
   Player p = {0};
   p.hp = MAX_PLAYER_HP;
   p.state = PLAYER_IDLE;
-  p.pos = (Vector2){.x = 800, .y = 800};
+  p.pos = (Vector2){.x = 150, .y = 150};
   p.vel = (Vector2){.x = 0, .y = 0};
   p.speed = 120;
 

@@ -21,6 +21,8 @@ Vector2 normalize_vec(Vector2 V) {
   return (Vector2){.x = V.x / mod, .y = V.y / mod};
 }
 
+float mod_vec(Vector2 V) { return sqrt(pow(V.x, 2) + pow(V.y, 2)); }
+
 bool is_null_vec(Vector2 V) { return V.x == 0 && V.y == 0; }
 
 // Encontra o vetor de direção entre um de origem e um de destino
@@ -30,11 +32,11 @@ Vector2 direction_vec(Vector2 origin, Vector2 dest) {
 
 // Encontra o ponto em que target vai estar se andar target_move
 // E gera um vetor de direção saindo de origin até esse ponto
-Vector2 predict_vec(Vector2 origin, Vector2 target, Vector2 target_move){
-	return direction_vec(origin, sum_vec(target, target_move));
+Vector2 predict_vec(Vector2 origin, Vector2 target, Vector2 target_move) {
+  return direction_vec(origin, sum_vec(target, target_move));
 }
 
 // Encontra a distância euclidiana entre dois vetores
-float distance_vec(Vector2 origin, Vector2 dest){
-	return fabs(sqrt(pow(dest.x, origin.x) + pow(dest.y, origin.y)));
+float distance_vec(Vector2 origin, Vector2 dest) {
+  return fabs(sqrt(pow(dest.x, 2) + pow(dest.y, 2)));
 }
