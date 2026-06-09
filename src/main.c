@@ -10,6 +10,7 @@
 #define MAX_BUILDINGS 100
 
 void draw_fps_monitor();
+void draw_cursor(Texture2D cursor_tex);
 
 Universe universe;
 
@@ -26,6 +27,8 @@ int main(void) {
 
   universe = init_universe();
   universe.cam.zoom = 3.2f;
+  Texture2D cursor = LoadTexture("assets/cursor/cursor.png");
+  HideCursor();
 
   float dt;        // Tempo entre frames
   float timer = 0; // Contador de um segundo para spawn
@@ -56,6 +59,7 @@ int main(void) {
 
     ClearBackground(BLUE);
     draw_universe();
+    draw_cursor(cursor);
 
     EndMode2D();
 
@@ -69,6 +73,12 @@ int main(void) {
   // Encerrando o programa
   CloseWindow();
   return 0;
+}
+
+void draw_cursor(Texture2D cursor_tex) {
+  Vector2 mouse_pos = GetMousePosition();
+  mouse_pos = GetScreenToWorld2D(mouse_pos, universe.cam);
+  DrawTextureEx(cursor_tex, mouse_pos, 0.0f, 2.0f, WHITE);
 }
 
 void draw_fps_monitor() {
