@@ -27,6 +27,7 @@ typedef struct player {
   PlayerState state; // Estado atual (animação que está rodando)
   Vector2 pos;       // Posição no mundo
   Vector2 vel;       // Vetor de velocidade
+  float speed;       // Velocidade escalar de movimento
   usint crazyness;   // Nível de loucura, quanto maior, mais forte ele fica
   usint black_hole_charge; // Número de recargas para o buraco negro (ult)
   double atk_cooldown;     // Quanto tempo desde o último tiro
@@ -38,10 +39,9 @@ Player init_player(); // Cria um jogador
 void set_player_animation(Player *player, PlayerState state,
                           Animation anim);    // Define uma animação
 void update_player(Player *player, float dt); // Função de update do Player
-
 void move_player(Player *player, float dt);
-
+void update_player_state(Player *player);
 void shoot_blackhole(Player *player);
-
 void read_mouse_inputs(Player *player, float dt);
+void draw_player(Player *player);
 #endif

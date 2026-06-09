@@ -2,7 +2,6 @@
 #include "assetstore.h"
 #include "listcontrol.h"
 #include "player.h"
-#include <stdio.h>
 
 Universe init_universe() {
   Universe u = {0};
@@ -18,30 +17,30 @@ Universe init_universe() {
   return u;
 }
 
+void update_universe(float dt) {
+  update_player(&(universe.player), dt);
+  update_enemies(dt);
+  update_projectiles(dt);
+}
+
 int get_valid_projectile_id() {
   return get_empty_slot(&(universe.projectile_slots));
 }
 
-int get_valid_enemy_id() {
-  return get_empty_slot(&(universe.enemy_slots));
-}
+int get_valid_enemy_id() { return get_empty_slot(&(universe.enemy_slots)); }
 
 void free_projectile_slot(int id) {
   set_slot_as_empty(&(universe.projectile_slots), id);
 }
 
-void free_enemy_slot(int id) {
-  set_slot_as_empty(&(universe.enemy_slots), id);
+void free_enemy_slot(int id) { set_slot_as_empty(&(universe.enemy_slots), id); }
+
+void insert_projectile(Projectile projectile) {
+  universe.projectiles[projectile.id] = projectile;
 }
 
-void insert_projectile(Projectile projectile){
-  universe.projectiles[projectile.id]=projectile;
-}
+void insert_enemy(Enemy enemy) { universe.enemies[enemy.id] = enemy; }
 
-void insert_enemy(Enemy enemy){
-  universe.enemies[enemy.id]=enemy;
-}
-
-bool is_slot_empty(ListControl *control, int id){
+bool is_slot_empty(ListControl *control, int id) {
   return !control->used_slots[id];
 }

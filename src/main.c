@@ -1,6 +1,7 @@
 #include "../include/raylib.h"
 #include "modules/enemy.h"
 #include "modules/player.h"
+#include "modules/projectile.h"
 #include "modules/universe.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,9 +43,7 @@ int main(void) {
       new_enemy(rand() % 3, (Vector2){rand() % 1200, 0});      
     }
 
-    update_player(&universe.player, dt);
-    update_projectiles(dt);
-    update_enemies(dt);
+    update_universe(dt);
 
     //----------------------------------------------------------------------------------
     // Renderização do jogo
@@ -53,7 +52,7 @@ int main(void) {
 
     ClearBackground(RAYWHITE);
 
-    DrawCircle(universe.player.pos.x, universe.player.pos.y, 50.0f, RED);
+    draw_player(&universe.player);
     draw_projectiles();
     draw_enemies();
 
