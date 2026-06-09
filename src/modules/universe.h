@@ -41,4 +41,6 @@ void insert_projectile(Projectile projectile);
 void insert_enemy(Enemy enemy);
 // Faz o update de tudo que está contido no universo
 void update_universe(float dt);
+// Renderiza tudo que há no universo
+void draw_universe();
 #endif

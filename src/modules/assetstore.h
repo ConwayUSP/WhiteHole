@@ -14,6 +14,7 @@ typedef struct assetstore {
   Texture2D player_sheets[PLAYER_NUM_STATES];
   Texture2D enemy_sheets[ENEMY_NUM_TYPES][ENEMY_NUM_STATES];
   Texture2D projectile_sheets[PROJECTILE_NUM_TYPES][PROJECTILE_NUM_STATES];
+  Texture2D floor_sprite;
 } AssetStore;
 
 // Construtor

@@ -10,26 +10,26 @@ Player init_player() {
   Player p = {0};
   p.hp = MAX_PLAYER_HP;
   p.state = PLAYER_IDLE;
-  p.pos = (Vector2){.x = 600, .y = 600};
+  p.pos = (Vector2){.x = 800, .y = 800};
   p.vel = (Vector2){.x = 0, .y = 0};
-  p.speed = 500;
+  p.speed = 120;
 
   // Inicializando as animações
   set_player_animation(
       &p, PLAYER_IDLE,
-      new_animation(8, true, 0, 0.15F, (Vector2){.x = 32, .y = 32}));
+      new_animation(8, true, 0, 0.25f, (Vector2){.x = 32, .y = 32}));
   set_player_animation(
       &p, PLAYER_MOVING_UP,
-      new_animation(8, true, 0, 0.15F, (Vector2){.x = 32, .y = 32}));
+      new_animation(8, true, 0, 0.1f, (Vector2){.x = 32, .y = 32}));
   set_player_animation(
       &p, PLAYER_MOVING_RIGHT,
-      new_animation(8, true, 0, 0.15F, (Vector2){.x = 32, .y = 32}));
+      new_animation(8, true, 0, 0.1f, (Vector2){.x = 32, .y = 32}));
   set_player_animation(
       &p, PLAYER_MOVING_DOWN,
-      new_animation(8, true, 0, 0.15F, (Vector2){.x = 32, .y = 32}));
+      new_animation(8, true, 0, 0.1f, (Vector2){.x = 32, .y = 32}));
   set_player_animation(
       &p, PLAYER_MOVING_LEFT,
-      new_animation(8, true, 0, 0.15F, (Vector2){.x = 32, .y = 32}));
+      new_animation(8, true, 0, 0.1f, (Vector2){.x = 32, .y = 32}));
 
   return p;
 }
@@ -40,6 +40,7 @@ void update_player(Player *player, float dt) {
   read_mouse_inputs(player, dt);
   move_player(player, dt);
   update_player_state(player);
+  update_animation(&player->animations[player->state], dt);
 }
 
 void update_player_state(Player *player) {
