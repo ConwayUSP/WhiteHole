@@ -1,4 +1,5 @@
 #include "vector.h"
+#include <math.h>
 
 Vector2 sub_vec(Vector2 A, Vector2 B) {
   return (Vector2){.x = A.x - B.x, .y = A.y - B.y};
@@ -29,6 +30,11 @@ Vector2 direction_vec(Vector2 origin, Vector2 dest) {
 
 // Encontra o ponto em que target vai estar se andar target_move
 // E gera um vetor de direção saindo de origin até esse ponto
-Vector2 predict_vec(Vector2 origin, Vector2 target, Vector2 target_move) {
-  return direction_vec(origin, sum_vec(target, target_move));
+Vector2 predict_vec(Vector2 origin, Vector2 target, Vector2 target_move){
+	return direction_vec(origin, sum_vec(target, target_move));
+}
+
+// Encontra a distância euclidiana entre dois vetores
+float distance_vec(Vector2 origin, Vector2 dest){
+	return fabs(sqrt(pow(dest.x, origin.x) + pow(dest.y, origin.y)));
 }

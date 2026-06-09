@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "enemy.h"
+#include "player.h"
 #include "universe.h"
 #include "vector.h"
 #include <stdio.h>
@@ -15,6 +16,7 @@ void new_enemy(EnemyType type, Vector2 pos) {
   switch (type) {
   case ICE:
     e.hp = MAX_ICE_HP;
+    e.speed = 200;
     e.ult_threshold = ICE_ULT_CAP;
     break;
   case ASTRONAUT:
@@ -48,7 +50,7 @@ void update_enemies(float dt) {
 void update_enemy(Enemy *enemy, float dt) {
   switch(enemy->type) {
   case ICE:
-    //move_ice(enemy, dt);
+    move_ice(enemy, dt);
     break;
   case ASTRONAUT:
     //move_astronaut(enemy, dt);
@@ -61,11 +63,27 @@ void update_enemy(Enemy *enemy, float dt) {
   }
 }
 
-/*
 void move_ice(Enemy *enemy, float dt){
+  Vector2 itar;     // Posição do ICE mais próximo
+  bool flag = true; // Verifica se esse é o primeiro ICE da lista de inimigos
 
+  for (int i = 0; i < MAX_ENEMIES; i++){
+    if (!is_slot_empty(&universe.enemy_slots, i) && enemy->id != universe.enemies[i].id && universe.enemies[i].type == ICE){
+      if(flag){
+        itar = universe.enemies[i].pos;
+        flag = false;
+      } else {
+        itar = distance_vec(enemy->pos, itar) > distance_vec(enemy->pos, universe.enemies[i].pos) ? universe.enemies[i].pos : itar;
+      }
+    }
+  }
+
+  enemy->target = mult_vec(sum_vec(universe.player.pos, itar), 0.5);
+  enemy->vel = mult_vec(direction_vec(enemy->pos, enemy->target), enemy->speed * dt);
+  enemy->pos = sum_vec(enemy->pos, enemy->vel);
 }
 
+/*
 void move_astronaut(Enemy *enemy, float dt){
   
 }
@@ -78,7 +96,6 @@ void move_billionaire(Enemy *enemy, float dt){
 
   if(old_cooldown > 0 && cd < 0) {
       enemy->target = sum_vec(universe.player.pos, mult_vec(universe.player.vel, 1000*dt));
-      enemy->vel = mult_vec(direction_vec(enemy->pos, enemy->target), enemy->speed * dt);
       enemy->speed = 600;
   } else if(old_cooldown > -2 && cd < -2) {
       enemy->target = (Vector2){.x = rand() % 1200, .y = rand() % 1200};
@@ -101,11 +118,6 @@ void move_billionaire(Enemy *enemy, float dt){
   enemy->vel = mult_vec(direction_vec(enemy->pos, enemy->target), enemy->speed * dt);
   enemy->pos = sum_vec(enemy->pos, enemy->vel);
 }
-  // !TODO: Implementar (switch case para ver o tipo e chama a função de movimento do tipo)
-  // renderizar como circulos, já que ainda não tem sprite
-  // fazer o loop main spawnar a cada segundo um inimigo aleatório em posição aleatória para testar
-  // renderizar cada um de uma cor diferente
-  // renderizar o "player" e os "buracos negros" numa posição constante para testar o movimento
 
 void draw_enemies(){
   for (int i = 0; i < MAX_ENEMIES; i++){
