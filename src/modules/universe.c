@@ -5,7 +5,7 @@
 
 Universe init_universe() {
   Universe u = {0};
-
+  
   u.context = MENU;
   u.player = init_player();
   u.asset_store = init_asset_store();
