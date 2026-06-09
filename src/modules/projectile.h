@@ -40,7 +40,6 @@ typedef struct projectile {
   usint damage;          // Dano causado em impacto
   float size;            // Tamanho
   float weight;          // Peso, influencia como é afetado pelos buracos negros
-  float size;
   Animation animations[PROJECTILE_NUM_STATES]; // Animações para cada estado
 } Projectile;
 
