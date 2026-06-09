@@ -44,7 +44,7 @@ void new_projectile(ProjectileType type, Vector2 pos, Vector2 direction) {
   case BLACK_HOLE:
     p.damage = 1000;
     p.speed = 100.0f;
-    p.duration = 60.0f;
+    p.duration = 10.0f;
     p.weight = 1000000.0f;
     break;
 
@@ -71,6 +71,9 @@ void update_projectiles(float dt) {
 void update_projectile(Projectile *projectile, float dt) {
   move_projectile(projectile, dt);
   projectile->timer += dt;
+  if (projectile->timer > projectile->duration){
+    free_projectile_slot(projectile->id);
+  }
 }
 
 void set_projectile_direction(Projectile *projectile, Vector2 direction) {
