@@ -26,19 +26,19 @@ void new_projectile(ProjectileType type, Vector2 pos, Vector2 direction) {
     break;
   case ASTRONAUT_ATK:
     p.damage = 1;
-    p.speed = 80.0f;
+    p.speed = 200.0f;
     p.duration = 3.0f;
     p.weight = 2.0f;
     break;
   case ICE_ATK:
     p.damage = 1;
     p.speed = 120.0f;
-    p.duration = 1.0f;
+    p.duration = 2.0f;
     p.weight = 0.5f;
     break;
   case BILLIONAIRE_ATK:
     p.damage = 1;
-    p.speed = 8.0f;
+    p.speed = 150.0f;
     p.duration = 3.0f;
     p.weight = 2.0f;
     break;
@@ -73,7 +73,7 @@ void update_projectiles(float dt) {
 void update_projectile(Projectile *projectile, float dt) {
   move_projectile(projectile, dt);
   projectile->timer += dt;
-  if (projectile->timer > projectile->duration){
+  if (projectile->timer > projectile->duration) {
     free_projectile_slot(projectile->id);
   }
 }
@@ -109,6 +109,15 @@ void draw_projectile(Projectile projectile) {
     break;
   case PLAYER_ATK:
     DrawCircle(projectile.pos.x, projectile.pos.y, 2.0f, YELLOW);
+    break;
+  case ICE_ATK:
+    DrawCircle(projectile.pos.x, projectile.pos.y, 2.0f, PINK);
+    break;
+  case ASTRONAUT_ATK:
+    DrawCircle(projectile.pos.x, projectile.pos.y, 2.0f, PURPLE);
+    break;
+  case BILLIONAIRE_ATK:
+    DrawCircle(projectile.pos.x, projectile.pos.y, 2.0f, GREEN);
     break;
   default:
     return;

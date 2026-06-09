@@ -21,4 +21,6 @@ Vector2 predict_vec(Vector2 origin, Vector2 target, Vector2 target_vel);
 // Encontra a distância euclidiana entre dois vetores
 float distance_vec(Vector2 origin, Vector2 dest);
 
+Vector2 rotate_vec(Vector2 V, float rad);
+
 #endif

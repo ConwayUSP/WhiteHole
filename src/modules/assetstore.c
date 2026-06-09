@@ -21,6 +21,15 @@ AssetStore init_asset_store() {
   as.player_sheets[PLAYER_MOVING_LEFT] =
       LoadTexture("assets/player/alien_walk_left.png");
 
+  // ICE
+  as.enemy_sheets[ICE][ENEMY_IDLE] = LoadTexture("assets/ice/idle.png");
+  // BILLIONAIRE
+  as.enemy_sheets[BILLIONAIRE][ENEMY_IDLE] =
+      LoadTexture("assets/billionaire/idle.png");
+  // ASTRONAUT
+  as.enemy_sheets[ASTRONAUT][ENEMY_IDLE] =
+      LoadTexture("assets/astronaut/idle.png");
+
   return as;
 }
 

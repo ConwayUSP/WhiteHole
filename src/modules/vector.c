@@ -40,3 +40,9 @@ Vector2 predict_vec(Vector2 origin, Vector2 target, Vector2 target_move) {
 float distance_vec(Vector2 origin, Vector2 dest) {
   return mod_vec(sub_vec(origin, dest));
 }
+
+Vector2 rotate_vec(Vector2 V, float rad) {
+  float new_x = V.x * cos(rad) - V.y * sin(rad);
+  float new_y = V.x * sin(rad) + V.y * cos(rad);
+  return (Vector2){new_x, new_y};
+}

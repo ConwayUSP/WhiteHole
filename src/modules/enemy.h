@@ -37,32 +37,37 @@ typedef enum {
 
 // Tipo que representará nossos inimigos
 typedef struct enemy {
-  EnemyType type;       // Tipo específico de inimigo
-  int id;               // Seu índice na lista de inimigos do universo
-  usint hp;             // Vida restante ao inimigo
-  EnemyState state;     // Estado atual (animação que está rodando)
-  Vector2 pos;          // Posição no mundo
-  Vector2 vel;          // Vetor de velocidade
-  Vector2 target;       // Ponto para o qual o inimigo quer se mover
-  float speed;          // Velocidade base de movimento
-  float ult_charge;     // Carga atual da ult
-  float ult_threshold;  // Quanta carga precisa acumular para ultar
-  float atk_cooldown;   // Quanto tempo desde o último tiro
-  float move_cooldown;  // Quanto tempo para o bilionário dar seu dash
+  EnemyType type;      // Tipo específico de inimigo
+  int id;              // Seu índice na lista de inimigos do universo
+  usint hp;            // Vida restante ao inimigo
+  EnemyState state;    // Estado atual (animação que está rodando)
+  Vector2 pos;         // Posição no mundo
+  Vector2 vel;         // Vetor de velocidade
+  Vector2 target;      // Ponto para o qual o inimigo quer se mover
+  float speed;         // Velocidade base de movimento
+  float ult_charge;    // Carga atual da ult
+  float ult_threshold; // Quanta carga precisa acumular para ultar
+  float atk_cooldown;  // Quanto tempo desde o último tiro
+  float move_cooldown; // Quanto tempo para o bilionário dar seu dash
   float size;
   Animation animations[ENEMY_NUM_STATES]; // Animações para cada estado
 } Enemy;
 
 // Funções relacionadas aos inimigos
 void new_enemy(EnemyType type, Vector2 pos); // Cria um inimigo
-void set_enemy_animation(Enemy *enemy, EnemyState state, Animation anim); // Define uma animação
+void set_enemy_animation(Enemy *enemy, EnemyState state,
+                         Animation anim); // Define uma animação
 void update_enemies(float dt);
-void update_enemy(Enemy *enemy, float dt);          // Função de update do inimigo
-void move_ice(Enemy *enemy, float dt);              // Função de movimentação inimigos tipo ICE 
-void move_astronaut(Enemy *enemy, float dt);        // Função de movimentação inimigos tipo ASTRONAUT
-void move_billionaire(Enemy *enemy, float dt);      // Função de movimentação inimigos tipo BILLIONAIRE
+void update_enemy(Enemy *enemy, float dt); // Função de update do inimigo
+void move_ice(Enemy *enemy,
+              float dt); // Função de movimentação inimigos tipo ICE
+void move_astronaut(Enemy *enemy,
+                    float dt); // Função de movimentação inimigos tipo ASTRONAUT
+void move_billionaire(
+    Enemy *enemy, float dt); // Função de movimentação inimigos tipo BILLIONAIRE
 void draw_enemies();
 void draw_enemy(Enemy enemy);
-void enemy_take_damage(Enemy*enemy, int damage);
+void enemy_take_damage(Enemy *enemy, int damage);
+void enemy_attack(Enemy *enemy);
 
 #endif
