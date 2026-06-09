@@ -1,8 +1,11 @@
 #ifndef PROJECTILE_H
 #define PROJECTILE_H
 
+
+
 #include "../../include/raylib.h"
 #include "animation.h"
+#include "player.h"
 
 // Entenda "usint" como "unsigned short int" a partir de agora
 typedef unsigned short int usint;
@@ -45,11 +48,8 @@ typedef struct projectile {
 void new_projectile(ProjectileType type, Vector2 pos, Vector2 direction); // Cria um projétil
 void set_projectile_animation(Projectile *projectile, ProjectileState state,
                               Animation anim); // Define uma animação
-void update_projectile(Projectile *projectile,
-                       float dt); // Função de update do projétil
-       
+void sai_projectile(Projectile *projectile, Vector2 inicial_position, Vector2 mira_position, float dt);
 void move_projectile(Projectile *projectile, float dt); // Move o projétil de acordo com sua direção e velocidade 
-void sai_projectile(Projectile *projectile, float dt);
 void draw_projectiles();
 void draw_projectile(Projectile projectile);
 void set_projectile_direction(Projectile *projectile, Vector2 direction);

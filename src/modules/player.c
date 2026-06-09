@@ -87,12 +87,21 @@ void shoot_blackhole(Player *player) {
   int mouse_x = GetMouseX();
   int mouse_y = GetMouseY();
   Vector2 mouse_pos = {.x = mouse_x, .y = mouse_y};
-  Vector2 direction = direction_vec(player->pos, mouse_pos);
+  Vector2 mouse_2d = GetScreenToWorld2D(mouse_pos, universe.cam);
+  Vector2 direction = direction_vec(player->pos, mouse_2d);
   new_black_hole(player->pos, direction);
 }
 void read_mouse_inputs(Player *player, float dt) {
-  if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+  if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
     shoot_blackhole(player);
+  }
+  else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+    int mouse_x = GetMouseX();
+    int mouse_y = GetMouseY();
+    Vector2 mouse = {mouse_x, mouse_y};
+    Vector2 mouse_2d = GetScreenToWorld2D(mouse, universe.cam);
+    Vector2 direction = direction_vec(player->pos, mouse_2d);
+    new_player_projectile(player->pos, direction);
   }
 }
 
