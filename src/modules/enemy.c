@@ -103,8 +103,9 @@ void move_astronaut(Enemy *e, float dt){
 
   for (int i = 0; i < MAX_PROJECTILES; i++){
     Projectile p = universe.projectiles[i];
-    if (!is_slot_empty(&universe.projectile_slots, i) && distance_vec(sum_vec(e->pos, e->vel), p.pos) < p.size && p.type == BLACK_HOLE){
-      e->target = mult_vec(direction_vec(p.pos, sum_vec(e->pos, e->vel)), p.size);
+    float orb = p.size + 15;
+    if (!is_slot_empty(&universe.projectile_slots, i) && distance_vec(sum_vec(e->pos, e->vel), p.pos) < orb && p.type == BLACK_HOLE){
+      e->target = mult_vec(direction_vec(p.pos, sum_vec(e->pos, e->vel)), orb);
     }
   }
   e->vel = mult_vec(direction_vec(e->pos, e->target), e->speed * dt);
