@@ -5,11 +5,13 @@
 #include "modules/universe.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <time.h> 
 
 #define MAX_BUILDINGS 100
 
 void draw_fps_monitor();
+void draw_menu();
+
 
 Universe universe;
 
@@ -21,6 +23,7 @@ int main(void) {
   InitWindow(screenWidth, screenHeight, "WhiteHole"); // Inicializando janela
   SetTargetFPS(240); // Queremos que rode a 60 fps
 
+
   // Aleatoriedade
   srand(time(NULL));
 
@@ -30,15 +33,25 @@ int main(void) {
   float dt;        // Tempo entre frames
   float timer = 0; // Contador de um segundo para spawn
 
+  
+
   // Loop de jogo
   while (!WindowShouldClose()) // Fecha no ESC
   {
+    
+
+    if(universe.context == MENU && IsKeyPressed(KEY_SPACE)){
+      universe.context = RUNNING;
+    }
     //----------------------------------------------------------------------------------
     // Update
     //----------------------------------------------------------------------------------
-    dt = GetFrameTime();
-    dt *= distort_time();
-    timer += dt;
+    if(universe.context == RUNNING){
+      dt = GetFrameTime();
+      dt *= distort_time();
+      timer += dt;
+    }
+  
 
     // Spawna um novo inimigo a cada 2 segundos
     if (timer >= 2.0f) {
@@ -47,7 +60,7 @@ int main(void) {
     }
 
     update_universe(dt);
-
+  
     //----------------------------------------------------------------------------------
     // Renderização do jogo
     //----------------------------------------------------------------------------------
@@ -62,7 +75,7 @@ int main(void) {
     // Renderização da UI
     DrawText("WHITEHOLE", 500, 10, 40, WHITE);
     draw_fps_monitor();
-
+    draw_menu();
     EndDrawing();
   }
 
@@ -82,4 +95,9 @@ void draw_fps_monitor() {
   char fps_text[8];
   sprintf(fps_text, "%d fps", FPS);
   DrawText(fps_text, 1100, 10, 20, fps_color);
+}
+void draw_menu() {
+  if (universe.context == MENU){
+    DrawText("APERTE ESPAÇO PARA RODAR", 320, 288, 24, GREEN);
+  }
 }
