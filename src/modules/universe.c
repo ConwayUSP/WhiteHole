@@ -31,6 +31,12 @@ void update_universe(float dt) {
     update_enemies(dt);
   }
   update_projectiles(dt);
+  if (universe.player.hp == 0) {
+    universe.context = MENU;
+    universe.player.hp = MAX_PLAYER_HP;
+    set_all_empty(&universe.projectile_slots);
+    set_all_empty(&universe.enemy_slots);
+  }
 }
 
 void universe_handle_input() {

@@ -106,6 +106,6 @@ void draw_fps_monitor() {
 }
 void draw_menu() {
   if (universe.context == MENU) {
-    DrawText("APERTE ESPAÇO PARA RODAR", 320, 288, 24, GREEN);
+    DrawText("APERTE ESPAÇO PARA JOGAR", 380, 288, 30, BEIGE);
   }
 }

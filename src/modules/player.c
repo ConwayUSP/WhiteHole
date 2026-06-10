@@ -13,7 +13,7 @@ Player init_player() {
   Player p = {0};
   p.hp = MAX_PLAYER_HP;
   p.state = PLAYER_IDLE;
-  p.pos = (Vector2){.x = 150, .y = 150};
+  p.pos = (Vector2){.x = 187.5, .y = 187.5};
   p.vel = (Vector2){.x = 0, .y = 0};
   p.speed = 120;
   p.size = 10;
@@ -46,6 +46,7 @@ void update_player(Player *player, float dt) {
   move_player(player, dt);
   update_player_state(player);
   update_animation(&player->animations[player->state], dt);
+  
 }
 
 void update_player_state(Player *player) {
@@ -126,10 +127,11 @@ void read_mouse_inputs(Player *player, float dt) {
 }
 
 void draw_player(Player *player) {
-  Animation animation = player->animations[player->state];
-  Texture2D spritesheet =
-      get_player_sheet(&universe.asset_store, player->state);
-  draw_frame(animation, spritesheet, player->pos);
+    Animation animation = player->animations[player->state];
+    Texture2D spritesheet =
+    get_player_sheet(&universe.asset_store, player->state);
+    draw_frame(animation, spritesheet, player->pos);
+
 }
 
 void player_take_damage(Player *player, int damage) {
