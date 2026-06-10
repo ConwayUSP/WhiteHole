@@ -4,6 +4,7 @@
 #include "projectile.h"
 #include "universe.h"
 #include "vector.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -116,14 +117,21 @@ void move_ice(Enemy *enemy, float dt) {
 
 void move_astronaut(Enemy *e, float dt) {
   e->target = universe.player.pos;
-  e->vel = mult_vec(direction_vec(e->pos, e->target), e->speed * dt);
+  Vector2 bhtar = e->pos; // Posição do buraco negro mais próximo
+  bool found_blackhole = true; // Verifica se esse é o primeiro buraco negro encontrado
 
   for (int i = 0; i < MAX_PROJECTILES; i++) {
     Projectile p = universe.projectiles[i];
     float orb = p.size + 30;
     if (!is_slot_empty(&universe.projectile_slots, i) && distance_vec(sum_vec(e->pos, e->vel), p.pos) < orb && p.type == BLACK_HOLE){
-      Vector2 new_direction = direction_vec(p.pos, sum_vec(e->pos, e->vel));
-      e->target = sum_vec(p.pos, mult_vec(new_direction, orb));
+      if(found_blackhole){
+        bhtar = p.pos;
+        found_blackhole = false;
+      } else if(distance_vec(e->pos, bhtar) > distance_vec(e->pos, p.pos)){
+        bhtar = p.pos;
+      }
+      Vector2 new_direction = direction_vec(bhtar, sum_vec(e->pos, e->vel));
+      e->target = sum_vec(bhtar, mult_vec(new_direction, orb));
     }
   }
   e->vel = mult_vec(direction_vec(e->pos, e->target), e->speed * dt);
