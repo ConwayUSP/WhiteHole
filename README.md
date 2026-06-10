@@ -16,13 +16,13 @@
 - [X] Fazer a distorção temporal via proximidade a buracos negros
 - [ ] Fazer gravidade do buraco negro afetar entidades
 - [ ] Geração de inimigos (aleatório ou deteminístico)
-- [ ] Pontuação
+- [X] Pontuação
 - [ ] Música de fundo
 - [ ] Áudio dos tiros
 - [ ] Áudio de tomar dano
 - [ ] Áudio de morte
 - [ ] Som ambiente do buraco negro (quanto mais perto, mais alto)
-- [ ] Menu ("aperte espaço para começar")
+- [X] Menu ("aperte espaço para começar")
 - [ ] Morte ("aperte espaço para tentar de novo")
 - [ ] Vitória ("sua pontuação: X")
 - [ ] Se der tempo, botar um boss (ElonMusk-Robô-Polvo)

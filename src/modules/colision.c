@@ -12,10 +12,7 @@ void solve_enemy_colision(Enemy *enemy) {
       bool colided =
           CheckCollisionCircles(enemy->pos, enemy->size, p.pos, p.size);
       if (colided && (p.type == BLACK_HOLE || p.type == PLAYER_ATK)) {
-        
-        enemy_take_damage(enemy, p.damage);
-      
-      
+        enemy_take_damage(enemy, p.damage);     
         if (p.type != BLACK_HOLE) {
           free_projectile_slot(p.id);
         }
@@ -42,7 +39,7 @@ void solve_player_colision(Player *player) {
       Projectile p = universe.projectiles[i];
       bool colided =
           CheckCollisionCircles(player->pos, player->size, p.pos, p.size);
-      if (colided && p.type != PLAYER_ATK) {
+      if (colided && p.type != PLAYER_ATK && p.type != BLACK_HOLE) {
         player_take_damage(player, p.damage);
         if (p.type != BLACK_HOLE && p.type != PLAYER_ATK) {
           free_projectile_slot(p.id);
@@ -59,6 +56,19 @@ void solve_player_colision(Player *player) {
         Vector2 correction = direction_vec(e.pos, player->pos);
         correction = mult_vec(correction, e.size + player->size + 1);
         player->pos = sum_vec(e.pos, correction);
+      }
+    }
+  }
+
+    for (int i = 0; i < MAX_PROJECTILES; i++) {
+    if (!is_slot_empty(&universe.projectile_slots, i)) {
+      Projectile p = universe.projectiles[i];
+      bool colided =
+          CheckCollisionCircles(player->pos, player->size, p.pos, p.size);
+      if (colided && p.type == BLACK_HOLE) {
+        Vector2 correction = direction_vec(p.pos, player->pos);
+        correction = mult_vec(correction, p.size + player->size + 1);
+        player->pos = sum_vec(p.pos, correction);
       }
     }
   }

@@ -31,6 +31,7 @@ typedef struct player {
   float speed;       // Velocidade escalar de movimento
   usint crazyness;   // Nível de loucura, quanto maior, mais forte ele fica
   usint black_hole_charge; // Número de recargas para o buraco negro (ult)
+  usint black_hole_threshold; 
   float black_hole_pull;   // O quão forte o buraco negro vai ser lançado (ult)
   double atk_cooldown;     // Quanto tempo desde o último tiro
   float size;        // Tamanho do player
