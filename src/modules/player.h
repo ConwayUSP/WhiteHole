@@ -32,6 +32,7 @@ typedef struct player {
   usint crazyness;   // Nível de loucura, quanto maior, mais forte ele fica
   usint black_hole_charge; // Número de recargas para o buraco negro (ult)
   double atk_cooldown;     // Quanto tempo desde o último tiro
+  float size;        // Tamanho do player
   Animation animations[PLAYER_NUM_STATES]; // Animações para cada estado
 } Player;
 
@@ -44,4 +45,5 @@ void move_player(Player *player, float dt);
 void update_player_state(Player *player);
 void read_mouse_inputs(Player *player, float dt);
 void draw_player(Player *player);
+void player_take_damage(Player *player, int damage);
 #endif
