@@ -3,9 +3,10 @@
 #include "modules/player.h"
 #include "modules/projectile.h"
 #include "modules/universe.h"
+#include "modules/vector.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h> 
+#include <time.h>
 
 #define MAX_BUILDINGS 100
 
@@ -23,7 +24,6 @@ int main(void) {
   InitWindow(screenWidth, screenHeight, "WhiteHole"); // Inicializando janela
   SetTargetFPS(240); // Queremos que rode a 60 fps
 
-
   // Aleatoriedade
   srand(time(NULL));
 
@@ -35,34 +35,26 @@ int main(void) {
   float dt;        // Tempo entre frames
   float timer = 0; // Contador de um segundo para spawn
 
-  
-
   // Loop de jogo
   while (!WindowShouldClose()) // Fecha no ESC
   {
-    
-
-    if(universe.context == MENU && IsKeyPressed(KEY_SPACE)){
-      universe.context = RUNNING;
-    }
     //----------------------------------------------------------------------------------
     // Update
     //----------------------------------------------------------------------------------
-    if(universe.context == RUNNING){
-      dt = GetFrameTime();
-      dt *= distort_time();
-      timer += dt;
-    }
-  
+    dt = GetFrameTime();
+    dt *= distort_time();
 
     // Spawna um novo inimigo a cada 2 segundos
-    if (timer >= 2.0f) {
-      timer -= 2.0f;
-      new_enemy(rand() % 3, (Vector2){rand() % 375, rand() % 375});
+    if (universe.context == RUNNING) {
+      timer += dt;
+      if (timer >= 2.0f) {
+        timer -= 2.0f;
+        new_enemy(rand() % 3, (Vector2){rand() % 375, rand() % 375});
+      }
     }
 
     update_universe(dt);
-  
+
     //----------------------------------------------------------------------------------
     // Renderização do jogo
     //----------------------------------------------------------------------------------
@@ -79,6 +71,12 @@ int main(void) {
     DrawText("WHITEHOLE", 500, 10, 40, WHITE);
     draw_fps_monitor();
     draw_menu();
+
+    if (universe.context == PAUSE) {
+      DrawRectangle(300, 300, 200, 600, (Color){255, 255, 255, 160});
+      DrawRectangle(700, 300, 200, 600, (Color){255, 255, 255, 160});
+    }
+
     EndDrawing();
   }
 
@@ -89,7 +87,8 @@ int main(void) {
 
 void draw_cursor(Texture2D cursor_tex) {
   Vector2 mouse_pos = GetMousePosition();
-  mouse_pos = GetScreenToWorld2D(mouse_pos, universe.cam);
+  mouse_pos = sub_vec(GetScreenToWorld2D(mouse_pos, universe.cam),
+                      (Vector2){.x = 8, .y = 8});
   DrawTextureEx(cursor_tex, mouse_pos, 0.0f, 2.0f, WHITE);
 }
 
@@ -106,7 +105,7 @@ void draw_fps_monitor() {
   DrawText(fps_text, 1100, 10, 20, fps_color);
 }
 void draw_menu() {
-  if (universe.context == MENU){
+  if (universe.context == MENU) {
     DrawText("APERTE ESPAÇO PARA RODAR", 320, 288, 24, GREEN);
   }
 }

@@ -11,7 +11,7 @@
 #define MAX_PROJECTILES 1024
 #define MAX_ENEMIES 128
 
-typedef enum { MENU, RUNNING, GAME_OVER, VICTORY } Scene;
+typedef enum { MENU, RUNNING, PAUSE, GAME_OVER, VICTORY } Scene;
 
 // Estrutura do estado global do jogo
 typedef struct universe {
@@ -47,4 +47,5 @@ void update_universe(float dt);
 void draw_universe();
 // Retorna um coeficiente (0..1) que diz o quão desacelerado o universo está
 float distort_time();
+void universe_handle_input();
 #endif
