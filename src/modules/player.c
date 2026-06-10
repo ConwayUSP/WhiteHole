@@ -1,4 +1,5 @@
 #include "player.h"
+#include "colision.h"
 #include "animation.h"
 #include "assetstore.h"
 #include "listcontrol.h"
@@ -15,6 +16,7 @@ Player init_player() {
   p.pos = (Vector2){.x = 150, .y = 150};
   p.vel = (Vector2){.x = 0, .y = 0};
   p.speed = 120;
+  p.size = 10;
 
   // Inicializando as animações
   set_player_animation(
@@ -64,6 +66,7 @@ void update_player_state(Player *player) {
       player->state = PLAYER_MOVING_UP;
     }
   }
+  solve_player_colision(player);
 }
 
 void move_player(Player *player, float dt) {
@@ -127,4 +130,12 @@ void draw_player(Player *player) {
   Texture2D spritesheet =
       get_player_sheet(&universe.asset_store, player->state);
   draw_frame(animation, spritesheet, player->pos);
+}
+
+void player_take_damage(Player *player, int damage) {
+  if (damage > player->hp) {
+    player->hp = 0;
+  } else {
+    player->hp -= damage;
+  }
 }
