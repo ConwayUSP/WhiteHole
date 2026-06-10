@@ -1,6 +1,7 @@
 #include "colision.h"
 #include "universe.h"
 #include "vector.h"
+#include <stdio.h>
 
 void solve_enemy_colision(Enemy *enemy) {
   for (int i = 0; i < MAX_PROJECTILES; i++) {
@@ -36,7 +37,7 @@ void solve_player_colision(Player *player) {
       Projectile p = universe.projectiles[i];
       bool colided =
           CheckCollisionCircles(player->pos, player->size, p.pos, p.size);
-      if (colided) {
+      if (colided && p.type != PLAYER_ATK) {
         player_take_damage(player, p.damage);
         if (p.type != BLACK_HOLE && p.type != PLAYER_ATK) {
           free_projectile_slot(p.id);

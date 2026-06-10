@@ -16,7 +16,7 @@ void free_list_control(ListControl *list_control) {
 }
 
 void set_slot_as_empty(ListControl *list_control, int idx) {
-  if (list_control->top >= list_control->max)
+  if (list_control->top >= list_control->max && !list_control->used_slots[idx])
     return;
   list_control->top += 1;
   list_control->free_stack[list_control->top] = idx;
