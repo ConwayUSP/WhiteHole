@@ -1,6 +1,7 @@
 #include "listcontrol.h"
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 
 ListControl new_list_control(int list_size) {
   int *s = malloc(list_size * sizeof(int));
@@ -33,6 +34,9 @@ int get_empty_slot(ListControl *list_control) {
 }
 
 void set_all_empty(ListControl *list_control) {
+  memset(list_control->free_stack, 0, list_control->max * sizeof(int));
+  memset(list_control->used_slots, 1, list_control->max * sizeof(bool));
+  list_control->top = 0;
   for (int i = list_control->max - 1; i >= 0; i--)
     set_slot_as_empty(list_control, i);
 }

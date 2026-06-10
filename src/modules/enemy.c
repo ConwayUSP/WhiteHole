@@ -1,4 +1,5 @@
 #include "enemy.h"
+#include "assetstore.h"
 #include "colision.h"
 #include "player.h"
 #include "projectile.h"
@@ -118,16 +119,19 @@ void move_ice(Enemy *enemy, float dt) {
 void move_astronaut(Enemy *e, float dt) {
   e->target = universe.player.pos;
   Vector2 bhtar = e->pos; // Posição do buraco negro mais próximo
-  bool found_blackhole = true; // Verifica se esse é o primeiro buraco negro encontrado
+  bool found_blackhole =
+      true; // Verifica se esse é o primeiro buraco negro encontrado
 
   for (int i = 0; i < MAX_PROJECTILES; i++) {
     Projectile p = universe.projectiles[i];
     float orb = p.size + 30;
-    if (!is_slot_empty(&universe.projectile_slots, i) && distance_vec(sum_vec(e->pos, e->vel), p.pos) < orb && p.type == BLACK_HOLE){
-      if(found_blackhole){
+    if (!is_slot_empty(&universe.projectile_slots, i) &&
+        distance_vec(sum_vec(e->pos, e->vel), p.pos) < orb &&
+        p.type == BLACK_HOLE) {
+      if (found_blackhole) {
         bhtar = p.pos;
         found_blackhole = false;
-      } else if(distance_vec(e->pos, bhtar) > distance_vec(e->pos, p.pos)){
+      } else if (distance_vec(e->pos, bhtar) > distance_vec(e->pos, p.pos)) {
         bhtar = p.pos;
       }
       Vector2 new_direction = direction_vec(bhtar, sum_vec(e->pos, e->vel));
@@ -185,9 +189,10 @@ void draw_enemies() {
 
 void draw_enemy(Enemy enemy) {
   Animation animation = enemy.animations[enemy.state];
-  Texture2D spritesheet =
-      get_enemy_sheet(&universe.asset_store, enemy.type, enemy.state);
-  draw_frame(animation, spritesheet, enemy.pos);
+  Texture2D spritesheet = get_enemy_sheet(&universe.asset_store, enemy.type);
+  Vector2 offset =
+      get_enemy_offset(&universe.asset_store, enemy.type, enemy.state);
+  draw_frame(animation, spritesheet, offset, enemy.pos);
 }
 
 void enemy_take_damage(Enemy *enemy, int damage) {

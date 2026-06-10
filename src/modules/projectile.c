@@ -118,7 +118,9 @@ void draw_projectiles() {
 
 void draw_projectile(Projectile projectile) {
   Animation anim = projectile.animations[projectile.state];
-  Texture2D sheet = get_projectile_sheet(&universe.asset_store, projectile.type,
+  Texture2D sheet =
+      get_projectile_sheet(&universe.asset_store, projectile.type);
+  Vector2 offset = get_projectile_offset(&universe.asset_store, projectile.type,
                                          projectile.state);
-  draw_frame(anim, sheet, projectile.pos);
+  draw_frame(anim, sheet, offset, projectile.pos);
 }

@@ -23,6 +23,7 @@ Animation new_animation(usint num_frames, bool loop, usint loop_frame,
                         double frame_dur, Vector2 frame_size);
 void reset_animation(Animation *anim);
 void update_animation(Animation *anim, float dt);
-void draw_frame(Animation anim, Texture2D spritesheet, Vector2 pos);
+void draw_frame(Animation anim, Texture2D spritesheet, Vector2 offset,
+                Vector2 pos);
 
 #endif

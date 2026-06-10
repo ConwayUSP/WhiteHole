@@ -35,12 +35,15 @@ void update_animation(Animation *anim, float dt) {
   }
 }
 
-void draw_frame(Animation anim, Texture2D spritesheet, Vector2 pos) {
+void draw_frame(Animation anim, Texture2D spritesheet, Vector2 offset,
+                Vector2 pos) {
   // Quantos frames a spritesheet tem de largura
   int spritesheet_columns = spritesheet.width / anim.frame_size.x;
   int frameX = anim.frame % spritesheet_columns * anim.frame_size.x;
   int frameY =
       floor((float)anim.frame / spritesheet_columns) * anim.frame_size.y;
+  frameX += offset.x;
+  frameY += offset.y;
   Rectangle frame_rect = {frameX, frameY, anim.frame_size.x, anim.frame_size.y};
   Vector2 good_pos = sub_vec(
       pos, (Vector2){.x = anim.frame_size.x / 2, .y = anim.frame_size.y / 2});
