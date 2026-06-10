@@ -8,7 +8,7 @@ AssetStore init_asset_store() {
   AssetStore as = {0};
 
   // Chão
-  as.floor_sprite = LoadTexture("assets/floor/galaxy.png");
+  as.floor_sprite = LoadTexture("assets/floor/marte.png");
 
   // Player
   as.player_sheets[PLAYER_IDLE] = LoadTexture("assets/player/alien_idle.png");
