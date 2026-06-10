@@ -69,6 +69,7 @@ int main(void) {
 
     // Renderização da UI
     DrawText("WHITEHOLE", 500, 10, 40, WHITE);
+    DrawText(TextFormat("Pontuacao: %d", universe.points), 50, 950, 30, GREEN); 
     draw_fps_monitor();
     draw_menu();
 

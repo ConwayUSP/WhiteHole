@@ -7,6 +7,7 @@
 #include <stdio.h>
 
 Universe init_universe() {
+  
   Universe u = {0};
 
   u.context = MENU;
@@ -14,6 +15,8 @@ Universe init_universe() {
   u.asset_store = init_asset_store();
   u.projectile_slots = new_list_control(MAX_PROJECTILES);
   u.enemy_slots = new_list_control(MAX_ENEMIES);
+  u.points = 100;
+  u.point_timer = 0.0f;
   set_all_empty(&(u.projectile_slots));
   set_all_empty(&(u.enemy_slots));
 
@@ -28,10 +31,16 @@ void update_universe(float dt) {
 
   update_player(&(universe.player), dt);
   if (universe.context == RUNNING) {
+    universe.point_timer += dt;
+  if (universe.point_timer >= 1.0f) {
+    universe.point_timer -= 1.0f;
+    universe.points -= 1.0f;
+  }
     update_enemies(dt);
   }
   update_projectiles(dt);
   if (universe.player.hp == 0) {
+    universe.points = 100; 
     universe.context = MENU;
     universe.player.hp = MAX_PLAYER_HP;
     set_all_empty(&universe.projectile_slots);

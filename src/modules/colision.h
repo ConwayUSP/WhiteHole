@@ -8,4 +8,5 @@ void solve_enemy_colision(Enemy*enemy);
 
 void solve_player_colision(Player*player);
 
+
 #endif
