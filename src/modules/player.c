@@ -17,6 +17,8 @@ Player init_player() {
   p.vel = (Vector2){.x = 0, .y = 0};
   p.speed = 120;
   p.size = 10;
+  p.black_hole_threshold = 10;
+  p.black_hole_charge = 10;
 
   // Inicializando as animações
   set_player_animation(
@@ -46,6 +48,7 @@ void update_player(Player *player, float dt) {
   move_player(player, dt);
   update_player_state(player);
   update_animation(&player->animations[player->state], dt);
+  printf("%d\n", player->black_hole_charge);
 }
 
 void update_player_state(Player *player) {
@@ -113,21 +116,24 @@ void read_mouse_inputs(Player *player, float dt) {
   }
 
   // Atirar Buracos Negros (ult)
-  if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
-    bhp += dt;
-    player->black_hole_pull = bhp > 2 ? 2 : bhp;
-  }
-
-  if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) {
-    int bh_id = new_projectile(
-        BLACK_HOLE,
-        sum_vec(player->pos, sum_vec(mult_vec(direction, 20), player->vel)),
-        direction);
-    if (bh_id == NULL_SLOT) {
-      return;
+  if (player->black_hole_charge >= player->black_hole_threshold) {
+    if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+      bhp += dt;
+      player->black_hole_pull = bhp > 2 ? 2 : bhp;
     }
-    universe.projectiles[bh_id].speed = 100 + bhp * 175;
-    player->black_hole_pull = 0;
+
+    if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) {
+      int bh_id = new_projectile(
+          BLACK_HOLE,
+          sum_vec(player->pos, sum_vec(mult_vec(direction, 20), player->vel)),
+          direction);
+      if (bh_id == NULL_SLOT) {
+        return;
+      }
+      universe.projectiles[bh_id].speed = 100 + bhp * 175;
+      player->black_hole_pull = 0;
+      player->black_hole_charge -= player->black_hole_threshold;
+    }
   }
 }
 

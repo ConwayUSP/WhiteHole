@@ -202,7 +202,8 @@ void enemy_take_damage(Enemy *enemy, int damage) {
   } else {
     enemy->hp -= damage;
   }
-  if (enemy->hp ==0) {
+  if (enemy->hp == 0) {
+    universe.player.black_hole_charge += 1;
     switch (enemy->type) {
     case ICE:
       universe.points += ICE_POINTS;
@@ -216,7 +217,6 @@ void enemy_take_damage(Enemy *enemy, int damage) {
     default:
       break; 
     }
-
   }
 }
 

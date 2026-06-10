@@ -43,6 +43,7 @@ void update_universe(float dt) {
     universe.points = 100; 
     universe.context = MENU;
     universe.player.hp = MAX_PLAYER_HP;
+    universe.player.black_hole_charge = 10;
     set_all_empty(&universe.projectile_slots);
     set_all_empty(&universe.enemy_slots);
   }
