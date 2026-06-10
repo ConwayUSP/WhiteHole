@@ -1,4 +1,6 @@
 #include "projectile.h"
+#include "animation.h"
+#include "assetstore.h"
 #include "listcontrol.h"
 #include "stdlib.h"
 #include "universe.h"
@@ -15,34 +17,44 @@ int new_projectile(ProjectileType type, Vector2 pos, Vector2 direction) {
   if (p.id == NULL_SLOT) {
     return NULL_SLOT;
   }
-  p.state = PROJECTILE_FORMING;
+  p.state = PROJECTILE_IDLE;
 
   switch (type) {
   case PLAYER_ATK:
+    set_projectile_animation(&p, PROJECTILE_IDLE,
+                             new_animation(1, true, 0, 1, (Vector2){8, 8}));
     p.damage = 5;
     p.speed = 400.0f;
     p.duration = 2.0f;
     p.weight = 1.0f;
     break;
   case ASTRONAUT_ATK:
+    set_projectile_animation(&p, PROJECTILE_IDLE,
+                             new_animation(1, true, 0, 1, (Vector2){8, 8}));
     p.damage = 1;
     p.speed = 200.0f;
     p.duration = 3.0f;
     p.weight = 2.0f;
     break;
   case ICE_ATK:
+    set_projectile_animation(&p, PROJECTILE_IDLE,
+                             new_animation(1, true, 0, 1, (Vector2){8, 8}));
     p.damage = 1;
     p.speed = 120.0f;
     p.duration = 2.0f;
     p.weight = 0.5f;
     break;
   case BILLIONAIRE_ATK:
+    set_projectile_animation(&p, PROJECTILE_IDLE,
+                             new_animation(1, true, 0, 1, (Vector2){8, 8}));
     p.damage = 1;
     p.speed = 150.0f;
     p.duration = 3.0f;
     p.weight = 2.0f;
     break;
   case BLACK_HOLE:
+    set_projectile_animation(&p, PROJECTILE_IDLE,
+                             new_animation(1, true, 0, 1, (Vector2){32, 32}));
     p.damage = 1000;
     p.speed = 100.0f;
     p.duration = 10.0f;
@@ -90,7 +102,9 @@ void move_projectile(Projectile *projectile, float dt) {
 
   if (projectile->type == BLACK_HOLE) {
     float slow_amount = 300 * dt;
-    projectile->speed = projectile->speed - slow_amount < 0 ? 0 : projectile->speed - slow_amount;
+    projectile->speed = projectile->speed - slow_amount < 0
+                            ? 0
+                            : projectile->speed - slow_amount;
   }
 }
 
@@ -103,23 +117,8 @@ void draw_projectiles() {
 }
 
 void draw_projectile(Projectile projectile) {
-  switch (projectile.type) {
-  case BLACK_HOLE:
-    DrawCircle(projectile.pos.x, projectile.pos.y, 5.0f, BLACK);
-    break;
-  case PLAYER_ATK:
-    DrawCircle(projectile.pos.x, projectile.pos.y, 2.0f, YELLOW);
-    break;
-  case ICE_ATK:
-    DrawCircle(projectile.pos.x, projectile.pos.y, 2.0f, PINK);
-    break;
-  case ASTRONAUT_ATK:
-    DrawCircle(projectile.pos.x, projectile.pos.y, 2.0f, PURPLE);
-    break;
-  case BILLIONAIRE_ATK:
-    DrawCircle(projectile.pos.x, projectile.pos.y, 2.0f, GREEN);
-    break;
-  default:
-    return;
-  }
+  Animation anim = projectile.animations[projectile.state];
+  Texture2D sheet = get_projectile_sheet(&universe.asset_store, projectile.type,
+                                         projectile.state);
+  draw_frame(anim, sheet, projectile.pos);
 }

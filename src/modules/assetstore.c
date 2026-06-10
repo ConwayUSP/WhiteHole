@@ -23,12 +23,24 @@ AssetStore init_asset_store() {
 
   // ICE
   as.enemy_sheets[ICE][ENEMY_IDLE] = LoadTexture("assets/ice/idle.png");
-  // BILLIONAIRE
+  // Bilionário
   as.enemy_sheets[BILLIONAIRE][ENEMY_IDLE] =
       LoadTexture("assets/billionaire/idle.png");
-  // ASTRONAUT
+  // Astronauta
   as.enemy_sheets[ASTRONAUT][ENEMY_IDLE] =
       LoadTexture("assets/astronaut/idle.png");
+
+  // PROJÉTEIS
+  as.projectile_sheets[BLACK_HOLE][PROJECTILE_IDLE] =
+      LoadTexture("assets/projectiles/blackhole.png");
+  as.projectile_sheets[PLAYER_ATK][PROJECTILE_IDLE] =
+      LoadTexture("assets/projectiles/player_shot.png");
+  as.projectile_sheets[BILLIONAIRE_ATK][PROJECTILE_IDLE] =
+      LoadTexture("assets/projectiles/enemy_shot.png");
+  as.projectile_sheets[ICE_ATK][PROJECTILE_IDLE] =
+      LoadTexture("assets/projectiles/enemy_shot.png");
+  as.projectile_sheets[ASTRONAUT_ATK][PROJECTILE_IDLE] =
+      LoadTexture("assets/projectiles/enemy_shot.png");
 
   return as;
 }
