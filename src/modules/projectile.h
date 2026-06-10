@@ -44,7 +44,7 @@ typedef struct projectile {
 } Projectile;
 
 // Funções relacionadas aos inimigos
-void new_projectile(ProjectileType type, Vector2 pos,
+int new_projectile(ProjectileType type, Vector2 pos,
                     Vector2 direction); // Cria um projétil
 void set_projectile_animation(Projectile *projectile, ProjectileState state,
                               Animation anim); // Define uma animação

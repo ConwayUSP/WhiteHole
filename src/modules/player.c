@@ -1,10 +1,12 @@
 #include "player.h"
 #include "animation.h"
 #include "assetstore.h"
+#include "listcontrol.h"
 #include "projectile.h"
 #include "universe.h"
 #include "vector.h"
 #include <math.h>
+#include <stdio.h>
 
 Player init_player() {
   Player p = {0};
@@ -90,10 +92,7 @@ void move_player(Player *player, float dt) {
 }
 
 void read_mouse_inputs(Player *player, float dt) {
-  if (player->atk_cooldown > 0) {
-    return;
-  }
-
+  float bhp = player->black_hole_pull;
   // Calcular a direção do tiro
   int mouse_x = GetMouseX();
   int mouse_y = GetMouseY();
@@ -101,14 +100,26 @@ void read_mouse_inputs(Player *player, float dt) {
   Vector2 mouse_2d = GetScreenToWorld2D(mouse_pos, universe.cam);
   Vector2 direction = direction_vec(player->pos, mouse_2d);
 
-  // Atirar de fato
-  if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
-    new_projectile(BLACK_HOLE, player->pos, direction);
-  } else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-    new_projectile(PLAYER_ATK, player->pos, direction);
+  if (player->atk_cooldown < 0) {
+    // Atirar
+    if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+      new_projectile(PLAYER_ATK, player->pos, direction);
+    }
+    player->atk_cooldown = ATK_COOLDOWN;
   }
 
-  player->atk_cooldown = ATK_COOLDOWN;
+  // Atirar Buracos Negros (ult)
+  if(IsMouseButtonDown(MOUSE_BUTTON_RIGHT)){
+    bhp += dt;
+    player->black_hole_pull = bhp > 2 ? 2 : bhp;
+  }
+  
+  if(IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)){
+    int bh_id = new_projectile(BLACK_HOLE, sum_vec(player->pos, mult_vec(direction, 10)), direction);
+    if (bh_id == NULL_SLOT) {return;} 
+    universe.projectiles[bh_id].speed = 100 + bhp * 175;
+    player->black_hole_pull = 0;
+  }
 }
 
 void draw_player(Player *player) {
