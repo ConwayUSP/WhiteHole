@@ -1,7 +1,7 @@
 #include "player.h"
-#include "colision.h"
 #include "animation.h"
 #include "assetstore.h"
+#include "colision.h"
 #include "listcontrol.h"
 #include "projectile.h"
 #include "universe.h"
@@ -87,10 +87,10 @@ void move_player(Player *player, float dt) {
   move.x *= player->speed * dt;
   move.y *= player->speed * dt;
   player->pos = sum_vec(player->pos, move);
-  player->pos.x = player->pos.x < 0? 0: player->pos.x;
-  player->pos.x = player->pos.x > 375? 375: player->pos.x;
-  player->pos.y = player->pos.y < 0? 0: player->pos.y;
-  player->pos.y = player->pos.y > 375? 375: player->pos.y;
+  player->pos.x = player->pos.x < 0 ? 0 : player->pos.x;
+  player->pos.x = player->pos.x > 375 ? 375 : player->pos.x;
+  player->pos.y = player->pos.y < 0 ? 0 : player->pos.y;
+  player->pos.y = player->pos.y > 375 ? 375 : player->pos.y;
   player->vel = move;
 }
 
@@ -105,21 +105,25 @@ void read_mouse_inputs(Player *player, float dt) {
 
   if (player->atk_cooldown < 0) {
     // Atirar
-    if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
-      new_projectile(PLAYER_ATK, player->pos, direction);
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+      new_projectile(PLAYER_ATK, sum_vec(player->pos, mult_vec(direction, 10)),
+                     direction);
     }
     player->atk_cooldown = ATK_COOLDOWN;
   }
 
   // Atirar Buracos Negros (ult)
-  if(IsMouseButtonDown(MOUSE_BUTTON_RIGHT)){
+  if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
     bhp += dt;
     player->black_hole_pull = bhp > 2 ? 2 : bhp;
   }
-  
-  if(IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)){
-    int bh_id = new_projectile(BLACK_HOLE, sum_vec(player->pos, mult_vec(direction, 10)), direction);
-    if (bh_id == NULL_SLOT) {return;} 
+
+  if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) {
+    int bh_id = new_projectile(
+        BLACK_HOLE, sum_vec(player->pos, mult_vec(direction, 10)), direction);
+    if (bh_id == NULL_SLOT) {
+      return;
+    }
     universe.projectiles[bh_id].speed = 100 + bhp * 175;
     player->black_hole_pull = 0;
   }
