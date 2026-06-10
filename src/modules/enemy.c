@@ -198,8 +198,25 @@ void draw_enemy(Enemy enemy) {
 void enemy_take_damage(Enemy *enemy, int damage) {
   if (damage > enemy->hp) {
     enemy->hp = 0;
+  
   } else {
     enemy->hp -= damage;
+  }
+  if (enemy->hp ==0) {
+    switch (enemy->type) {
+    case ICE:
+      universe.points += ICE_POINTS;
+      break;
+    case ASTRONAUT:
+      universe.points += ASTRONAUT_POINTS;
+      break;
+    case BILLIONAIRE:
+      universe.points += BILLIONAIRE_POINTS;
+      break;
+    default:
+      break; 
+    }
+
   }
 }
 

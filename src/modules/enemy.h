@@ -12,6 +12,10 @@
 #define ICE_ULT_CAP 10.0
 #define ASTRONAUT_ULT_CAP 15.0
 #define BILLIONAIRE_ULT_CAP 20.0
+// Pontos ganhos ao matar cada inimigo
+#define ICE_POINTS 3
+#define ASTRONAUT_POINTS 5 
+#define BILLIONAIRE_POINTS 8 
 
 // Entenda "usint" como "unsigned short int" a partir de agora
 typedef unsigned short int usint;

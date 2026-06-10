@@ -25,6 +25,7 @@ typedef struct universe {
   ListControl enemy_slots;                 // Gerencia a lista de inimigos
   Camera2D cam;
   float time_dilation;
+  float point_timer;
 } Universe;
 
 extern Universe universe;
@@ -48,4 +49,5 @@ void draw_universe();
 // Retorna um coeficiente (0..1) que diz o quão desacelerado o universo está
 float distort_time();
 void universe_handle_input();
+
 #endif
