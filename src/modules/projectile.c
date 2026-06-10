@@ -5,7 +5,7 @@
 #include "vector.h"
 #include <stdio.h>
 
-void new_projectile(ProjectileType type, Vector2 pos, Vector2 direction) {
+int new_projectile(ProjectileType type, Vector2 pos, Vector2 direction) {
   Projectile p = {0};
   p.type = type;
   p.pos = pos;
@@ -13,7 +13,7 @@ void new_projectile(ProjectileType type, Vector2 pos, Vector2 direction) {
   p.id = get_valid_projectile_id();
   p.size = 2.0f;
   if (p.id == NULL_SLOT) {
-    return;
+    return NULL_SLOT;
   }
   p.state = PROJECTILE_FORMING;
 
@@ -55,6 +55,7 @@ void new_projectile(ProjectileType type, Vector2 pos, Vector2 direction) {
   }
 
   insert_projectile(p);
+  return p.id;
 }
 
 void set_projectile_animation(Projectile *projectile, ProjectileState state,
@@ -83,15 +84,14 @@ void set_projectile_direction(Projectile *projectile, Vector2 direction) {
 }
 
 void move_projectile(Projectile *projectile, float dt) {
-  // DEBUG DA DISTORÇÃO TEMPORAL
-  if (projectile->type == BLACK_HOLE) {
-    return;
-  }
-  // ---------------------------
-
   Vector2 movement = {.x = projectile->direction.x * projectile->speed * dt,
                       .y = projectile->direction.y * projectile->speed * dt};
   projectile->pos = sum_vec(projectile->pos, movement);
+
+  if (projectile->type == BLACK_HOLE) {
+    float slow_amount = 300 * dt;
+    projectile->speed = projectile->speed - slow_amount < 0 ? 0 : projectile->speed - slow_amount;
+  }
 }
 
 void draw_projectiles() {
