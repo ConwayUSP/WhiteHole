@@ -21,9 +21,28 @@ Universe init_universe() {
 }
 
 void update_universe(float dt) {
+  universe_handle_input();
+  if (universe.context == PAUSE) {
+    return;
+  }
+
   update_player(&(universe.player), dt);
-  update_enemies(dt);
+  if (universe.context == RUNNING) {
+    update_enemies(dt);
+  }
   update_projectiles(dt);
+}
+
+void universe_handle_input() {
+  if (universe.context == MENU && IsKeyPressed(KEY_SPACE)) {
+    universe.context = RUNNING;
+    return;
+  }
+  if (IsKeyPressed(KEY_SPACE) && universe.context == RUNNING) {
+    universe.context = PAUSE;
+  } else if (IsKeyPressed(KEY_SPACE) && universe.context == PAUSE) {
+    universe.context = RUNNING;
+  }
 }
 
 int get_valid_projectile_id() {

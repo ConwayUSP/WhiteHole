@@ -39,12 +39,12 @@ typedef struct projectile {
   float duration;        // Carga atual da ult
   usint damage;          // Dano causado em impacto
   float size;            // Tamanho
-  float weight;          // Peso, influencia como é afetado pelos buracos negros
+  float weight;         // Peso, influencia como é afetado pelos buracos negros
   Animation animations[PROJECTILE_NUM_STATES]; // Animações para cada estado
 } Projectile;
 
 // Funções relacionadas aos inimigos
-void new_projectile(ProjectileType type, Vector2 pos,
+int new_projectile(ProjectileType type, Vector2 pos,
                     Vector2 direction); // Cria um projétil
 void set_projectile_animation(Projectile *projectile, ProjectileState state,
                               Animation anim); // Define uma animação
