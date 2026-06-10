@@ -1,5 +1,4 @@
 #include "player.h"
-#include "colision.h"
 #include "animation.h"
 #include "assetstore.h"
 #include "colision.h"
@@ -47,7 +46,6 @@ void update_player(Player *player, float dt) {
   move_player(player, dt);
   update_player_state(player);
   update_animation(&player->animations[player->state], dt);
-  
 }
 
 void update_player_state(Player *player) {
@@ -122,7 +120,9 @@ void read_mouse_inputs(Player *player, float dt) {
 
   if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) {
     int bh_id = new_projectile(
-        BLACK_HOLE, sum_vec(player->pos, mult_vec(direction, 10)), direction);
+        BLACK_HOLE,
+        sum_vec(player->pos, sum_vec(mult_vec(direction, 20), player->vel)),
+        direction);
     if (bh_id == NULL_SLOT) {
       return;
     }
@@ -132,19 +132,20 @@ void read_mouse_inputs(Player *player, float dt) {
 }
 
 void draw_player(Player *player) {
-    Animation animation = player->animations[player->state];
-    Texture2D spritesheet =
-    get_player_sheet(&universe.asset_store, player->state);
-    draw_frame(animation, spritesheet, player->pos);
-
-}
-
-void player_take_damage(Player *player, int damage) {
-  if (damage > player->hp) {
-    player->hp = 0;
-  } else {
-    player->hp -= damage;
-  }
+  Animation anim = player->animations[player->state];
+  Texture2D spritesheet = get_player_sheet(&universe.asset_store);
+  Vector2 offset = get_player_offset(&universe.asset_store, player->state);
+  int spritesheet_columns = (spritesheet.width / anim.frame_size.x) / 2;
+  int frameX = (anim.frame % spritesheet_columns) * anim.frame_size.x;
+  int frameY =
+      floor((float)anim.frame / spritesheet_columns) * anim.frame_size.y;
+  frameX += offset.x;
+  frameY += offset.y;
+  Rectangle frame_rect = {frameX, frameY, anim.frame_size.x, anim.frame_size.y};
+  Vector2 good_pos =
+      sub_vec(player->pos, (Vector2){.x = anim.frame_size.x / 2,
+                                     .y = anim.frame_size.y / 2});
+  DrawTextureRec(spritesheet, frame_rect, good_pos, WHITE);
 }
 
 void player_take_damage(Player *player, int damage) {

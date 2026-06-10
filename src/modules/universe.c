@@ -96,8 +96,8 @@ void draw_universe() {
   Rectangle source_rec = {0.0f, 0.0f, 256.0f, 256.0f};
   Rectangle dest_rec = {0.0f, 0.0f, 375.0f, 375.0f};
   Vector2 origin = {0.0f, 0.0f};
-  DrawTexturePro(universe.asset_store.floor_sprite, source_rec, dest_rec,
-                 origin, 0.0f, WHITE);
+  Texture2D floor_tex = universe.asset_store.floor_sprite;
+  DrawTexturePro(floor_tex, source_rec, dest_rec, origin, 0.0f, WHITE);
   draw_player(&universe.player);
   draw_projectiles();
   draw_enemies();
