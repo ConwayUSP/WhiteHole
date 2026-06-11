@@ -10,7 +10,7 @@ Universe init_universe() {
   
   Universe u = {0};
 
-  u.context = MENU;
+  u.context = MENU; 
   u.player = init_player();
   u.asset_store = init_asset_store();
   u.projectile_slots = new_list_control(MAX_PROJECTILES);
@@ -37,6 +37,7 @@ void update_universe(float dt) {
     universe.points -= 1.0f;
   }
     update_enemies(dt);
+    victory();
   }
   update_projectiles(dt);
   if (universe.player.hp == 0) {
@@ -111,4 +112,9 @@ void draw_universe() {
   draw_player(&universe.player);
   draw_projectiles();
   draw_enemies();
+}
+void victory(){
+if (universe.kill_count == 5){
+universe.context = VICTORY; 
+}
 }

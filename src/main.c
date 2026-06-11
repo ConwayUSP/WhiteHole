@@ -14,6 +14,7 @@
 void draw_fps_monitor();
 void draw_menu();
 void draw_cursor();
+void victory();
 
 Universe universe;
 
@@ -77,8 +78,14 @@ int main(void) {
       DrawRectangle(300, 300, 200, 600, (Color){255, 255, 255, 160});
       DrawRectangle(700, 300, 200, 600, (Color){255, 255, 255, 160});
     }
+    if(universe.context == VICTORY){
+    DrawText("VITORIA",500,400,60,GREEN);
+    DrawText("voce expulsou os bilionarios da sua casa!", 600, 300,40, GREEN);
+    
+    }
 
     EndDrawing();
+    
   }
 
   // Encerrando o programa
@@ -112,3 +119,4 @@ void draw_menu() {
     DrawText("APERTE ESPAÇO PARA JOGAR", 380, 288, 30, BEIGE);
   }
 }
+
