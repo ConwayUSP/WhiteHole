@@ -28,6 +28,7 @@ typedef struct universe {
   float time_dilation;
   float point_timer;
   int kill_count;
+  bool can_spawn_new_enemies;
 } Universe;
 
 extern Universe universe;
@@ -50,6 +51,7 @@ void update_universe(float dt);
 void draw_universe();
 // Retorna um coeficiente (0..1) que diz o quão desacelerado o universo está
 float distort_time();
-void universe_handle_input(); 
+void universe_handle_input();
 void victory();
+void spawn_enemies();
 #endif

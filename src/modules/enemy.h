@@ -21,7 +21,6 @@
 // Entenda "usint" como "unsigned short int" a partir de agora
 typedef unsigned short int usint;
 
-
 // Tipos de inimigo
 typedef enum {
   ICE,
@@ -38,6 +37,7 @@ typedef enum {
   ENEMY_MOVING_LEFT,
   ENEMY_MOVING_RIGHT,
   ENEMY_ULTING,
+  NOT_SPAWNED,
   ENEMY_NUM_STATES // Variante de contagem
 } EnemyState;
 
@@ -57,10 +57,9 @@ typedef struct enemy {
   float atk_cooldown;  // Quanto tempo desde o último tiro
   float move_cooldown; // Quanto tempo para o bilionário dar seu dash
   float size;
+  float spawn_timer;
   Animation animations[ENEMY_NUM_STATES]; // Animações para cada estado
 } Enemy;
-
-
 
 // Funções relacionadas aos inimigos
 void new_enemy(EnemyType type, Vector2 pos); // Cria um inimigo

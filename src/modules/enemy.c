@@ -14,7 +14,8 @@ void new_enemy(EnemyType type, Vector2 pos) {
   e.entity_type = ENEMY;
   e.type = type;
   e.id = get_valid_enemy_id();
-  e.state = ENEMY_IDLE;
+  e.state = NOT_SPAWNED;
+  e.spawn_timer = 2;
   e.pos = pos;
   e.size = 10;
 
@@ -91,6 +92,14 @@ void update_enemies(float dt) {
 }
 
 void update_enemy(Enemy *enemy, float dt) {
+  if (enemy->state == NOT_SPAWNED) {
+    enemy->spawn_timer -= dt;
+    if (enemy->spawn_timer <= 0) {
+      enemy->state = ENEMY_IDLE;
+    } else {
+      return;
+    }
+  }
   switch (enemy->type) {
   case ICE:
     move_ice(enemy, dt);
@@ -139,6 +148,7 @@ void update_enemy_state(Enemy *enemy) {
 }
 
 void move_ice(Enemy *enemy, float dt) {
+  const float MIN_DISTANCE = 100.0f;
   Vector2 itar = enemy->pos; // Posição do ICE mais próximo
   bool found_other_ice =
       true; // Verifica se esse é o primeiro ICE da lista de inimigos
@@ -162,10 +172,16 @@ void move_ice(Enemy *enemy, float dt) {
   enemy->target = mult_vec(sum_vec(universe.player.pos, itar), 0.5);
   enemy->vel =
       mult_vec(direction_vec(enemy->pos, enemy->target), enemy->speed * dt);
+  float dist =
+      distance_vec(sum_vec(enemy->pos, enemy->vel), universe.player.pos);
+  if (dist < MIN_DISTANCE) {
+    enemy->vel = mult_vec(enemy->vel, fmax(0, (dist - 60)) / 40);
+  }
   enemy->pos = sum_vec(enemy->pos, enemy->vel);
 }
 
 void move_astronaut(Enemy *e, float dt) {
+  const float MIN_DISTANCE = 120.0f;
   e->target = universe.player.pos;
   Vector2 bhtar = e->pos; // Posição do buraco negro mais próximo
   bool found_blackhole =
@@ -188,6 +204,10 @@ void move_astronaut(Enemy *e, float dt) {
     }
   }
   e->vel = mult_vec(direction_vec(e->pos, e->target), e->speed * dt);
+  float dist = distance_vec(sum_vec(e->pos, e->vel), e->target);
+  if (dist < MIN_DISTANCE) {
+    e->vel = mult_vec(e->vel, fmax(0, (dist - 80)) / 40);
+  }
   e->pos = sum_vec(e->pos, e->vel);
 }
 
@@ -237,6 +257,15 @@ void draw_enemies() {
 }
 
 void draw_enemy(Enemy enemy) {
+  if (enemy.state == NOT_SPAWNED) {
+    if (((int)(GetTime() * 2.5) % 2)) {
+      DrawPolyLinesEx(enemy.pos, 3, 11, 30, 2.5f, (Color){255, 255, 255, 220});
+      DrawText("!", enemy.pos.x - 0.02, enemy.pos.y - 5, 8,
+               (Color){255, 255, 255, 220});
+    }
+    return;
+  }
+
   // !TODO: Padronizar depois
   if (enemy.type == ASTRONAUT) {
     Animation anim = enemy.animations[enemy.state];
@@ -266,7 +295,7 @@ void draw_enemy(Enemy enemy) {
 }
 
 void enemy_take_damage(Enemy *enemy, int damage) {
-  
+
   if (damage > enemy->hp) {
     enemy->hp = 0;
 
@@ -274,9 +303,12 @@ void enemy_take_damage(Enemy *enemy, int damage) {
     enemy->hp -= damage;
   }
   if (enemy->hp == 0) {
-    universe.player.black_hole_charge += 1;
+    if (universe.player.black_hole_charge < 20) {
+      universe.player.black_hole_charge += 1;
+    }
     universe.kill_count++;
-    
+    universe.can_spawn_new_enemies = true;
+
     switch (enemy->type) {
     case ICE:
       universe.points += ICE_POINTS;

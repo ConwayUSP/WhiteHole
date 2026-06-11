@@ -15,6 +15,7 @@ void draw_menu();
 void draw_game_over();
 void draw_cursor();
 void victory();
+void draw_blackhole_charge();
 
 Universe universe;
 
@@ -28,7 +29,7 @@ int main(void) {
   SetTargetFPS(240); // Queremos que rode a 60 fps
 
   // Aleatoriedade
-  srand(time(NULL));
+  srand(67);
 
   universe = init_universe();
 
@@ -53,15 +54,6 @@ int main(void) {
     dt = GetFrameTime();
     dt *= distort_time();
 
-    // Spawna um novo inimigo a cada 2 segundos
-    if (universe.context == RUNNING) {
-      timer += dt;
-      if (timer >= 2.0f) {
-        timer -= 2.0f;
-        new_enemy(rand() % 3, (Vector2){rand() % 375, rand() % 375});
-      }
-    }
-
     update_universe(dt);
 
     //----------------------------------------------------------------------------------
@@ -82,19 +74,19 @@ int main(void) {
     draw_fps_monitor();
     draw_menu();
     draw_game_over();
+    draw_blackhole_charge();
 
     if (universe.context == PAUSE) {
       DrawRectangle(300, 300, 200, 600, (Color){255, 255, 255, 160});
       DrawRectangle(700, 300, 200, 600, (Color){255, 255, 255, 160});
     }
-    if(universe.context == VICTORY){
-    DrawText("VITORIA",500,400,60,GREEN);
-    DrawText("voce expulsou os bilionarios da sua casa!", 600, 300,40, GREEN);
-    
+    if (universe.context == VICTORY) {
+      DrawText("VITORIA", 500, 400, 60, GREEN);
+      DrawText("voce expulsou os bilionarios da sua casa!", 600, 300, 40,
+               GREEN);
     }
 
     EndDrawing();
-    
   }
 
   // Encerrando o programa
@@ -141,3 +133,19 @@ void draw_game_over() {
   }
 }
 
+void draw_blackhole_charge() {
+  Rectangle bg = {20, 1080, 265, 60};
+  DrawRectangleLinesEx(bg, 3, (Color){255, 255, 255, 255});
+  for (int i = 0; i < fmin(universe.player.black_hole_charge, 10); i++) {
+    int x = 30 + 25 * i;
+    int y = 1090;
+    int width = 20;
+    int height = 40;
+    Color color = {225 + 3 * i, 245 - 22 * i, 50 + 10 * i, 255};
+    DrawRectangle(x, y, width, height, color);
+  }
+  if (universe.player.black_hole_charge > 10) {
+    DrawRectangle(307, 1090, 15, 39, (Color){255, 70, 100, 255}); // Vertical
+    DrawRectangle(295, 1102, 39, 15, (Color){255, 70, 100, 255}); // Horizontal
+  }
+}
