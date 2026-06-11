@@ -1,6 +1,8 @@
 #include "../include/raylib.h"
 #include "modules/assetstore.h"
+#include "modules/audio.h"
 #include "modules/enemy.h"
+#include "modules/entity.h"
 #include "modules/universe.h"
 #include "modules/vector.h"
 #include <math.h>
@@ -33,21 +35,19 @@ int main(void) {
   SetTargetFPS(240); // Queremos que rode a 60 fps
 
   // Aleatoriedade
-  srand(67);
+  srand(time(NULL) + 67);
 
   universe = init_universe();
 
-  if (IsMusicValid(get_scene_audio(&(universe.asset_store)))) {
-    Music music = get_scene_audio(&(universe.asset_store));
-    SetMusicVolume(music, 0.3);
+  if(IsMusicValid(get_scene_audio(&universe.asset_store))){
+    Music music = get_scene_audio(&universe.asset_store);
     PlayMusicStream(music);
   }
 
   universe.cam.zoom = 3.2f;
   HideCursor();
 
-  float dt;        // Tempo entre frames
-  float timer = 0; // Contador de um segundo para spawn
+  float dt; // Tempo entre frames
 
   // Loop de jogo
   while (!WindowShouldClose()) // Fecha no ESC
@@ -74,7 +74,8 @@ int main(void) {
 
     // Renderização da UI
     DrawText("WHITEHOLE", 473, 10, 40, (Color){255, 255, 255, 120});
-    DrawText(TextFormat("%d pts", universe.points), 50, 950, 30, GREEN);
+    DrawText(TextFormat("%d pts", universe.points), 20, 100, 30,
+             (Color){100, 255, 200, 255});
     draw_ui();
 
     EndDrawing();
@@ -126,7 +127,7 @@ void draw_menu() {
 
 void draw_game_over() {
   if (universe.context == GAME_OVER) {
-    DrawText("VOCE FOI", 500, 213, 40, (Color){102, 122, 255, 200});
+    DrawText("VOCE FOI", 500, 213, 40, (Color){102, 182, 255, 200});
     DrawText("AMERICANIZADO", 174, 300, 100, (Color){252, 8, 32, 180});
     sua_pontuação();
     DrawText("aperte espaço para tentar de novo...", 313, 700, 30,
@@ -151,8 +152,8 @@ void draw_blackhole_charge() {
   }
 }
 void sua_pontuação() {
-  DrawText(TextFormat("SUA PONTUAÇÃO: %d pts", universe.points), 174, 523, 40,
-           GREEN);
+  DrawText(TextFormat("SUA PONTUAÇÃO: %d pts", universe.points), 414, 560, 30,
+           (Color){100, 255, 200, 255});
 }
 
 void draw_victory() {

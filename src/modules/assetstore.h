@@ -26,7 +26,7 @@ typedef struct assetstore {
   Texture cursor_sprite;
 
   Music scene_audio[5];
-  Music shot_audio[SHOT_NUM_TYPES];
+  Sound shot_audio[SHOT_NUM_TYPES];
 } AssetStore;
 
 // Construtor
@@ -45,6 +45,6 @@ void unload_textures(AssetStore *store);
 
 // Getters para os áudios
 Music get_scene_audio(AssetStore *store);
-Music get_shot_audio(AssetStore *store, ShotType shot_type);
+Sound get_shot_audio(AssetStore *store, ShotType shot_type);
 
 #endif
