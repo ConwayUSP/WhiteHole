@@ -43,6 +43,21 @@ void new_enemy(EnemyType type, Vector2 pos) {
     e.speed = 100;
     e.ult_threshold = ICE_ULT_CAP;
     e.atk_cooldown = 4.0f;
+    set_enemy_animation(
+        &e, ENEMY_IDLE,
+        new_animation(1, true, 0, 0.2f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_DOWN,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_LEFT,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_UP,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_RIGHT,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
     break;
   case ASTRONAUT:
     e.hp = MAX_ASTRONAUT_HP;
@@ -192,6 +207,9 @@ void move_ice(Enemy *enemy, float dt) {
   if (dist < MIN_DISTANCE) {
     enemy->vel = mult_vec(enemy->vel, fmax(0, (dist - 60)) / 40);
   }
+  if (distance_vec(enemy->pos, enemy->target) < 0.5) {
+    enemy->vel = (Vector2){0, 0};
+  }
   enemy->pos = sum_vec(enemy->pos, enemy->vel);
 }
 
@@ -283,33 +301,20 @@ void draw_enemy(Enemy enemy) {
     }
     return;
   }
-
-  // !TODO: Padronizar depois
-  if (enemy.type != ICE) {
-    Animation anim = enemy.animations[enemy.state];
-    Texture2D spritesheet = get_enemy_sheet(&universe.asset_store, enemy.type);
-    Vector2 offset =
-        get_enemy_offset(&universe.asset_store, enemy.type, enemy.state);
-    int spritesheet_columns = (spritesheet.width / anim.frame_size.x) / 2;
-    int frameX = (anim.frame % spritesheet_columns) * anim.frame_size.x;
-    int frameY =
-        floor((float)anim.frame / spritesheet_columns) * anim.frame_size.y;
-    frameX += offset.x;
-    frameY += offset.y;
-    Rectangle frame_rect = {frameX, frameY, anim.frame_size.x,
-                            anim.frame_size.y};
-    Vector2 good_pos =
-        sub_vec(enemy.pos, (Vector2){.x = anim.frame_size.x / 2,
-                                     .y = anim.frame_size.y / 2});
-    DrawTextureRec(spritesheet, frame_rect, good_pos, WHITE);
-    return;
-  }
-
-  Animation animation = enemy.animations[enemy.state];
+  Animation anim = enemy.animations[enemy.state];
   Texture2D spritesheet = get_enemy_sheet(&universe.asset_store, enemy.type);
   Vector2 offset =
       get_enemy_offset(&universe.asset_store, enemy.type, enemy.state);
-  draw_frame(animation, spritesheet, offset, enemy.pos, enemy.entity_type);
+  int spritesheet_columns = (spritesheet.width / anim.frame_size.x) / 2;
+  int frameX = (anim.frame % spritesheet_columns) * anim.frame_size.x;
+  int frameY =
+      floor((float)anim.frame / spritesheet_columns) * anim.frame_size.y;
+  frameX += offset.x;
+  frameY += offset.y;
+  Rectangle frame_rect = {frameX, frameY, anim.frame_size.x, anim.frame_size.y};
+  Vector2 good_pos = sub_vec(enemy.pos, (Vector2){.x = anim.frame_size.x / 2,
+                                                  .y = anim.frame_size.y / 2});
+  DrawTextureRec(spritesheet, frame_rect, good_pos, WHITE);
 }
 
 void enemy_take_damage(Enemy *enemy, int damage) {

@@ -28,7 +28,11 @@ AssetStore init_asset_store() {
 
   // ICE
   as.enemy_atlas[ICE] = LoadTexture("assets/ice/ice_atlas.png");
-  as.enemy_offsets[ICE][ENEMY_IDLE] = (Vector2){0, 0};
+  as.enemy_offsets[ICE][ENEMY_IDLE] = (Vector2){0, 192};
+  as.enemy_offsets[ICE][ENEMY_MOVING_UP] = (Vector2){96, 0};
+  as.enemy_offsets[ICE][ENEMY_MOVING_DOWN] = (Vector2){96, 96};
+  as.enemy_offsets[ICE][ENEMY_MOVING_LEFT] = (Vector2){0, 96};
+  as.enemy_offsets[ICE][ENEMY_MOVING_RIGHT] = (Vector2){0, 0};
   // Bilionário
   as.enemy_atlas[BILLIONAIRE] =
       LoadTexture("assets/billionaire/billionaire_atlas.png");
