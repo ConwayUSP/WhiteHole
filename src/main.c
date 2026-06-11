@@ -16,6 +16,7 @@ void draw_game_over();
 void draw_cursor();
 void victory();
 void draw_blackhole_charge();
+void sua_pontuação();
 
 Universe universe;
 
@@ -69,21 +70,30 @@ int main(void) {
     EndMode2D();
 
     // Renderização da UI
-    DrawText("WHITEHOLE", 500, 10, 40, (Color){255, 255, 255, 120});
+    DrawText("WHITEHOLE", 473, 10, 40, (Color){255, 255, 255, 120});
     DrawText(TextFormat("%d pts", universe.points), 50, 950, 30, GREEN);
     draw_fps_monitor();
     draw_menu();
     draw_game_over();
     draw_blackhole_charge();
 
+      // DrawLineEx((Vector2){0, 600}, (Vector2){1200, 600}, 10, BLACK); // Linha Horizontal Centro
+      // DrawLineEx((Vector2){600, 0}, (Vector2){600, 1200}, 10, BLACK); // Linha Vertical Centro
+      // DrawLineEx((Vector2){300, 0}, (Vector2){300, 1200}, 10, BLACK); // Linha Vertical ESQ
+      // DrawLineEx((Vector2){900, 0}, (Vector2){900, 1200}, 10, BLACK); // Linha Vertical DIR
+
     if (universe.context == PAUSE) {
       DrawRectangle(300, 300, 200, 600, (Color){255, 255, 255, 160});
       DrawRectangle(700, 300, 200, 600, (Color){255, 255, 255, 160});
     }
     if (universe.context == VICTORY) {
-      DrawText("VITORIA", 500, 400, 60, GREEN);
-      DrawText("voce expulsou os bilionarios da sua casa!", 600, 300, 40,
+      DrawText("VITORIA", 461, 400, 60, GREEN);
+      DrawText("voce expulsou os bilionarios da sua casa!", 167, 300, 40,
                GREEN);
+      sua_pontuação();
+      bool blink = (int)(GetTime() * 2) % 2;
+      DrawText("APERTE ESPAÇO PARA JOGAR", 360, 700, 30,
+              blink ? (Color){255, 221, 158, 255} : (Color){255, 240, 220, 255});
     }
 
     EndDrawing();
@@ -119,17 +129,19 @@ void draw_fps_monitor() {
 void draw_menu() {
   if (universe.context == MENU) {
     bool blink = (int)(GetTime() * 2) % 2;
-    DrawText("APERTE ESPAÇO PARA JOGAR", 380, 700, 30,
+    DrawText("APERTE ESPAÇO PARA JOGAR", 360, 700, 30,
              blink ? (Color){255, 221, 158, 255} : (Color){255, 240, 220, 255});
   }
 }
 
 void draw_game_over() {
   if (universe.context == GAME_OVER) {
-    DrawText("VOCE FOI", 500, 100, 40, (Color){102, 122, 255, 200});
-    DrawText("AMERICANIZADO", 300, 200, 100, (Color){252, 8, 32, 180});
-    DrawText("aperte espaço para tentar de novo...", 400, 700, 30,
+    DrawText("VOCE FOI", 500, 213, 40, (Color){102, 122, 255, 200});
+    DrawText("AMERICANIZADO", 174, 300, 100, (Color){252, 8, 32, 180});
+    sua_pontuação();
+    DrawText("aperte espaço para tentar de novo...", 313, 700, 30,
              (Color){255, 255, 255, 120});
+
   }
 }
 
@@ -148,4 +160,7 @@ void draw_blackhole_charge() {
     DrawRectangle(307, 1090, 15, 39, (Color){255, 70, 100, 255}); // Vertical
     DrawRectangle(295, 1102, 39, 15, (Color){255, 70, 100, 255}); // Horizontal
   }
+}
+void sua_pontuação(){
+  DrawText(TextFormat("SUA PONTUAÇÃO: %d pts", universe.points), 174, 523, 40, GREEN);
 }
