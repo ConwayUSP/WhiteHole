@@ -1,18 +1,18 @@
 #include "colision.h"
+#include "projectile.h"
 #include "universe.h"
 #include "vector.h"
 #include <stdio.h>
 
-
 void solve_enemy_colision(Enemy *enemy) {
-  
+
   for (int i = 0; i < MAX_PROJECTILES; i++) {
     if (!is_slot_empty(&universe.projectile_slots, i)) {
       Projectile p = universe.projectiles[i];
       bool colided =
           CheckCollisionCircles(enemy->pos, enemy->size, p.pos, p.size);
       if (colided && (p.type == BLACK_HOLE || p.type == PLAYER_ATK)) {
-        enemy_take_damage(enemy, p.damage);     
+        enemy_take_damage(enemy, p.damage);
         if (p.type != BLACK_HOLE) {
           free_projectile_slot(p.id);
         }
@@ -59,8 +59,7 @@ void solve_player_colision(Player *player) {
       }
     }
   }
-
-    for (int i = 0; i < MAX_PROJECTILES; i++) {
+  for (int i = 0; i < MAX_PROJECTILES; i++) {
     if (!is_slot_empty(&universe.projectile_slots, i)) {
       Projectile p = universe.projectiles[i];
       bool colided =
@@ -72,5 +71,4 @@ void solve_player_colision(Player *player) {
       }
     }
   }
-    
 }

@@ -3,6 +3,7 @@
 
 #include "../../include/raylib.h"
 #include "animation.h"
+#include "entity.h"
 
 #define MAX_PLAYER_HP 3
 #define BLACK_HOLE_COST 20
@@ -24,6 +25,7 @@ typedef enum {
 
 // Tipo que representará nosso jogador
 typedef struct player {
+  EntityType entity_type;
   usint hp;          // Vida restante ao player
   PlayerState state; // Estado atual (animação que está rodando)
   Vector2 pos;       // Posição no mundo
@@ -31,10 +33,10 @@ typedef struct player {
   float speed;       // Velocidade escalar de movimento
   usint crazyness;   // Nível de loucura, quanto maior, mais forte ele fica
   usint black_hole_charge; // Número de recargas para o buraco negro (ult)
-  usint black_hole_threshold; 
-  float black_hole_pull;   // O quão forte o buraco negro vai ser lançado (ult)
-  double atk_cooldown;     // Quanto tempo desde o último tiro
-  float size;        // Tamanho do player
+  usint black_hole_threshold;
+  float black_hole_pull; // O quão forte o buraco negro vai ser lançado (ult)
+  double atk_cooldown;   // Quanto tempo desde o último tiro
+  float size;            // Tamanho do player
   Animation animations[PLAYER_NUM_STATES]; // Animações para cada estado
 } Player;
 

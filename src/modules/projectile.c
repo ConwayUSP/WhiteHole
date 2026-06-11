@@ -1,6 +1,7 @@
 #include "projectile.h"
 #include "animation.h"
 #include "assetstore.h"
+#include "entity.h"
 #include "listcontrol.h"
 #include "stdlib.h"
 #include "universe.h"
@@ -9,6 +10,7 @@
 
 int new_projectile(ProjectileType type, Vector2 pos, Vector2 direction) {
   Projectile p = {0};
+  p.entity_type = PROJECTILE;
   p.type = type;
   p.pos = pos;
   p.direction = direction;
@@ -122,5 +124,5 @@ void draw_projectile(Projectile projectile) {
       get_projectile_sheet(&universe.asset_store, projectile.type);
   Vector2 offset = get_projectile_offset(&universe.asset_store, projectile.type,
                                          projectile.state);
-  draw_frame(anim, sheet, offset, projectile.pos);
+  draw_frame(anim, sheet, offset, projectile.pos, projectile.entity_type);
 }

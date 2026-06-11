@@ -11,6 +11,7 @@
 
 Player init_player() {
   Player p = {0};
+  p.entity_type = PLAYER;
   p.hp = MAX_PLAYER_HP;
   p.state = PLAYER_IDLE;
   p.pos = (Vector2){.x = 187.5, .y = 187.5};
@@ -48,12 +49,12 @@ void update_player(Player *player, float dt) {
   move_player(player, dt);
   update_player_state(player);
   update_animation(&player->animations[player->state], dt);
-  printf("%d\n", player->black_hole_charge);
 }
 
 void update_player_state(Player *player) {
   if (is_null_vec(player->vel)) {
     player->state = PLAYER_IDLE;
+    solve_player_colision(player);
     return;
   }
   if (pow(player->vel.x, 2) > pow(player->vel.y, 2)) {

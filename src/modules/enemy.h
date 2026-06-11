@@ -3,6 +3,7 @@
 
 #include "../../include/raylib.h"
 #include "animation.h"
+#include "entity.h"
 
 // Vida máxima de cada tipo de inimigo
 #define MAX_ICE_HP 30
@@ -14,8 +15,8 @@
 #define BILLIONAIRE_ULT_CAP 20.0
 // Pontos ganhos ao matar cada inimigo
 #define ICE_POINTS 3
-#define ASTRONAUT_POINTS 5 
-#define BILLIONAIRE_POINTS 8 
+#define ASTRONAUT_POINTS 5
+#define BILLIONAIRE_POINTS 8
 
 // Entenda "usint" como "unsigned short int" a partir de agora
 typedef unsigned short int usint;
@@ -41,6 +42,7 @@ typedef enum {
 
 // Tipo que representará nossos inimigos
 typedef struct enemy {
+  EntityType entity_type;
   EnemyType type;      // Tipo específico de inimigo
   int id;              // Seu índice na lista de inimigos do universo
   usint hp;            // Vida restante ao inimigo
@@ -73,5 +75,6 @@ void draw_enemies();
 void draw_enemy(Enemy enemy);
 void enemy_take_damage(Enemy *enemy, int damage);
 void enemy_attack(Enemy *enemy);
+void update_enemy_state(Enemy *enemy);
 
 #endif

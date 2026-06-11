@@ -32,6 +32,10 @@ AssetStore init_asset_store() {
   as.enemy_atlas[ASTRONAUT] =
       LoadTexture("assets/astronaut/astronaut_atlas.png");
   as.enemy_offsets[ASTRONAUT][ENEMY_IDLE] = (Vector2){0, 0};
+  as.enemy_offsets[ASTRONAUT][ENEMY_MOVING_UP] = (Vector2){0, 96};
+  as.enemy_offsets[ASTRONAUT][ENEMY_MOVING_DOWN] = (Vector2){0, 192};
+  as.enemy_offsets[ASTRONAUT][ENEMY_MOVING_LEFT] = (Vector2){0, 288};
+  as.enemy_offsets[ASTRONAUT][ENEMY_MOVING_RIGHT] = (Vector2){96, 0};
 
   // PROJÉTEIS
   as.blackhole_atlas = LoadTexture("assets/projectiles/blackhole_atlas.png");

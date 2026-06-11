@@ -2,6 +2,7 @@
 #define ANIMATION_H
 
 #include "../../include/raylib.h"
+#include "entity.h"
 #include <stdbool.h>
 
 // Entenda "usint" como "unsigned short int" a partir de agora
@@ -24,6 +25,6 @@ Animation new_animation(usint num_frames, bool loop, usint loop_frame,
 void reset_animation(Animation *anim);
 void update_animation(Animation *anim, float dt);
 void draw_frame(Animation anim, Texture2D spritesheet, Vector2 offset,
-                Vector2 pos);
+                Vector2 pos, EntityType type);
 
 #endif
