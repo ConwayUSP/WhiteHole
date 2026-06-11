@@ -34,7 +34,6 @@ void update_universe(float dt) {
     return;
   }
 
-  
   // Player
   update_player(&(universe.player), dt);
 
@@ -155,7 +154,7 @@ void draw_universe() {
   draw_enemies();
 }
 
-void check_gameover(){
+void check_gameover() {
   if (universe.player.hp == 0) {
     universe.points = 100;
     universe.context = GAME_OVER;
@@ -167,9 +166,11 @@ void check_gameover(){
   }
 }
 
-void check_victory(){
-  if (universe.kill_count == 5){
-    universe.context = VICTORY; 
+void check_victory() {
+  if (universe.kill_count == 5) {
+    universe.context = VICTORY;
+    set_all_empty(&universe.projectile_slots);
+    set_all_empty(&universe.enemy_slots);
     change_music(get_scene_audio(&(universe.asset_store)));
   }
 }
