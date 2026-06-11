@@ -37,6 +37,7 @@ typedef struct player {
   float black_hole_pull; // O quão forte o buraco negro vai ser lançado (ult)
   double atk_cooldown;   // Quanto tempo desde o último tiro
   float size;            // Tamanho do player
+  float walk_audio_timer; // Timer para tocar o áudio dos passos do player
   Animation animations[PLAYER_NUM_STATES]; // Animações para cada estado
 } Player;
 

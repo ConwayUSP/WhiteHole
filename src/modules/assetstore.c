@@ -66,12 +66,12 @@ AssetStore init_asset_store() {
   as.scene_audio[VICTORY].looping = false;
 
   // Tiros (+1)
-  as.shot_audio[SHOT_ICE] = LoadMusicStream("assets/audio/shot/ice.mp3");                  // Tiros ICE
-  as.shot_audio[SHOT_ASTRONAUT] = LoadMusicStream("assets/audio/shot/astronaut.mp3");      // Tiros ASTRONAUT
-  as.shot_audio[SHOT_BILLIONAIRE] = LoadMusicStream("assets/audio/shot/billionaire.mp3");  // Tiros BILLIONAIRE
-  as.shot_audio[SHOT_PLAYER] = LoadMusicStream("assets/audio/shot/player.mp3");            // Tiros PLAYER
-  as.shot_audio[SHOT_BLACKHOLE] = LoadMusicStream("assets/audio/shot/blackhole.mp3");      // Tiros BLACKHOLE
-  as.shot_audio[WALK] = LoadMusicStream("assets/audio/shot/walk.mp3");                     // Alien andando
+  as.shot_audio[SHOT_ICE] = LoadSound("assets/audio/shot/ice.mp3");                  // Tiros ICE
+  as.shot_audio[SHOT_ASTRONAUT] = LoadSound("assets/audio/shot/astronaut.mp3");      // Tiros ASTRONAUT
+  as.shot_audio[SHOT_BILLIONAIRE] = LoadSound("assets/audio/shot/billionaire.mp3");  // Tiros BILLIONAIRE
+  as.shot_audio[SHOT_PLAYER] = LoadSound("assets/audio/shot/player.mp3");            // Tiros PLAYER
+  as.shot_audio[SHOT_BLACKHOLE] = LoadSound("assets/audio/shot/blackhole.mp3");      // Tiros BLACKHOLE
+  as.shot_audio[WALK] = LoadSound("assets/audio/shot/walk.mp3");                     // Alien andando
 
   return as;
 }
@@ -132,9 +132,15 @@ void unload_textures(AssetStore *store) {
 
 // Getters para os áudios
 Music get_scene_audio(AssetStore *store){
-  return store->scene_audio[universe.context];
+  Music music = store->scene_audio[universe.context];
+  SetMusicVolume(music, 0.3);
+  return music;
 }
 
-Music get_shot_audio(AssetStore *store, ShotType shot_type){
-  return store->shot_audio[shot_type];
+Sound get_shot_audio(AssetStore *store, ShotType shot_type){
+  Sound sound = store->shot_audio[shot_type];
+  if (shot_type != WALK){
+    SetSoundVolume(sound, 0.3);    
+  }
+  return sound;
 }

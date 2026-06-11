@@ -1,10 +1,12 @@
 #include "enemy.h"
 #include "assetstore.h"
+#include "audio.h"
 #include "colision.h"
 #include "player.h"
 #include "projectile.h"
 #include "universe.h"
 #include "vector.h"
+#include <raylib.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -335,6 +337,7 @@ void enemy_attack(Enemy *enemy) {
     for (int i = -1; i <= 1; i++) {
       new_projectile(ICE_ATK, enemy->pos,
                      rotate_vec(main_direction, i * angle));
+      PlaySound(get_shot_audio(&universe.asset_store, SHOT_ICE));
     }
     enemy->atk_cooldown = 4.0f;
     break;
@@ -342,6 +345,7 @@ void enemy_attack(Enemy *enemy) {
   case ASTRONAUT:
     new_projectile(ASTRONAUT_ATK, enemy->pos,
                    direction_vec(enemy->pos, universe.player.pos));
+    PlaySound(get_shot_audio(&universe.asset_store, SHOT_ASTRONAUT));
     enemy->atk_cooldown = 0.3f;
     break;
 
@@ -350,6 +354,7 @@ void enemy_attack(Enemy *enemy) {
     for (int i = 0; i < 8; i++) {
       new_projectile(BILLIONAIRE_ATK, enemy->pos,
                      rotate_vec(main_direction, i * angle));
+      PlaySound(get_shot_audio(&universe.asset_store, SHOT_BILLIONAIRE));
     }
     enemy->atk_cooldown = 7.0f;
     break;

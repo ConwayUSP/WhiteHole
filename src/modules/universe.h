@@ -52,6 +52,7 @@ void draw_universe();
 // Retorna um coeficiente (0..1) que diz o quão desacelerado o universo está
 float distort_time();
 void universe_handle_input();
-void victory();
+void check_gameover();
+void check_victory();
 void spawn_enemies();
 #endif

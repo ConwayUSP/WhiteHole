@@ -35,7 +35,10 @@ void update_universe(float dt) {
   }
 
   
+  // Player
   update_player(&(universe.player), dt);
+
+  // Inimigos
   if (universe.context == RUNNING) {
     spawn_enemies();
     universe.point_timer += dt;
@@ -44,20 +47,15 @@ void update_universe(float dt) {
       universe.points -= 1.0f;
     }
     update_enemies(dt);
-    victory();
-  }
-  update_projectiles(dt);
-  if (universe.player.hp == 0) {
-    universe.points = 100;
-    universe.context = GAME_OVER;
-    change_music(get_scene_audio(&(universe.asset_store)));
-    universe.player.hp = MAX_PLAYER_HP;
-    universe.player.black_hole_charge = 10;
-    set_all_empty(&universe.projectile_slots);
-    set_all_empty(&universe.enemy_slots);
+    check_victory();
   }
 
-  // Música
+  // Projéteis
+  update_projectiles(dt);
+
+  check_gameover();
+
+  // Músicas
   universe.scene_music = get_scene_audio(&(universe.asset_store));
   UpdateMusicStream(universe.scene_music);
 }
@@ -151,7 +149,20 @@ void draw_universe() {
   draw_projectiles();
   draw_enemies();
 }
-void victory(){
+
+void check_gameover(){
+  if (universe.player.hp == 0) {
+    universe.points = 100;
+    universe.context = GAME_OVER;
+    change_music(get_scene_audio(&(universe.asset_store)));
+    universe.player.hp = MAX_PLAYER_HP;
+    universe.player.black_hole_charge = 10;
+    set_all_empty(&universe.projectile_slots);
+    set_all_empty(&universe.enemy_slots);
+  }
+}
+
+void check_victory(){
   if (universe.kill_count == 5){
     universe.context = VICTORY; 
     change_music(get_scene_audio(&(universe.asset_store)));
