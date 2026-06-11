@@ -266,6 +266,7 @@ void draw_enemy(Enemy enemy) {
 }
 
 void enemy_take_damage(Enemy *enemy, int damage) {
+  
   if (damage > enemy->hp) {
     enemy->hp = 0;
 
@@ -274,6 +275,8 @@ void enemy_take_damage(Enemy *enemy, int damage) {
   }
   if (enemy->hp == 0) {
     universe.player.black_hole_charge += 1;
+    universe.kill_count++;
+    
     switch (enemy->type) {
     case ICE:
       universe.points += ICE_POINTS;

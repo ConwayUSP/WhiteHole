@@ -21,6 +21,7 @@
 // Entenda "usint" como "unsigned short int" a partir de agora
 typedef unsigned short int usint;
 
+
 // Tipos de inimigo
 typedef enum {
   ICE,
@@ -58,6 +59,8 @@ typedef struct enemy {
   float size;
   Animation animations[ENEMY_NUM_STATES]; // Animações para cada estado
 } Enemy;
+
+
 
 // Funções relacionadas aos inimigos
 void new_enemy(EnemyType type, Vector2 pos); // Cria um inimigo
