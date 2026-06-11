@@ -1,22 +1,25 @@
 #include "universe.h"
 #include "assetstore.h"
+#include "enemy.h"
 #include "listcontrol.h"
 #include "player.h"
 #include "projectile.h"
 #include "vector.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 Universe init_universe() {
 
   Universe u = {0};
 
-  u.context = MENU; 
+  u.context = MENU;
   u.player = init_player();
   u.asset_store = init_asset_store();
   u.projectile_slots = new_list_control(MAX_PROJECTILES);
   u.enemy_slots = new_list_control(MAX_ENEMIES);
   u.points = 100;
   u.point_timer = 0.0f;
+  u.can_spawn_new_enemies = true;
   set_all_empty(&(u.projectile_slots));
   set_all_empty(&(u.enemy_slots));
 
@@ -31,6 +34,7 @@ void update_universe(float dt) {
 
   update_player(&(universe.player), dt);
   if (universe.context == RUNNING) {
+    spawn_enemies();
     universe.point_timer += dt;
     if (universe.point_timer >= 1.0f) {
       universe.point_timer -= 1.0f;
@@ -62,6 +66,27 @@ void universe_handle_input() {
   } else if (IsKeyPressed(KEY_SPACE) && universe.context == PAUSE) {
     universe.context = RUNNING;
   }
+}
+
+void spawn_enemies() {
+  if (!universe.can_spawn_new_enemies) {
+    return;
+  }
+
+  Vector2 position = {rand() % 375, rand() % 375};
+  if (distance_vec(position, universe.player.pos) < 50) {
+    position = mult_vec(direction_vec(position, universe.player.pos), 50);
+  }
+  EnemyType type = rand() % ENEMY_NUM_TYPES;
+  if (type == ICE) {
+    new_enemy(type, sum_vec(position, (Vector2){0, -30}));
+    new_enemy(type, sum_vec(position, (Vector2){20, 10}));
+    new_enemy(type, sum_vec(position, (Vector2){-20, 10}));
+  } else {
+    new_enemy(type, position);
+  }
+
+  universe.can_spawn_new_enemies = false;
 }
 
 int get_valid_projectile_id() {
@@ -115,8 +140,8 @@ void draw_universe() {
   draw_projectiles();
   draw_enemies();
 }
-void victory(){
-if (universe.kill_count == 5){
-universe.context = VICTORY; 
-}
+void victory() {
+  if (universe.kill_count >= 100) {
+    universe.context = VICTORY;
+  }
 }

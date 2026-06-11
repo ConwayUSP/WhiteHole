@@ -14,7 +14,8 @@ void new_enemy(EnemyType type, Vector2 pos) {
   e.entity_type = ENEMY;
   e.type = type;
   e.id = get_valid_enemy_id();
-  e.state = ENEMY_IDLE;
+  e.state = NOT_SPAWNED;
+  e.spawn_timer = 2;
   e.pos = pos;
   e.size = 10;
 
@@ -91,6 +92,14 @@ void update_enemies(float dt) {
 }
 
 void update_enemy(Enemy *enemy, float dt) {
+  if (enemy->state == NOT_SPAWNED) {
+    enemy->spawn_timer -= dt;
+    if (enemy->spawn_timer <= 0) {
+      enemy->state = ENEMY_IDLE;
+    } else {
+      return;
+    }
+  }
   switch (enemy->type) {
   case ICE:
     move_ice(enemy, dt);
@@ -248,6 +257,15 @@ void draw_enemies() {
 }
 
 void draw_enemy(Enemy enemy) {
+  if (enemy.state == NOT_SPAWNED) {
+    if (((int)(GetTime() * 2.5) % 2)) {
+      DrawPolyLinesEx(enemy.pos, 3, 11, 30, 2.5f, (Color){255, 255, 255, 220});
+      DrawText("!", enemy.pos.x - 0.02, enemy.pos.y - 5, 8,
+               (Color){255, 255, 255, 220});
+    }
+    return;
+  }
+
   // !TODO: Padronizar depois
   if (enemy.type == ASTRONAUT) {
     Animation anim = enemy.animations[enemy.state];
@@ -285,8 +303,11 @@ void enemy_take_damage(Enemy *enemy, int damage) {
     enemy->hp -= damage;
   }
   if (enemy->hp == 0) {
-    universe.player.black_hole_charge += 1;
+    if (universe.player.black_hole_charge < 20) {
+      universe.player.black_hole_charge += 1;
+    }
     universe.kill_count++;
+    universe.can_spawn_new_enemies = true;
 
     switch (enemy->type) {
     case ICE:
