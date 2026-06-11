@@ -37,6 +37,8 @@ typedef struct player {
   float black_hole_pull; // O quão forte o buraco negro vai ser lançado (ult)
   double atk_cooldown;   // Quanto tempo desde o último tiro
   float size;            // Tamanho do player
+  float show_hp_timer;   // Timer de mostrar o HP após tomar dano
+  float damage_timer;    // Timer após tomar um hit
   Animation animations[PLAYER_NUM_STATES]; // Animações para cada estado
 } Player;
 
@@ -50,4 +52,5 @@ void update_player_state(Player *player);
 void read_mouse_inputs(Player *player, float dt);
 void draw_player(Player *player);
 void player_take_damage(Player *player, int damage);
+void draw_player_hp(Player player);
 #endif

@@ -10,10 +10,13 @@
 
 #define MAX_BUILDINGS 100
 
+void draw_ui();
+void draw_pause();
 void draw_fps_monitor();
 void draw_menu();
 void draw_game_over();
 void draw_cursor();
+void draw_victory();
 void victory();
 void draw_blackhole_charge();
 void sua_pontuação();
@@ -34,7 +37,7 @@ int main(void) {
 
   universe = init_universe();
 
-  if(IsMusicValid(get_scene_audio(&(universe.asset_store)))){
+  if (IsMusicValid(get_scene_audio(&(universe.asset_store)))) {
     Music music = get_scene_audio(&(universe.asset_store));
     SetMusicVolume(music, 0.3);
     PlayMusicStream(music);
@@ -72,29 +75,7 @@ int main(void) {
     // Renderização da UI
     DrawText("WHITEHOLE", 473, 10, 40, (Color){255, 255, 255, 120});
     DrawText(TextFormat("%d pts", universe.points), 50, 950, 30, GREEN);
-    draw_fps_monitor();
-    draw_menu();
-    draw_game_over();
-    draw_blackhole_charge();
-
-      // DrawLineEx((Vector2){0, 600}, (Vector2){1200, 600}, 10, BLACK); // Linha Horizontal Centro
-      // DrawLineEx((Vector2){600, 0}, (Vector2){600, 1200}, 10, BLACK); // Linha Vertical Centro
-      // DrawLineEx((Vector2){300, 0}, (Vector2){300, 1200}, 10, BLACK); // Linha Vertical ESQ
-      // DrawLineEx((Vector2){900, 0}, (Vector2){900, 1200}, 10, BLACK); // Linha Vertical DIR
-
-    if (universe.context == PAUSE) {
-      DrawRectangle(300, 300, 200, 600, (Color){255, 255, 255, 160});
-      DrawRectangle(700, 300, 200, 600, (Color){255, 255, 255, 160});
-    }
-    if (universe.context == VICTORY) {
-      DrawText("VITORIA", 461, 400, 60, GREEN);
-      DrawText("voce expulsou os bilionarios da sua casa!", 167, 300, 40,
-               GREEN);
-      sua_pontuação();
-      bool blink = (int)(GetTime() * 2) % 2;
-      DrawText("APERTE ESPAÇO PARA JOGAR", 360, 700, 30,
-              blink ? (Color){255, 221, 158, 255} : (Color){255, 240, 220, 255});
-    }
+    draw_ui();
 
     EndDrawing();
   }
@@ -111,6 +92,15 @@ void draw_cursor() {
                       (Vector2){.x = 8, .y = 8});
   DrawTextureEx(universe.asset_store.cursor_sprite, mouse_pos, 0.0f, 2.0f,
                 WHITE);
+}
+
+void draw_ui() {
+  draw_fps_monitor();
+  draw_menu();
+  draw_game_over();
+  draw_blackhole_charge();
+  draw_victory();
+  draw_pause();
 }
 
 void draw_fps_monitor() {
@@ -141,26 +131,44 @@ void draw_game_over() {
     sua_pontuação();
     DrawText("aperte espaço para tentar de novo...", 313, 700, 30,
              (Color){255, 255, 255, 120});
-
   }
 }
 
 void draw_blackhole_charge() {
-  Rectangle bg = {20, 1080, 265, 60};
+  Rectangle bg = {20, 20, 265, 60};
   DrawRectangleLinesEx(bg, 3, (Color){255, 255, 255, 255});
   for (int i = 0; i < fmin(universe.player.black_hole_charge, 10); i++) {
     int x = 30 + 25 * i;
-    int y = 1090;
+    int y = 30;
     int width = 20;
     int height = 40;
     Color color = {225 + 3 * i, 245 - 22 * i, 50 + 10 * i, 255};
     DrawRectangle(x, y, width, height, color);
   }
   if (universe.player.black_hole_charge > 10) {
-    DrawRectangle(307, 1090, 15, 39, (Color){255, 70, 100, 255}); // Vertical
-    DrawRectangle(295, 1102, 39, 15, (Color){255, 70, 100, 255}); // Horizontal
+    DrawRectangle(307, 30, 15, 39, (Color){255, 70, 100, 255}); // Vertical
+    DrawRectangle(295, 42, 39, 15, (Color){255, 70, 100, 255}); // Horizontal
   }
 }
-void sua_pontuação(){
-  DrawText(TextFormat("SUA PONTUAÇÃO: %d pts", universe.points), 174, 523, 40, GREEN);
+void sua_pontuação() {
+  DrawText(TextFormat("SUA PONTUAÇÃO: %d pts", universe.points), 174, 523, 40,
+           GREEN);
+}
+
+void draw_victory() {
+  if (universe.context == VICTORY) {
+    DrawText("VITORIA", 461, 400, 60, GREEN);
+    DrawText("voce expulsou os bilionarios da sua casa!", 167, 300, 40, GREEN);
+    sua_pontuação();
+    bool blink = (int)(GetTime() * 2) % 2;
+    DrawText("APERTE ESPAÇO PARA JOGAR", 360, 700, 30,
+             blink ? (Color){255, 221, 158, 255} : (Color){255, 240, 220, 255});
+  }
+}
+
+void draw_pause() {
+  if (universe.context == PAUSE) {
+    DrawRectangle(300, 300, 200, 600, (Color){255, 255, 255, 160});
+    DrawRectangle(700, 300, 200, 600, (Color){255, 255, 255, 160});
+  }
 }

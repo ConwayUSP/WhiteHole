@@ -1,7 +1,7 @@
 #include "universe.h"
 #include "assetstore.h"
-#include "enemy.h"
 #include "audio.h"
+#include "enemy.h"
 #include "listcontrol.h"
 #include "player.h"
 #include "projectile.h"
@@ -50,11 +50,12 @@ void update_universe(float dt) {
     universe.context = GAME_OVER;
     change_music(get_scene_audio(&(universe.asset_store)));
     universe.player.hp = MAX_PLAYER_HP;
-    //universe.player.black_hole_charge = 10;
+    universe.player.damage_timer = 0;
+    universe.player.show_hp_timer = 0;
+    // universe.player.black_hole_charge = 10;
     set_all_empty(&universe.projectile_slots);
     set_all_empty(&universe.enemy_slots);
   }
-  
 
   // Música
   universe.scene_music = get_scene_audio(&(universe.asset_store));
@@ -126,7 +127,7 @@ bool is_slot_empty(ListControl *control, int id) {
 }
 
 float distort_time() {
-  const float EFFECT_RADIUS = 70;
+  const float EFFECT_RADIUS = 100;
   float min_dist = 1000.0f;
   for (int i = 0; i < MAX_PROJECTILES; i++) {
     if (!is_slot_empty(&universe.projectile_slots, i)) {
@@ -154,11 +155,11 @@ void draw_universe() {
   draw_projectiles();
   draw_enemies();
 }
-void victory(){
-  if (universe.kill_count == 5){
+void victory() {
+  if (universe.kill_count == 5) {
     universe.context = VICTORY;
     set_all_empty(&universe.projectile_slots);
-    set_all_empty(&universe.enemy_slots); 
+    set_all_empty(&universe.enemy_slots);
     change_music(get_scene_audio(&(universe.asset_store)));
   }
 }
