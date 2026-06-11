@@ -1,6 +1,8 @@
 #include "../include/raylib.h"
 #include "modules/assetstore.h"
+#include "modules/audio.h"
 #include "modules/enemy.h"
+#include "modules/entity.h"
 #include "modules/universe.h"
 #include "modules/vector.h"
 #include <math.h>
@@ -37,9 +39,8 @@ int main(void) {
 
   universe = init_universe();
 
-  if (IsMusicValid(get_scene_audio(&(universe.asset_store)))) {
-    Music music = get_scene_audio(&(universe.asset_store));
-    SetMusicVolume(music, 0.3);
+  if(IsMusicValid(get_scene_audio(&universe.asset_store))){
+    Music music = get_scene_audio(&universe.asset_store);
     PlayMusicStream(music);
   }
 

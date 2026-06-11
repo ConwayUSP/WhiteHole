@@ -1,12 +1,14 @@
 #include "player.h"
 #include "animation.h"
 #include "assetstore.h"
+#include "audio.h"
 #include "colision.h"
 #include "listcontrol.h"
 #include "projectile.h"
 #include "universe.h"
 #include "vector.h"
 #include <math.h>
+#include <raylib.h>
 #include <stdio.h>
 
 Player init_player() {
@@ -81,17 +83,25 @@ void update_player_state(Player *player) {
 
 void move_player(Player *player, float dt) {
   Vector2 move = {.x = 0, .y = 0};
-  if (IsKeyDown(KEY_W)) {
+  bool w = IsKeyDown(KEY_W), a = IsKeyDown(KEY_A), s = IsKeyDown(KEY_S), d = IsKeyDown(KEY_D);
+  if (w) {
     move.y -= 1;
   }
-  if (IsKeyDown(KEY_A)) {
+  if (a) {
     move.x -= 1;
   }
-  if (IsKeyDown(KEY_S)) {
+  if (s) {
     move.y += 1;
   }
-  if (IsKeyDown(KEY_D)) {
+  if (d) {
     move.x += 1;
+  }
+  player->walk_audio_timer -= dt;
+  if (w || a || s || d) {
+    if (player->walk_audio_timer <= 0) {
+      PlaySound(get_shot_audio(&universe.asset_store, WALK));    
+      player->walk_audio_timer = 0.4;
+    }
   }
   move = normalize_vec(move);
   move.x *= player->speed * dt;
@@ -118,6 +128,7 @@ void read_mouse_inputs(Player *player, float dt) {
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
       new_projectile(PLAYER_ATK, sum_vec(player->pos, mult_vec(direction, 10)),
                      direction);
+      PlaySound(get_shot_audio(&universe.asset_store, SHOT_PLAYER));
     }
     player->atk_cooldown = ATK_COOLDOWN;
   }
@@ -134,6 +145,7 @@ void read_mouse_inputs(Player *player, float dt) {
           BLACK_HOLE,
           sum_vec(player->pos, sum_vec(mult_vec(direction, 20), player->vel)),
           direction);
+      PlaySound(get_shot_audio(&universe.asset_store, SHOT_BLACKHOLE));
       if (bh_id == NULL_SLOT) {
         return;
       }
