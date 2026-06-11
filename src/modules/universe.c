@@ -90,7 +90,17 @@ void spawn_enemies() {
   if (distance_vec(position, universe.player.pos) < 50) {
     position = mult_vec(direction_vec(position, universe.player.pos), 50);
   }
-  EnemyType type = rand() % ENEMY_NUM_TYPES;
+  EnemyType type;// = rand() % ENEMY_NUM_TYPES;
+  int r = rand() % 100;
+  if (r <= 10) {
+    type = ICE;
+  }
+  else if (r < 40) {
+    type = BILLIONAIRE;
+  }
+  else {
+    type = ASTRONAUT;
+  }
 
   if (type == ICE) {
     new_enemy(type, sum_vec(position, (Vector2){0, -30}));
