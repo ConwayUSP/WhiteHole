@@ -16,6 +16,7 @@ typedef enum { MENU, RUNNING, PAUSE, GAME_OVER, VICTORY } Scene;
 // Estrutura do estado global do jogo
 typedef struct universe {
   Scene context;          // Contexto atual do jogo
+  Music scene_music;
   AssetStore asset_store; // O asset store global
   Player player;
   int points; // Com quantos pontos o jogador está atualmente

@@ -1,10 +1,12 @@
 #include "universe.h"
 #include "assetstore.h"
 #include "enemy.h"
+#include "audio.h"
 #include "listcontrol.h"
 #include "player.h"
 #include "projectile.h"
 #include "vector.h"
+#include <raylib.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -32,6 +34,7 @@ void update_universe(float dt) {
     return;
   }
 
+  
   update_player(&(universe.player), dt);
   if (universe.context == RUNNING) {
     spawn_enemies();
@@ -47,11 +50,16 @@ void update_universe(float dt) {
   if (universe.player.hp == 0) {
     universe.points = 100;
     universe.context = GAME_OVER;
+    change_music(get_scene_audio(&(universe.asset_store)));
     universe.player.hp = MAX_PLAYER_HP;
     universe.player.black_hole_charge = 10;
     set_all_empty(&universe.projectile_slots);
     set_all_empty(&universe.enemy_slots);
   }
+
+  // Música
+  universe.scene_music = get_scene_audio(&(universe.asset_store));
+  UpdateMusicStream(universe.scene_music);
 }
 
 void universe_handle_input() {
@@ -59,12 +67,15 @@ void universe_handle_input() {
        universe.context == VICTORY) &&
       IsKeyPressed(KEY_SPACE)) {
     universe.context = RUNNING;
+    change_music(get_scene_audio(&(universe.asset_store)));
     return;
   }
   if (IsKeyPressed(KEY_SPACE) && universe.context == RUNNING) {
     universe.context = PAUSE;
+    change_music(get_scene_audio(&(universe.asset_store)));
   } else if (IsKeyPressed(KEY_SPACE) && universe.context == PAUSE) {
     universe.context = RUNNING;
+    change_music(get_scene_audio(&(universe.asset_store)));
   }
 }
 
@@ -140,8 +151,9 @@ void draw_universe() {
   draw_projectiles();
   draw_enemies();
 }
-void victory() {
-  if (universe.kill_count >= 100) {
-    universe.context = VICTORY;
+void victory(){
+  if (universe.kill_count == 5){
+    universe.context = VICTORY; 
+    change_music(get_scene_audio(&(universe.asset_store)));
   }
 }

@@ -1,12 +1,17 @@
 #include "assetstore.h"
 #include "../../include/raylib.h"
+#include "audio.h"
 #include "enemy.h"
 #include "player.h"
 #include "projectile.h"
+#include "universe.h"
 
 AssetStore init_asset_store() {
   AssetStore as = {0};
 
+//----------------------------------------------------------------------------------
+//  SPRITESHEETS
+//----------------------------------------------------------------------------------
   // Chão
   as.floor_sprite = LoadTexture("assets/floor/marte.png");
 
@@ -48,6 +53,25 @@ AssetStore init_asset_store() {
   as.player_projectile_atlas =
       LoadTexture("assets/projectiles/player_shot_atlas.png");
   as.player_projectile_offsets[PROJECTILE_IDLE] = (Vector2){0, 0};
+
+//----------------------------------------------------------------------------------
+//  SOUND EFFECTS (SFX)
+//----------------------------------------------------------------------------------
+  // Cenas
+  // TODO: talvez implementar MENU
+  as.scene_audio[GAME_OVER] = LoadMusicStream("assets/audio/scene/game_over.mp3");  // Gameover
+  as.scene_audio[GAME_OVER].looping = false;
+  as.scene_audio[RUNNING] = LoadMusicStream("assets/audio/scene/running.mp3");      // Running
+  as.scene_audio[VICTORY] = LoadMusicStream("assets/audio/scene/victory.mp3");      // Victory
+  as.scene_audio[VICTORY].looping = false;
+
+  // Tiros (+1)
+  as.shot_audio[SHOT_ICE] = LoadMusicStream("assets/audio/shot/ice.mp3");                  // Tiros ICE
+  as.shot_audio[SHOT_ASTRONAUT] = LoadMusicStream("assets/audio/shot/astronaut.mp3");      // Tiros ASTRONAUT
+  as.shot_audio[SHOT_BILLIONAIRE] = LoadMusicStream("assets/audio/shot/billionaire.mp3");  // Tiros BILLIONAIRE
+  as.shot_audio[SHOT_PLAYER] = LoadMusicStream("assets/audio/shot/player.mp3");            // Tiros PLAYER
+  as.shot_audio[SHOT_BLACKHOLE] = LoadMusicStream("assets/audio/shot/blackhole.mp3");      // Tiros BLACKHOLE
+  as.shot_audio[WALK] = LoadMusicStream("assets/audio/shot/walk.mp3");                     // Alien andando
 
   return as;
 }
@@ -104,4 +128,13 @@ void unload_textures(AssetStore *store) {
   UnloadTexture(store->enemy_projectile_atlas);
   UnloadTexture(store->floor_sprite);
   UnloadTexture(store->cursor_sprite);
+}
+
+// Getters para os áudios
+Music get_scene_audio(AssetStore *store){
+  return store->scene_audio[universe.context];
+}
+
+Music get_shot_audio(AssetStore *store, ShotType shot_type){
+  return store->shot_audio[shot_type];
 }
