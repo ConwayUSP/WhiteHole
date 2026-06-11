@@ -55,8 +55,9 @@ int new_projectile(ProjectileType type, Vector2 pos, Vector2 direction) {
     p.weight = 2.0f;
     break;
   case BLACK_HOLE:
-    set_projectile_animation(&p, PROJECTILE_IDLE,
-                             new_animation(1, true, 0, 1, (Vector2){32, 32}));
+    set_projectile_animation(
+        &p, PROJECTILE_IDLE,
+        new_animation(16, true, 0, 0.05, (Vector2){32, 32}));
     p.damage = 1000;
     p.speed = 100.0f;
     p.duration = 10.0f;
@@ -87,6 +88,7 @@ void update_projectiles(float dt) {
 
 void update_projectile(Projectile *projectile, float dt) {
   move_projectile(projectile, dt);
+  update_animation(&projectile->animations[projectile->state], dt);
   projectile->timer += dt;
   if (projectile->timer > projectile->duration) {
     free_projectile_slot(projectile->id);
