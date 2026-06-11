@@ -139,6 +139,7 @@ void update_enemy_state(Enemy *enemy) {
 }
 
 void move_ice(Enemy *enemy, float dt) {
+  const float MIN_DISTANCE = 100.0f;
   Vector2 itar = enemy->pos; // Posição do ICE mais próximo
   bool found_other_ice =
       true; // Verifica se esse é o primeiro ICE da lista de inimigos
@@ -162,10 +163,16 @@ void move_ice(Enemy *enemy, float dt) {
   enemy->target = mult_vec(sum_vec(universe.player.pos, itar), 0.5);
   enemy->vel =
       mult_vec(direction_vec(enemy->pos, enemy->target), enemy->speed * dt);
+  float dist =
+      distance_vec(sum_vec(enemy->pos, enemy->vel), universe.player.pos);
+  if (dist < MIN_DISTANCE) {
+    enemy->vel = mult_vec(enemy->vel, fmax(0, (dist - 60)) / 40);
+  }
   enemy->pos = sum_vec(enemy->pos, enemy->vel);
 }
 
 void move_astronaut(Enemy *e, float dt) {
+  const float MIN_DISTANCE = 120.0f;
   e->target = universe.player.pos;
   Vector2 bhtar = e->pos; // Posição do buraco negro mais próximo
   bool found_blackhole =
@@ -188,6 +195,10 @@ void move_astronaut(Enemy *e, float dt) {
     }
   }
   e->vel = mult_vec(direction_vec(e->pos, e->target), e->speed * dt);
+  float dist = distance_vec(sum_vec(e->pos, e->vel), e->target);
+  if (dist < MIN_DISTANCE) {
+    e->vel = mult_vec(e->vel, fmax(0, (dist - 80)) / 40);
+  }
   e->pos = sum_vec(e->pos, e->vel);
 }
 
@@ -266,7 +277,7 @@ void draw_enemy(Enemy enemy) {
 }
 
 void enemy_take_damage(Enemy *enemy, int damage) {
-  
+
   if (damage > enemy->hp) {
     enemy->hp = 0;
 
@@ -276,7 +287,7 @@ void enemy_take_damage(Enemy *enemy, int damage) {
   if (enemy->hp == 0) {
     universe.player.black_hole_charge += 1;
     universe.kill_count++;
-    
+
     switch (enemy->type) {
     case ICE:
       universe.points += ICE_POINTS;
