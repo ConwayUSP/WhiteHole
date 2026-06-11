@@ -47,6 +47,12 @@ void set_player_animation(Player *player, PlayerState state, Animation anim) {
 }
 void update_player(Player *player, float dt) {
   player->atk_cooldown -= dt;
+  if (player->show_hp_timer > 0) {
+    player->show_hp_timer -= dt;
+  }
+  if (player->damage_timer > 0) {
+    player->damage_timer -= dt;
+  }
   read_mouse_inputs(player, dt);
   move_player(player, dt);
   update_player_state(player);
@@ -164,13 +170,50 @@ void draw_player(Player *player) {
   Vector2 good_pos =
       sub_vec(player->pos, (Vector2){.x = anim.frame_size.x / 2,
                                      .y = anim.frame_size.y / 2});
-  DrawTextureRec(spritesheet, frame_rect, good_pos, WHITE);
+  float norm_dmg_timer = player->damage_timer - 1;
+  Color damage_tint = norm_dmg_timer < 0
+                          ? WHITE
+                          : (Color){255, 100 + 155 * (1 - norm_dmg_timer),
+                                    100 + 155 * (1 - norm_dmg_timer), 200};
+  DrawTextureRec(spritesheet, frame_rect, good_pos, damage_tint);
+  if (player->show_hp_timer > 0) {
+    draw_player_hp(*player);
+  }
+}
+
+void draw_player_hp(Player player) {
+  int prev_hp = player.hp + 1;
+  int curr_hp = player.hp;
+  if (player.show_hp_timer > 0.5) {
+    for (int i = 0; i < prev_hp; i++) {
+      int x = player.pos.x - 8 + i * 6;
+      int y = player.pos.y - 20;
+      bool blink = false;
+      if (i == prev_hp - 1) {
+        blink = (int)(GetTime() * 5) % 2;
+      }
+      if (!blink) {
+        DrawRectangle(x, y, 4, 4, RED);
+      }
+    }
+  } else {
+    for (int i = 0; i < curr_hp; i++) {
+      int x = player.pos.x - 8 + i * 6;
+      int y = player.pos.y - 20;
+      DrawRectangle(x, y, 4, 4, RED);
+    }
+  }
 }
 
 void player_take_damage(Player *player, int damage) {
-  if (damage > player->hp) {
-    player->hp = 0;
-  } else {
-    player->hp -= damage;
+  player->show_hp_timer = 1.0f;
+  if (player->damage_timer <= 0) {
+    if (damage > player->hp) {
+      player->hp = 0;
+      player->damage_timer = 2.0f;
+    } else {
+      player->hp -= damage;
+      player->damage_timer = 2.0f;
+    }
   }
 }

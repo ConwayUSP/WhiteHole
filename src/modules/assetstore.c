@@ -9,9 +9,9 @@
 AssetStore init_asset_store() {
   AssetStore as = {0};
 
-//----------------------------------------------------------------------------------
-//  SPRITESHEETS
-//----------------------------------------------------------------------------------
+  //----------------------------------------------------------------------------------
+  //  SPRITESHEETS
+  //----------------------------------------------------------------------------------
   // Chão
   as.floor_sprite = LoadTexture("assets/floor/marte.png");
 
@@ -28,11 +28,19 @@ AssetStore init_asset_store() {
 
   // ICE
   as.enemy_atlas[ICE] = LoadTexture("assets/ice/ice_atlas.png");
-  as.enemy_offsets[ICE][ENEMY_IDLE] = (Vector2){0, 0};
+  as.enemy_offsets[ICE][ENEMY_IDLE] = (Vector2){0, 192};
+  as.enemy_offsets[ICE][ENEMY_MOVING_UP] = (Vector2){96, 0};
+  as.enemy_offsets[ICE][ENEMY_MOVING_DOWN] = (Vector2){96, 96};
+  as.enemy_offsets[ICE][ENEMY_MOVING_LEFT] = (Vector2){0, 96};
+  as.enemy_offsets[ICE][ENEMY_MOVING_RIGHT] = (Vector2){0, 0};
   // Bilionário
   as.enemy_atlas[BILLIONAIRE] =
       LoadTexture("assets/billionaire/billionaire_atlas.png");
-  as.enemy_offsets[BILLIONAIRE][ENEMY_IDLE] = (Vector2){0, 0};
+  as.enemy_offsets[BILLIONAIRE][ENEMY_IDLE] = (Vector2){96, 0};
+  as.enemy_offsets[BILLIONAIRE][ENEMY_MOVING_UP] = (Vector2){0, 288};
+  as.enemy_offsets[BILLIONAIRE][ENEMY_MOVING_DOWN] = (Vector2){0, 0};
+  as.enemy_offsets[BILLIONAIRE][ENEMY_MOVING_LEFT] = (Vector2){0, 192};
+  as.enemy_offsets[BILLIONAIRE][ENEMY_MOVING_RIGHT] = (Vector2){0, 96};
   // Astronauta
   as.enemy_atlas[ASTRONAUT] =
       LoadTexture("assets/astronaut/astronaut_atlas.png");
@@ -54,15 +62,18 @@ AssetStore init_asset_store() {
       LoadTexture("assets/projectiles/player_shot_atlas.png");
   as.player_projectile_offsets[PROJECTILE_IDLE] = (Vector2){0, 0};
 
-//----------------------------------------------------------------------------------
-//  SOUND EFFECTS (SFX)
-//----------------------------------------------------------------------------------
+  //----------------------------------------------------------------------------------
+  //  SOUND EFFECTS (SFX)
+  //----------------------------------------------------------------------------------
   // Cenas
   // TODO: talvez implementar MENU
-  as.scene_audio[GAME_OVER] = LoadMusicStream("assets/audio/scene/game_over.mp3");  // Gameover
+  as.scene_audio[GAME_OVER] =
+      LoadMusicStream("assets/audio/scene/game_over.mp3"); // Gameover
   as.scene_audio[GAME_OVER].looping = false;
-  as.scene_audio[RUNNING] = LoadMusicStream("assets/audio/scene/running.mp3");      // Running
-  as.scene_audio[VICTORY] = LoadMusicStream("assets/audio/scene/victory.mp3");      // Victory
+  as.scene_audio[RUNNING] =
+      LoadMusicStream("assets/audio/scene/running.mp3"); // Running
+  as.scene_audio[VICTORY] =
+      LoadMusicStream("assets/audio/scene/victory.mp3"); // Victory
   as.scene_audio[VICTORY].looping = false;
 
   // Tiros (+1)

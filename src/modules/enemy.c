@@ -45,6 +45,21 @@ void new_enemy(EnemyType type, Vector2 pos) {
     e.speed = 100;
     e.ult_threshold = ICE_ULT_CAP;
     e.atk_cooldown = 4.0f;
+    set_enemy_animation(
+        &e, ENEMY_IDLE,
+        new_animation(1, true, 0, 0.2f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_DOWN,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_LEFT,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_UP,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_RIGHT,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
     break;
   case ASTRONAUT:
     e.hp = MAX_ASTRONAUT_HP;
@@ -72,6 +87,21 @@ void new_enemy(EnemyType type, Vector2 pos) {
     e.ult_threshold = BILLIONAIRE_ULT_CAP;
     e.move_cooldown = 5.0f;
     e.atk_cooldown = 2.5f;
+    set_enemy_animation(
+        &e, ENEMY_IDLE,
+        new_animation(8, true, 0, 0.2f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_DOWN,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_LEFT,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_UP,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_RIGHT,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
     break;
   default:
     exit(1); // Tipo de inimigo não detectado
@@ -94,6 +124,9 @@ void update_enemies(float dt) {
 }
 
 void update_enemy(Enemy *enemy, float dt) {
+  if (enemy->damage_timer > 0) {
+    enemy->damage_timer -= dt;
+  }
   if (enemy->state == NOT_SPAWNED) {
     enemy->spawn_timer -= dt;
     if (enemy->spawn_timer <= 0) {
@@ -179,6 +212,9 @@ void move_ice(Enemy *enemy, float dt) {
   if (dist < MIN_DISTANCE) {
     enemy->vel = mult_vec(enemy->vel, fmax(0, (dist - 60)) / 40);
   }
+  if (distance_vec(enemy->pos, enemy->target) < 0.5) {
+    enemy->vel = (Vector2){0, 0};
+  }
   enemy->pos = sum_vec(enemy->pos, enemy->vel);
 }
 
@@ -225,7 +261,7 @@ void move_billionaire(Enemy *enemy, float dt) {
     enemy->target =
         sum_vec(universe.player.pos, mult_vec(universe.player.vel, 1000 * dt));
     enemy->speed = DASH_SPEED;
-  } else if (old_cooldown > -2 && cd < -2) {
+  } else if (old_cooldown > -1 && cd < -1) {
     enemy->target = (Vector2){.x = rand() % 400, .y = rand() % 400};
     enemy->speed = MIN_SPEED;
     enemy->move_cooldown = 5;
@@ -241,12 +277,15 @@ void move_billionaire(Enemy *enemy, float dt) {
     enemy->speed = (charge * charge) * (DASH_SPEED - MIN_SPEED) + MIN_SPEED;
     enemy->target =
         sum_vec(universe.player.pos, mult_vec(universe.player.vel, 300 * dt));
-  } else if (cd < 0 && cd >= -2) {
-    enemy->target = sum_vec(enemy->pos, enemy->vel);
+  } else if (cd < 0 && cd >= -1) {
+    enemy->target = sum_vec(enemy->pos, mult_vec(enemy->vel, 10));
   }
 
   enemy->vel =
       mult_vec(direction_vec(enemy->pos, enemy->target), enemy->speed * dt);
+  if (distance_vec(enemy->pos, enemy->target) < 1) {
+    enemy->vel = (Vector2){0, 0};
+  }
   enemy->pos = sum_vec(enemy->pos, enemy->vel);
 }
 
@@ -267,37 +306,28 @@ void draw_enemy(Enemy enemy) {
     }
     return;
   }
-
-  // !TODO: Padronizar depois
-  if (enemy.type == ASTRONAUT) {
-    Animation anim = enemy.animations[enemy.state];
-    Texture2D spritesheet = get_enemy_sheet(&universe.asset_store, enemy.type);
-    Vector2 offset =
-        get_enemy_offset(&universe.asset_store, enemy.type, enemy.state);
-    int spritesheet_columns = (spritesheet.width / anim.frame_size.x) / 2;
-    int frameX = (anim.frame % spritesheet_columns) * anim.frame_size.x;
-    int frameY =
-        floor((float)anim.frame / spritesheet_columns) * anim.frame_size.y;
-    frameX += offset.x;
-    frameY += offset.y;
-    Rectangle frame_rect = {frameX, frameY, anim.frame_size.x,
-                            anim.frame_size.y};
-    Vector2 good_pos =
-        sub_vec(enemy.pos, (Vector2){.x = anim.frame_size.x / 2,
-                                     .y = anim.frame_size.y / 2});
-    DrawTextureRec(spritesheet, frame_rect, good_pos, WHITE);
-    return;
-  }
-
-  Animation animation = enemy.animations[enemy.state];
+  Animation anim = enemy.animations[enemy.state];
   Texture2D spritesheet = get_enemy_sheet(&universe.asset_store, enemy.type);
   Vector2 offset =
       get_enemy_offset(&universe.asset_store, enemy.type, enemy.state);
-  draw_frame(animation, spritesheet, offset, enemy.pos, enemy.entity_type);
+  int spritesheet_columns = (spritesheet.width / anim.frame_size.x) / 2;
+  int frameX = (anim.frame % spritesheet_columns) * anim.frame_size.x;
+  int frameY =
+      floor((float)anim.frame / spritesheet_columns) * anim.frame_size.y;
+  frameX += offset.x;
+  frameY += offset.y;
+  Rectangle frame_rect = {frameX, frameY, anim.frame_size.x, anim.frame_size.y};
+  Vector2 good_pos = sub_vec(enemy.pos, (Vector2){.x = anim.frame_size.x / 2,
+                                                  .y = anim.frame_size.y / 2});
+
+  float dmg_timer = enemy.damage_timer;
+  Color damage_tint = dmg_timer <= 0 ? WHITE
+                                     : (Color){255, 255 * (1 - dmg_timer),
+                                               255 * (1 - dmg_timer), 255};
+  DrawTextureRec(spritesheet, frame_rect, good_pos, damage_tint);
 }
 
 void enemy_take_damage(Enemy *enemy, int damage) {
-
   if (damage > enemy->hp) {
     enemy->hp = 0;
 
@@ -325,6 +355,7 @@ void enemy_take_damage(Enemy *enemy, int damage) {
       break;
     }
   }
+  enemy->damage_timer = 0.3;
 }
 
 void enemy_attack(Enemy *enemy) {
@@ -356,7 +387,7 @@ void enemy_attack(Enemy *enemy) {
                      rotate_vec(main_direction, i * angle));
       PlaySound(get_shot_audio(&universe.asset_store, SHOT_BILLIONAIRE));
     }
-    enemy->atk_cooldown = 7.0f;
+    enemy->atk_cooldown = 6.0f;
     break;
 
   default:

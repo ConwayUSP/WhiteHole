@@ -1,7 +1,7 @@
 #include "universe.h"
 #include "assetstore.h"
-#include "enemy.h"
 #include "audio.h"
+#include "enemy.h"
 #include "listcontrol.h"
 #include "player.h"
 #include "projectile.h"
@@ -64,6 +64,10 @@ void universe_handle_input() {
   if ((universe.context == MENU || universe.context == GAME_OVER ||
        universe.context == VICTORY) &&
       IsKeyPressed(KEY_SPACE)) {
+    universe.points = 100;
+    universe.can_spawn_new_enemies = true;
+    universe.player.black_hole_charge = 10;
+    universe.kill_count = 0;
     universe.context = RUNNING;
     change_music(get_scene_audio(&(universe.asset_store)));
     return;
@@ -87,6 +91,7 @@ void spawn_enemies() {
     position = mult_vec(direction_vec(position, universe.player.pos), 50);
   }
   EnemyType type = rand() % ENEMY_NUM_TYPES;
+
   if (type == ICE) {
     new_enemy(type, sum_vec(position, (Vector2){0, -30}));
     new_enemy(type, sum_vec(position, (Vector2){20, 10}));
@@ -121,7 +126,7 @@ bool is_slot_empty(ListControl *control, int id) {
 }
 
 float distort_time() {
-  const float EFFECT_RADIUS = 70;
+  const float EFFECT_RADIUS = 100;
   float min_dist = 1000.0f;
   for (int i = 0; i < MAX_PROJECTILES; i++) {
     if (!is_slot_empty(&universe.projectile_slots, i)) {
