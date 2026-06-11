@@ -92,7 +92,18 @@ void spawn_enemies() {
   if (distance_vec(position, universe.player.pos) < 50) {
     position = mult_vec(direction_vec(position, universe.player.pos), 50);
   }
-  EnemyType type = rand() % ENEMY_NUM_TYPES;
+  EnemyType type;// = rand() % ENEMY_NUM_TYPES;
+  int r = rand() % 100;
+  if (r <= 10) {
+    type = ICE;
+  }
+  else if (r < 40) {
+    type = BILLIONAIRE;
+  }
+  else {
+    type = ASTRONAUT;
+  }
+
   if (type == ICE) {
     new_enemy(type, sum_vec(position, (Vector2){0, -30}));
     new_enemy(type, sum_vec(position, (Vector2){20, 10}));
@@ -156,7 +167,7 @@ void draw_universe() {
   draw_enemies();
 }
 void victory() {
-  if (universe.kill_count == 5) {
+  if (universe.kill_count == 100) {
     universe.context = VICTORY;
     set_all_empty(&universe.projectile_slots);
     set_all_empty(&universe.enemy_slots);
