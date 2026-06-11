@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 Universe init_universe() {
-  
+
   Universe u = {0};
 
   u.context = MENU;
@@ -32,16 +32,16 @@ void update_universe(float dt) {
   update_player(&(universe.player), dt);
   if (universe.context == RUNNING) {
     universe.point_timer += dt;
-  if (universe.point_timer >= 1.0f) {
-    universe.point_timer -= 1.0f;
-    universe.points -= 1.0f;
-  }
+    if (universe.point_timer >= 1.0f) {
+      universe.point_timer -= 1.0f;
+      universe.points -= 1.0f;
+    }
     update_enemies(dt);
   }
   update_projectiles(dt);
   if (universe.player.hp == 0) {
-    universe.points = 100; 
-    universe.context = MENU;
+    universe.points = 100;
+    universe.context = GAME_OVER;
     universe.player.hp = MAX_PLAYER_HP;
     universe.player.black_hole_charge = 10;
     set_all_empty(&universe.projectile_slots);
@@ -50,7 +50,9 @@ void update_universe(float dt) {
 }
 
 void universe_handle_input() {
-  if (universe.context == MENU && IsKeyPressed(KEY_SPACE)) {
+  if ((universe.context == MENU || universe.context == GAME_OVER ||
+       universe.context == VICTORY) &&
+      IsKeyPressed(KEY_SPACE)) {
     universe.context = RUNNING;
     return;
   }

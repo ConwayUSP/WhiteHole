@@ -11,11 +11,29 @@
 
 void new_enemy(EnemyType type, Vector2 pos) {
   Enemy e = {0};
+  e.entity_type = ENEMY;
   e.type = type;
   e.id = get_valid_enemy_id();
   e.state = ENEMY_IDLE;
   e.pos = pos;
   e.size = 10;
+
+  // Animações
+  set_enemy_animation(
+      &e, ENEMY_IDLE,
+      new_animation(1, true, 0, 0.2f, (Vector2){.x = 32, .y = 32}));
+  set_enemy_animation(
+      &e, ENEMY_MOVING_DOWN,
+      new_animation(1, true, 0, 0.2f, (Vector2){.x = 32, .y = 32}));
+  set_enemy_animation(
+      &e, ENEMY_MOVING_LEFT,
+      new_animation(1, true, 0, 0.2f, (Vector2){.x = 32, .y = 32}));
+  set_enemy_animation(
+      &e, ENEMY_MOVING_UP,
+      new_animation(1, true, 0, 0.2f, (Vector2){.x = 32, .y = 32}));
+  set_enemy_animation(
+      &e, ENEMY_MOVING_RIGHT,
+      new_animation(1, true, 0, 0.2f, (Vector2){.x = 32, .y = 32}));
 
   // Atributos que variam de inimigo para inimigo
   switch (type) {
@@ -30,6 +48,21 @@ void new_enemy(EnemyType type, Vector2 pos) {
     e.speed = 100;
     e.ult_threshold = ASTRONAUT_ULT_CAP;
     e.atk_cooldown = 0.3f;
+    set_enemy_animation(
+        &e, ENEMY_IDLE,
+        new_animation(8, true, 0, 0.2f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_DOWN,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_LEFT,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_UP,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_RIGHT,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
     break;
   case BILLIONAIRE:
     e.hp = MAX_BILLIONAIRE_HP;
@@ -40,11 +73,6 @@ void new_enemy(EnemyType type, Vector2 pos) {
   default:
     exit(1); // Tipo de inimigo não detectado
   }
-
-  // Animações
-  set_enemy_animation(
-      &e, ENEMY_IDLE,
-      new_animation(1, true, 0, 0.2f, (Vector2){.x = 32, .y = 32}));
 
   insert_enemy(e);
 }
@@ -76,6 +104,7 @@ void update_enemy(Enemy *enemy, float dt) {
   default:
     exit(1); // Tipo de inimigo não detectado
   }
+  update_enemy_state(enemy);
 
   solve_enemy_colision(enemy);
   update_animation(&enemy->animations[enemy->state], dt);
@@ -86,6 +115,26 @@ void update_enemy(Enemy *enemy, float dt) {
   enemy->atk_cooldown -= dt;
   if (enemy->atk_cooldown <= 0) {
     enemy_attack(enemy);
+  }
+}
+
+void update_enemy_state(Enemy *enemy) {
+  if (is_null_vec(enemy->vel)) {
+    enemy->state = ENEMY_IDLE;
+    return;
+  }
+  if (pow(enemy->vel.x, 2) > pow(enemy->vel.y, 2)) {
+    if (enemy->vel.x > 0) {
+      enemy->state = ENEMY_MOVING_RIGHT;
+    } else {
+      enemy->state = ENEMY_MOVING_LEFT;
+    }
+  } else {
+    if (enemy->vel.y > 0) {
+      enemy->state = ENEMY_MOVING_DOWN;
+    } else {
+      enemy->state = ENEMY_MOVING_UP;
+    }
   }
 }
 
@@ -188,17 +237,38 @@ void draw_enemies() {
 }
 
 void draw_enemy(Enemy enemy) {
+  // !TODO: Padronizar depois
+  if (enemy.type == ASTRONAUT) {
+    Animation anim = enemy.animations[enemy.state];
+    Texture2D spritesheet = get_enemy_sheet(&universe.asset_store, enemy.type);
+    Vector2 offset =
+        get_enemy_offset(&universe.asset_store, enemy.type, enemy.state);
+    int spritesheet_columns = (spritesheet.width / anim.frame_size.x) / 2;
+    int frameX = (anim.frame % spritesheet_columns) * anim.frame_size.x;
+    int frameY =
+        floor((float)anim.frame / spritesheet_columns) * anim.frame_size.y;
+    frameX += offset.x;
+    frameY += offset.y;
+    Rectangle frame_rect = {frameX, frameY, anim.frame_size.x,
+                            anim.frame_size.y};
+    Vector2 good_pos =
+        sub_vec(enemy.pos, (Vector2){.x = anim.frame_size.x / 2,
+                                     .y = anim.frame_size.y / 2});
+    DrawTextureRec(spritesheet, frame_rect, good_pos, WHITE);
+    return;
+  }
+
   Animation animation = enemy.animations[enemy.state];
   Texture2D spritesheet = get_enemy_sheet(&universe.asset_store, enemy.type);
   Vector2 offset =
       get_enemy_offset(&universe.asset_store, enemy.type, enemy.state);
-  draw_frame(animation, spritesheet, offset, enemy.pos);
+  draw_frame(animation, spritesheet, offset, enemy.pos, enemy.entity_type);
 }
 
 void enemy_take_damage(Enemy *enemy, int damage) {
   if (damage > enemy->hp) {
     enemy->hp = 0;
-  
+
   } else {
     enemy->hp -= damage;
   }
@@ -215,7 +285,7 @@ void enemy_take_damage(Enemy *enemy, int damage) {
       universe.points += BILLIONAIRE_POINTS;
       break;
     default:
-      break; 
+      break;
     }
   }
 }

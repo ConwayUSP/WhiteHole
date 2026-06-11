@@ -1,4 +1,5 @@
 #include "animation.h"
+#include "universe.h"
 #include "vector.h"
 #include <math.h>
 
@@ -36,7 +37,7 @@ void update_animation(Animation *anim, float dt) {
 }
 
 void draw_frame(Animation anim, Texture2D spritesheet, Vector2 offset,
-                Vector2 pos) {
+                Vector2 pos, EntityType type) {
   // Quantos frames a spritesheet tem de largura
   int spritesheet_columns = spritesheet.width / anim.frame_size.x;
   int frameX = anim.frame % spritesheet_columns * anim.frame_size.x;

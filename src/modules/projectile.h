@@ -3,6 +3,7 @@
 
 #include "../../include/raylib.h"
 #include "animation.h"
+#include "entity.h"
 #include "player.h"
 
 // Entenda "usint" como "unsigned short int" a partir de agora
@@ -28,6 +29,7 @@ typedef enum {
 
 // Tipo que representará nossos projéteis
 typedef struct projectile {
+  EntityType entity_type;
   ProjectileType type;   // Tipo específico de projétil
   int id;                // Seu ID na lista de projéteis do universo
   ProjectileState state; // Estado atual (animação que está rodando)
@@ -39,13 +41,13 @@ typedef struct projectile {
   float duration;        // Carga atual da ult
   usint damage;          // Dano causado em impacto
   float size;            // Tamanho
-  float weight;         // Peso, influencia como é afetado pelos buracos negros
+  float weight;          // Peso, influencia como é afetado pelos buracos negros
   Animation animations[PROJECTILE_NUM_STATES]; // Animações para cada estado
 } Projectile;
 
 // Funções relacionadas aos inimigos
 int new_projectile(ProjectileType type, Vector2 pos,
-                    Vector2 direction); // Cria um projétil
+                   Vector2 direction); // Cria um projétil
 void set_projectile_animation(Projectile *projectile, ProjectileState state,
                               Animation anim); // Define uma animação
 void move_projectile(
