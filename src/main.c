@@ -24,12 +24,20 @@ int main(void) {
   const int screenHeight = 1200;
 
   InitWindow(screenWidth, screenHeight, "WhiteHole"); // Inicializando janela
+  InitAudioDevice(); // Inicializando o dispositivo de áudio
   SetTargetFPS(240); // Queremos que rode a 60 fps
 
   // Aleatoriedade
   srand(time(NULL));
 
   universe = init_universe();
+
+  if(IsMusicValid(get_scene_audio(&(universe.asset_store)))){
+    Music music = get_scene_audio(&(universe.asset_store));
+    SetMusicVolume(music, 0.3);
+    PlayMusicStream(music);
+  }
+
   universe.cam.zoom = 3.2f;
   HideCursor();
 

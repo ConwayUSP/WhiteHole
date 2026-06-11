@@ -2,6 +2,7 @@
 #define ASSETSTORE_H
 
 #include "../../include/raylib.h"
+#include "audio.h"
 #include "enemy.h"
 #include "player.h"
 #include "projectile.h"
@@ -23,6 +24,9 @@ typedef struct assetstore {
   Vector2 enemy_projectile_offsets[PROJECTILE_NUM_STATES];
   Texture floor_sprite;
   Texture cursor_sprite;
+
+  Music scene_audio[5];
+  Music shot_audio[SHOT_NUM_TYPES];
 } AssetStore;
 
 // Construtor
@@ -38,5 +42,9 @@ Vector2 get_enemy_offset(AssetStore *store, EnemyType enemy_type,
 Vector2 get_projectile_offset(AssetStore *store, ProjectileType projectile_type,
                               ProjectileState state);
 void unload_textures(AssetStore *store);
+
+// Getters para os áudios
+Music get_scene_audio(AssetStore *store);
+Music get_shot_audio(AssetStore *store, ShotType shot_type);
 
 #endif
