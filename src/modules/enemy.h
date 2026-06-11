@@ -58,6 +58,7 @@ typedef struct enemy {
   float move_cooldown; // Quanto tempo para o bilionário dar seu dash
   float size;
   float spawn_timer;
+  float damage_timer;
   Animation animations[ENEMY_NUM_STATES]; // Animações para cada estado
 } Enemy;
 

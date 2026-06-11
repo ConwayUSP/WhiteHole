@@ -122,6 +122,9 @@ void update_enemies(float dt) {
 }
 
 void update_enemy(Enemy *enemy, float dt) {
+  if (enemy->damage_timer > 0) {
+    enemy->damage_timer -= dt;
+  }
   if (enemy->state == NOT_SPAWNED) {
     enemy->spawn_timer -= dt;
     if (enemy->spawn_timer <= 0) {
@@ -314,11 +317,15 @@ void draw_enemy(Enemy enemy) {
   Rectangle frame_rect = {frameX, frameY, anim.frame_size.x, anim.frame_size.y};
   Vector2 good_pos = sub_vec(enemy.pos, (Vector2){.x = anim.frame_size.x / 2,
                                                   .y = anim.frame_size.y / 2});
-  DrawTextureRec(spritesheet, frame_rect, good_pos, WHITE);
+
+  float dmg_timer = enemy.damage_timer;
+  Color damage_tint = dmg_timer <= 0 ? WHITE
+                                     : (Color){255, 255 * (1 - dmg_timer),
+                                               255 * (1 - dmg_timer), 255};
+  DrawTextureRec(spritesheet, frame_rect, good_pos, damage_tint);
 }
 
 void enemy_take_damage(Enemy *enemy, int damage) {
-
   if (damage > enemy->hp) {
     enemy->hp = 0;
 
@@ -346,6 +353,7 @@ void enemy_take_damage(Enemy *enemy, int damage) {
       break;
     }
   }
+  enemy->damage_timer = 0.3;
 }
 
 void enemy_attack(Enemy *enemy) {
