@@ -70,6 +70,21 @@ void new_enemy(EnemyType type, Vector2 pos) {
     e.ult_threshold = BILLIONAIRE_ULT_CAP;
     e.move_cooldown = 5.0f;
     e.atk_cooldown = 2.5f;
+    set_enemy_animation(
+        &e, ENEMY_IDLE,
+        new_animation(8, true, 0, 0.2f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_DOWN,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_LEFT,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_UP,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
+    set_enemy_animation(
+        &e, ENEMY_MOVING_RIGHT,
+        new_animation(8, true, 0, 0.15f, (Vector2){.x = 32, .y = 32}));
     break;
   default:
     exit(1); // Tipo de inimigo não detectado
@@ -223,7 +238,7 @@ void move_billionaire(Enemy *enemy, float dt) {
     enemy->target =
         sum_vec(universe.player.pos, mult_vec(universe.player.vel, 1000 * dt));
     enemy->speed = DASH_SPEED;
-  } else if (old_cooldown > -2 && cd < -2) {
+  } else if (old_cooldown > -1 && cd < -1) {
     enemy->target = (Vector2){.x = rand() % 400, .y = rand() % 400};
     enemy->speed = MIN_SPEED;
     enemy->move_cooldown = 5;
@@ -239,12 +254,15 @@ void move_billionaire(Enemy *enemy, float dt) {
     enemy->speed = (charge * charge) * (DASH_SPEED - MIN_SPEED) + MIN_SPEED;
     enemy->target =
         sum_vec(universe.player.pos, mult_vec(universe.player.vel, 300 * dt));
-  } else if (cd < 0 && cd >= -2) {
-    enemy->target = sum_vec(enemy->pos, enemy->vel);
+  } else if (cd < 0 && cd >= -1) {
+    enemy->target = sum_vec(enemy->pos, mult_vec(enemy->vel, 10));
   }
 
   enemy->vel =
       mult_vec(direction_vec(enemy->pos, enemy->target), enemy->speed * dt);
+  if (distance_vec(enemy->pos, enemy->target) < 1) {
+    enemy->vel = (Vector2){0, 0};
+  }
   enemy->pos = sum_vec(enemy->pos, enemy->vel);
 }
 
@@ -267,7 +285,7 @@ void draw_enemy(Enemy enemy) {
   }
 
   // !TODO: Padronizar depois
-  if (enemy.type == ASTRONAUT) {
+  if (enemy.type != ICE) {
     Animation anim = enemy.animations[enemy.state];
     Texture2D spritesheet = get_enemy_sheet(&universe.asset_store, enemy.type);
     Vector2 offset =
@@ -351,7 +369,7 @@ void enemy_attack(Enemy *enemy) {
       new_projectile(BILLIONAIRE_ATK, enemy->pos,
                      rotate_vec(main_direction, i * angle));
     }
-    enemy->atk_cooldown = 7.0f;
+    enemy->atk_cooldown = 6.0f;
     break;
 
   default:
