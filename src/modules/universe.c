@@ -56,6 +56,7 @@ void update_universe(float dt) {
 
   // Músicas
   universe.scene_music = get_scene_audio(&(universe.asset_store));
+  SetMusicPitch(universe.scene_music, fmin(1, sqrt(distort_time()) + 0.2));
   UpdateMusicStream(universe.scene_music);
 }
 
@@ -64,6 +65,7 @@ void universe_handle_input() {
        universe.context == VICTORY) &&
       IsKeyPressed(KEY_SPACE)) {
     universe.points = 100;
+    universe.player.hp = MAX_PLAYER_HP;
     universe.can_spawn_new_enemies = true;
     universe.player.black_hole_charge = 10;
     universe.kill_count = 0;
@@ -89,15 +91,13 @@ void spawn_enemies() {
   if (distance_vec(position, universe.player.pos) < 50) {
     position = mult_vec(direction_vec(position, universe.player.pos), 50);
   }
-  EnemyType type;// = rand() % ENEMY_NUM_TYPES;
+  EnemyType type;
   int r = rand() % 100;
   if (r <= 10) {
     type = ICE;
-  }
-  else if (r < 40) {
+  } else if (r < 40) {
     type = BILLIONAIRE;
-  }
-  else {
+  } else {
     type = ASTRONAUT;
   }
 
@@ -166,10 +166,8 @@ void draw_universe() {
 
 void check_gameover() {
   if (universe.player.hp == 0) {
-    universe.points = 100;
     universe.context = GAME_OVER;
     change_music(get_scene_audio(&(universe.asset_store)));
-    universe.player.hp = MAX_PLAYER_HP;
     universe.player.black_hole_charge = 10;
     set_all_empty(&universe.projectile_slots);
     set_all_empty(&universe.enemy_slots);
@@ -177,7 +175,7 @@ void check_gameover() {
 }
 
 void check_victory() {
-  if (universe.kill_count == 5) {
+  if (universe.kill_count == 100) {
     universe.context = VICTORY;
     set_all_empty(&universe.projectile_slots);
     set_all_empty(&universe.enemy_slots);

@@ -83,7 +83,8 @@ void update_player_state(Player *player) {
 
 void move_player(Player *player, float dt) {
   Vector2 move = {.x = 0, .y = 0};
-  bool w = IsKeyDown(KEY_W), a = IsKeyDown(KEY_A), s = IsKeyDown(KEY_S), d = IsKeyDown(KEY_D);
+  bool w = IsKeyDown(KEY_W), a = IsKeyDown(KEY_A), s = IsKeyDown(KEY_S),
+       d = IsKeyDown(KEY_D);
   if (w) {
     move.y -= 1;
   }
@@ -99,7 +100,9 @@ void move_player(Player *player, float dt) {
   player->walk_audio_timer -= dt;
   if (w || a || s || d) {
     if (player->walk_audio_timer <= 0) {
-      PlaySound(get_shot_audio(&universe.asset_store, WALK));    
+      Sound s = get_shot_audio(&universe.asset_store, WALK);
+      SetSoundPitch(s, fmin(1, sqrt(distort_time()) + 0.2));
+      PlaySound(s);
       player->walk_audio_timer = 0.4;
     }
   }
@@ -128,7 +131,9 @@ void read_mouse_inputs(Player *player, float dt) {
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
       new_projectile(PLAYER_ATK, sum_vec(player->pos, mult_vec(direction, 10)),
                      direction);
-      PlaySound(get_shot_audio(&universe.asset_store, SHOT_PLAYER));
+      Sound s = get_shot_audio(&universe.asset_store, SHOT_PLAYER);
+      SetSoundPitch(s, fmin(1, sqrt(distort_time()) + 0.2));
+      PlaySound(s);
     }
     player->atk_cooldown = ATK_COOLDOWN;
   }
@@ -145,7 +150,10 @@ void read_mouse_inputs(Player *player, float dt) {
           BLACK_HOLE,
           sum_vec(player->pos, sum_vec(mult_vec(direction, 20), player->vel)),
           direction);
-      PlaySound(get_shot_audio(&universe.asset_store, SHOT_BLACKHOLE));
+
+      Sound s = get_shot_audio(&universe.asset_store, SHOT_BLACKHOLE);
+      SetSoundPitch(s, fmin(1, sqrt(distort_time()) + 0.5));
+      PlaySound(s);
       if (bh_id == NULL_SLOT) {
         return;
       }

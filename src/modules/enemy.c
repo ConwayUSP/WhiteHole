@@ -368,7 +368,9 @@ void enemy_attack(Enemy *enemy) {
     for (int i = -1; i <= 1; i++) {
       new_projectile(ICE_ATK, enemy->pos,
                      rotate_vec(main_direction, i * angle));
-      PlaySound(get_shot_audio(&universe.asset_store, SHOT_ICE));
+      Sound s = get_shot_audio(&universe.asset_store, SHOT_ICE);
+      SetSoundPitch(s, fmin(1, sqrt(distort_time()) + 0.2));
+      PlaySound(s);
     }
     enemy->atk_cooldown = 4.0f;
     break;
@@ -376,7 +378,9 @@ void enemy_attack(Enemy *enemy) {
   case ASTRONAUT:
     new_projectile(ASTRONAUT_ATK, enemy->pos,
                    direction_vec(enemy->pos, universe.player.pos));
-    PlaySound(get_shot_audio(&universe.asset_store, SHOT_ASTRONAUT));
+    Sound s = get_shot_audio(&universe.asset_store, SHOT_ASTRONAUT);
+    SetSoundPitch(s, fmin(1, sqrt(distort_time()) + 0.2));
+    PlaySound(s);
     enemy->atk_cooldown = 0.3f;
     break;
 
@@ -385,7 +389,9 @@ void enemy_attack(Enemy *enemy) {
     for (int i = 0; i < 8; i++) {
       new_projectile(BILLIONAIRE_ATK, enemy->pos,
                      rotate_vec(main_direction, i * angle));
-      PlaySound(get_shot_audio(&universe.asset_store, SHOT_BILLIONAIRE));
+      Sound s = get_shot_audio(&universe.asset_store, SHOT_BILLIONAIRE);
+      SetSoundPitch(s, fmin(1, sqrt(distort_time()) + 0.2));
+      PlaySound(s);
     }
     enemy->atk_cooldown = 6.0f;
     break;
