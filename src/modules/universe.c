@@ -56,7 +56,7 @@ void update_universe(float dt) {
 
   // Músicas
   universe.scene_music = get_scene_audio(&(universe.asset_store));
-  SetMusicPitch(universe.scene_music, fmin(1, sqrt(distort_time()) + 0.2));
+  distort_music_time(universe.scene_music);
   UpdateMusicStream(universe.scene_music);
 }
 

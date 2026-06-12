@@ -100,9 +100,7 @@ void move_player(Player *player, float dt) {
   player->walk_audio_timer -= dt;
   if (w || a || s || d) {
     if (player->walk_audio_timer <= 0) {
-      Sound s = get_shot_audio(&universe.asset_store, WALK);
-      SetSoundPitch(s, fmin(1, sqrt(distort_time()) + 0.2));
-      PlaySound(s);
+      distort_sound_time(SHOT_PLAYER);
       player->walk_audio_timer = 0.4;
     }
   }
@@ -131,9 +129,7 @@ void read_mouse_inputs(Player *player, float dt) {
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
       new_projectile(PLAYER_ATK, sum_vec(player->pos, mult_vec(direction, 10)),
                      direction);
-      Sound s = get_shot_audio(&universe.asset_store, SHOT_PLAYER);
-      SetSoundPitch(s, fmin(1, sqrt(distort_time()) + 0.2));
-      PlaySound(s);
+      distort_sound_time(SHOT_PLAYER);
     }
     player->atk_cooldown = ATK_COOLDOWN;
   }
@@ -151,9 +147,8 @@ void read_mouse_inputs(Player *player, float dt) {
           sum_vec(player->pos, sum_vec(mult_vec(direction, 20), player->vel)),
           direction);
 
-      Sound s = get_shot_audio(&universe.asset_store, SHOT_BLACKHOLE);
-      SetSoundPitch(s, fmin(1, sqrt(distort_time()) + 0.5));
-      PlaySound(s);
+      distort_sound_time(SHOT_BLACKHOLE);
+
       if (bh_id == NULL_SLOT) {
         return;
       }

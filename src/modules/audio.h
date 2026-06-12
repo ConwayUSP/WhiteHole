@@ -22,5 +22,7 @@ typedef enum{
 } ShotType;
 
 void change_music(Music next_music);
+void distort_sound_time(ShotType shot_type);
+void distort_music_time(Music music);
 
 #endif
