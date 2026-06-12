@@ -56,6 +56,7 @@ void update_universe(float dt) {
 
   // Músicas
   universe.scene_music = get_scene_audio(&(universe.asset_store));
+  SetMusicPitch(universe.scene_music, fmin(1, sqrt(distort_time()) + 0.2));
   UpdateMusicStream(universe.scene_music);
 }
 
@@ -89,15 +90,13 @@ void spawn_enemies() {
   if (distance_vec(position, universe.player.pos) < 50) {
     position = mult_vec(direction_vec(position, universe.player.pos), 50);
   }
-  EnemyType type;// = rand() % ENEMY_NUM_TYPES;
+  EnemyType type; // = rand() % ENEMY_NUM_TYPES;
   int r = rand() % 100;
   if (r <= 10) {
     type = ICE;
-  }
-  else if (r < 40) {
+  } else if (r < 40) {
     type = BILLIONAIRE;
-  }
-  else {
+  } else {
     type = ASTRONAUT;
   }
 
