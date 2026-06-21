@@ -15,15 +15,15 @@
 - [ ] Fazer área bebêficadora do buraco negro
 - [X] Fazer a distorção temporal via proximidade a buracos negros
 - [ ] Fazer gravidade do buraco negro afetar entidades
-- [ ] Geração de inimigos (aleatório ou deteminístico)
+- [X] Geração de inimigos (aleatório ou deteminístico)
 - [X] Pontuação
-- [ ] Música de fundo
-- [ ] Áudio dos tiros
-- [ ] Áudio de tomar dano
-- [ ] Áudio de morte
-- [ ] Som ambiente do buraco negro (quanto mais perto, mais alto)
+- [X] Música de fundo
+- [X] Áudio dos tiros
+- [X] Áudio de tomar dano
+- [X] Áudio de morte
+- [X] Som ambiente do buraco negro (quanto mais perto, mais alto)
 - [X] Menu ("aperte espaço para começar")
-- [ ] Morte ("aperte espaço para tentar de novo")
-- [ ] Vitória ("sua pontuação: X")
+- [X] Morte ("aperte espaço para tentar de novo")
+- [X] Vitória ("sua pontuação: X")
 - [ ] Se der tempo, botar um boss (ElonMusk-Robô-Polvo)
 
